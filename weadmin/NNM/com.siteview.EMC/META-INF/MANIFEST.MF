@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: EMC
+Bundle-SymbolicName: com.siteview.EMC
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.siteview.emc.Activator
+Bundle-Vendor: SITEVIEW
+Require-Bundle: org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
+Export-Package: com.siteview.emc

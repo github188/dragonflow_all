@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Odata
+Bundle-SymbolicName: com.siteview.ecc.view.apptopu.odata;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.siteview.ecc.view.apptopu.odata.Activator
+Bundle-Vendor: SITEVIEW
+Require-Bundle: org.eclipse.core.runtime,
+ Siteview.lib;bundle-version="1.0.0",
+ com.siteview.utils;bundle-version="1.0.0",
+ Siteview.Web.Forms;bundle-version="1.0.0",
+ Siteview.Forms.Common;bundle-version="1.0.0",
+ org.eclipse.rap.ui,
+ com.siteview.ecc.view.apptopu
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-ActivationPolicy: lazy
