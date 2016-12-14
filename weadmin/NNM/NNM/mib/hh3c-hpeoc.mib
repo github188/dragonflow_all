@@ -1,0 +1,335 @@
+-- =================================================================
+-- Copyright (C) 2007 by H3C TECHNOLOGIES. All rights reserved.
+--
+-- Description:
+-- Reference:
+-- =================================================================
+HH3C-HPEOC-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+        hh3cCommon
+    FROM HH3C-OID-MIB
+        ifIndex
+    FROM IF-MIB
+        Integer32, Unsigned32, Counter64, OBJECT-TYPE, MODULE-IDENTITY
+    FROM SNMPv2-SMI
+        DisplayString
+    FROM SNMPv2-TC;
+
+
+hh3cHPEOC MODULE-IDENTITY
+    LAST-UPDATED "200708281008Z"
+    ORGANIZATION
+        "Hangzhou H3C Tech. Co., Ltd."
+    CONTACT-INFO
+        "SMB EOC Team H3C Technologies Co., Ltd.
+        310 Liuhe Road, Zhijiang Science Park, Hangzhou, P.R.China
+        http://www.h3c.com
+        Zip:310053."
+    DESCRIPTION
+        "
+        The objects in this MIB module are used to manage and
+        display current configuration of Ethernet Over Cable
+        Network (EOC) which based on HomePlug(HP) AV Specification.
+        "
+    ::= { hh3cCommon 84 }
+
+--
+-- hh3cHPEOCSystem
+--
+hh3cHPEOCSystem OBJECT IDENTIFIER ::= { hh3cHPEOC 1 }
+
+hh3cHPEOCCltVlanType OBJECT-TYPE
+    SYNTAX      INTEGER
+        {
+            ieee8021q(1),
+            portbased(2)
+        }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "
+        Control EOC CLT's VLAN type,
+        ieee8021q : 802.1q VLAN mode,
+        portbased : portbased VLAN mode.
+        "
+    ::= { hh3cHPEOCSystem 1 }
+
+--
+-- hh3cHPEOCCltVlanManTable
+--
+hh3cHPEOCCltVlanManTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF Hh3cHPEOCCltVlanManEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "
+        This table implements the management of CLT(Coax Line Terminal)
+        VLAN.
+        "
+    ::= { hh3cHPEOCSystem 2 }
+
+hh3cHPEOCCltVlanManEntry OBJECT-TYPE
+    SYNTAX      Hh3cHPEOCCltVlanManEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "
+        The entry of the table hh3cHPEOCCltVlanManTable.
+        "
+    INDEX
+        {
+            ifIndex
+        }
+    ::= { hh3cHPEOCCltVlanManTable 1 }
+
+Hh3cHPEOCCltVlanManEntry ::= SEQUENCE
+    {
+        hh3cHPEOCCltEthPortType    INTEGER
+    }
+
+hh3cHPEOCCltEthPortType OBJECT-TYPE
+    SYNTAX      INTEGER
+        {
+            normal(1),
+            debug(2)
+        }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "
+        Control CLT ethernet ports' type,
+        normal : port which used for normal translation,
+        debug : port which used for debug.
+        "
+    ::= { hh3cHPEOCCltVlanManEntry 1 }
+
+--
+-- hh3cHPEOCCltSysManTable
+--
+hh3cHPEOCCltSysManTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF Hh3cHPEOCCltSysManEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "
+        This table implements the management of CLT(Coax Line Terminal).
+        "
+    ::= { hh3cHPEOCSystem 3 }
+
+hh3cHPEOCCltSysManEntry OBJECT-TYPE
+    SYNTAX      Hh3cHPEOCCltSysManEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "
+        The entry of the table hh3cHPEOCCltSysManTable.
+        "
+    INDEX
+        {
+            ifIndex
+        }
+    ::= { hh3cHPEOCCltSysManTable 1 }
+
+Hh3cHPEOCCltSysManEntry ::= SEQUENCE
+    {
+        hh3cHPEOCCltDescr        DisplayString,
+        hh3cHPEOCCltFwVersion    DisplayString
+    }
+
+hh3cHPEOCCltDescr OBJECT-TYPE
+    SYNTAX      DisplayString(SIZE(0..126))
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "
+        Set the description of CLT.
+        "
+    ::= { hh3cHPEOCCltSysManEntry 1 }
+
+hh3cHPEOCCltFwVersion OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "
+        EOC firmware version.  If the object length is
+        zero, it means the version is unknown.
+        "
+    ::= { hh3cHPEOCCltSysManEntry 2 }
+
+--
+-- hh3cHPEOCCnuSysManTable
+--
+hh3cHPEOCCnuSysManTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF Hh3cHPEOCCnuSysManEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "
+        This table implements the management of CNUs.
+        "
+    ::= { hh3cHPEOCSystem 4 }
+
+hh3cHPEOCCnuSysManEntry OBJECT-TYPE
+    SYNTAX      Hh3cHPEOCCnuSysManEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "
+        The entry of the table hh3cHPEOCCnuSysManTable.
+        "
+    INDEX
+        {
+            ifIndex
+        }
+    ::= { hh3cHPEOCCnuSysManTable 1 }
+
+Hh3cHPEOCCnuSysManEntry ::= SEQUENCE
+    {
+        hh3cHPEOCCnuBcastControl    Integer32
+    }
+
+hh3cHPEOCCnuBcastControl OBJECT-TYPE
+    SYNTAX      Integer32(1..100)
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "
+        Broadcast storm suppression with the step length of 1,
+        ranging from 1 to 100 percent.
+        In some products the step is 5, ranging from 5 to 100.
+        "
+    ::= { hh3cHPEOCCnuSysManEntry 1 }
+
+--
+-- hh3cHPEOCCableInfo
+--
+hh3cHPEOCCableInfo OBJECT IDENTIFIER ::= { hh3cHPEOC 2 }
+
+hh3cHPEOCCableInfoTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF Hh3cHPEOCCableInfoEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "
+        This table defines the primary parameters of the
+        cable information.
+        "
+    ::= { hh3cHPEOCCableInfo 1 }
+
+hh3cHPEOCCableInfoEntry OBJECT-TYPE
+    SYNTAX      Hh3cHPEOCCableInfoEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "
+        The entry of the table hh3cHPEOCCableInfoTable.
+        "
+    INDEX
+        {
+            ifIndex
+        }
+    ::= { hh3cHPEOCCableInfoTable 1 }
+
+
+Hh3cHPEOCCableInfoEntry ::= SEQUENCE
+    {
+        hh3cHPEOCFECErrors            Counter64,
+        hh3cHPEOCAvgBitsPerCarrier    Unsigned32,
+        hh3cHPEOCAvgSNRPerCarrier     Integer32,
+        hh3cHPEOCAvgInPBCRCErrors     Unsigned32,
+        hh3cHPEOCInTotalPkts          Counter64,
+        hh3cHPEOCAvgOutPower          Integer32,
+        hh3cHPEOCAvgOutPBCRCErrors    Unsigned32,
+        hh3cHPEOCOutTotalPkts         Counter64
+    }
+
+hh3cHPEOCFECErrors OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "
+        The cable port's FEC bits errors ratio.  FEC means the
+        payload Forward Error Correction.  It's a technology of
+        controlling errors.  Packets in transmission is checked by
+        the receiver, if error occurs, the receiver will announce
+        the sender to resend.
+        "
+    ::= { hh3cHPEOCCableInfoEntry 1 }
+
+hh3cHPEOCAvgBitsPerCarrier OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "
+        The cable port's average bits per carrier.
+        "
+    ::= { hh3cHPEOCCableInfoEntry 2 }
+
+hh3cHPEOCAvgSNRPerCarrier OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "
+        The cable port's signal noise ratio(SNR) bits per carrier.
+        "
+    ::= { hh3cHPEOCCableInfoEntry 3 }
+
+hh3cHPEOCAvgInPBCRCErrors OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "
+        The input PB CRC errors on average.
+        "
+    ::= { hh3cHPEOCCableInfoEntry 4 }
+
+hh3cHPEOCInTotalPkts OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "
+        The total number of packets(including bad packets)
+        received on this interface.
+        "
+    ::= { hh3cHPEOCCableInfoEntry 5 }
+
+hh3cHPEOCAvgOutPower OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "
+        The cable port's power sent on average, the unit is db.
+        "
+    ::= { hh3cHPEOCCableInfoEntry 6 }
+
+hh3cHPEOCAvgOutPBCRCErrors OBJECT-TYPE
+    SYNTAX      Unsigned32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "
+        The cable port's physical block(PB) cyclic redundancy
+        check(CRC) errors sent on average.
+        "
+    ::= { hh3cHPEOCCableInfoEntry 7 }
+
+hh3cHPEOCOutTotalPkts OBJECT-TYPE
+    SYNTAX      Counter64
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "
+        The total count of the packets(including bad packets)
+        sent on this interface.
+        "
+    ::= { hh3cHPEOCCableInfoEntry 8 }
+
+END

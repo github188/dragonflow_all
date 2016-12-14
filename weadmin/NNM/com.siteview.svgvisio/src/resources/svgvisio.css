@@ -1,0 +1,41 @@
+.menuItem 
+{
+	font-family:ËÎÌו, sans-serif;
+	font-size:80%;
+	line-height: 1.5em;
+	background-color:white;
+	color:black;
+	cursor:hand;
+	overflow:hidden;
+	word-wrap:break-word;
+    word-break:break-all;
+	TABLE-LAYOUT: fixed;
+}
+.vMenu 
+{
+
+height:304;
+width:460;
+border:black 2px outset; 
+display:none; 
+z-index:10; 
+position:absolute; 
+background-Color:white;
+overflow-y:auto;
+overflow-x:hidden;
+}
+
+.svip
+{
+cursor: pointer;
+ cursor: hand;
+}
+
+.svline{
+cursor: pointer;
+ cursor: hand;
+}
+.svlink{
+cursor: pointer;
+ cursor: hand;
+}

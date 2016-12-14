@@ -1,0 +1,83 @@
+-- =========================================================================
+-- Copyright (C) 2001,2002 by  H3C TECHNOLOGIES. All rights reserved.
+--
+-- Description:This file describes the hh3c MIB implementation of router system,
+--             include:memory,configuration,flash,loghost and so on.
+-- Reference:H3C enterprise MIB
+-- =========================================================================
+	HH3C-COMMON-SYSTEM-MIB DEFINITIONS ::= BEGIN
+ 
+		IMPORTS			
+			OBJECT-TYPE,TimeTicks, IpAddress, NOTIFICATION-TYPE			
+				FROM SNMPv2-SMI
+			DisplayString			
+				FROM SNMPv2-TC
+			hh3cSystem
+				FROM HH3C-OID-MIB;
+		
+-- ==============================
+-- Begin define of hh3cmHostName
+-- ==============================
+	
+		hh3cWriteConfig OBJECT-TYPE
+			SYNTAX INTEGER{
+			               save(1)
+			              }			               
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"Write config to router."
+			::= { hh3cSystem 5 }
+		
+		hh3cStartFtpServer OBJECT-TYPE
+			SYNTAX INTEGER{
+			               enable(1),
+			               disable(2)
+			               }			               
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"Decide whether start ftp-server.enable(1) indicates to start ftp-server;
+				disable(2) indicates to stop ftp-server."
+			::= { hh3cSystem 6 }	 	
+			
+		hh3cReboot OBJECT-TYPE
+			SYNTAX INTEGER{
+			               reboot(1)
+			               }			               
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"Reboot router."
+			::= { hh3cSystem 7 }	 
+	
+	hh3cSystemNotification OBJECT IDENTIFIER ::= { hh3cSystem 8 }
+					
+		hh3cWriteSuccessTrap NOTIFICATION-TYPE			
+			STATUS current
+			DESCRIPTION
+				"send a trap about write success."
+			::= { hh3cSystemNotification 1 }	 
+		
+		hh3cWriteFailureTrap NOTIFICATION-TYPE			
+			STATUS current
+			DESCRIPTION
+				"send a trap about write failure."
+			::= { hh3cSystemNotification 2 }	 
+			
+		hh3cRebootSendTrap NOTIFICATION-TYPE
+			STATUS current
+			DESCRIPTION 
+				"When users restart the device with command 
+				'reboot', this trap will be sent two seconds
+				 before the device reboots." 
+			::= { hh3cSystemNotification 3 }
+  	 			
+		hh3cSoftwareVersion OBJECT-TYPE
+			SYNTAX DisplayString
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Software version."
+			::= { hh3cSystem 9 }	 	
+	END

@@ -1,0 +1,736 @@
+/trunk/mibs/cisco/CISCO-PNNI-MIB.my – netdot 
+Search:   LoginHelp/GuideAbout TracPreferences 
+  WikiTimelineRoadmapBrowse SourceView TicketsNew TicketSearch 
+Context Navigation
+  Last ChangeAnnotateRevision Log 
+
+
+root/trunk/mibs/cisco/CISCO-PNNI-MIB.my 
+
+View revision:  Visit:    
+    trunkbranches/netdot-0.2branches/netdot-0.3branches/netdot-0.4branches/netdot-0.4.1branches/netdot-0.5branches/netdot-0.6branches/netdot-0.7branches/netdot-0.8branches/nocpagebranches/table-connection-rename-netdot-0.7 
+     
+    tags/netdot-0.1tags/netdot-0.1.1tags/netdot-0.1.2tags/netdot-0.2tags/netdot-0.3tags/netdot-0.3.1tags/netdot-0.3.2tags/netdot-0.3.3tags/netdot-0.3.4tags/netdot-0.5tags/netdot-0.5.1tags/netdot-0.5.2tags/netdot-0.6tags/netdot-0.6.1tags/netdot-0.6.2tags/netdot-0.6.3tags/netdot-0.6.4tags/netdot-0.6.5tags/netdot-0.6.6tags/netdot-0.6.7tags/netdot-0.6.8tags/netdot-0.7.1tags/netdot-0.7.2tags/netdot-0.7.3tags/netdot-0.7.4tags/netdot-0.7.5tags/netdot-0.7.6tags/netdot-0.7.7tags/netdot-0.7.8tags/netdot-0.7.9tags/netdot-0.7.10tags/netdot-0.7.11tags/netdot-0.7.12tags/netdot-0.8.1tags/netdot-0.8.2 
+  Revision 1601, 27.1 KB (checked in by cvicente, 19 months ago) 
+      Including mibs in package
+
+
+      Line 
+      1-- --------------------------------------------------------------------
+      2-- CISCO ATM PNNI MIB
+      3--
+      4-- Sep 1996, Yehuda Bamnolker
+      5--
+      6-- Copyright (c) 1996-1997 by cisco Systems, Inc.
+      7-- All rights reserved.
+      8-- *****************************************************************
+      9
+      10CISCO-PNNI-MIB DEFINITIONS ::= BEGIN
+      11
+      12        IMPORTS
+      13                MODULE-IDENTITY, OBJECT-TYPE, Integer32
+      14                        FROM SNMPv2-SMI
+      15                TEXTUAL-CONVENTION, TruthValue, DisplayString
+      16                        FROM SNMPv2-TC
+      17                MODULE-COMPLIANCE, OBJECT-GROUP
+      18                        FROM SNMPv2-CONF
+      19                pnniNodeEntry, pnniIfEntry, pnniRouteAddrEntry
+      20                        FROM PNNI-MIB
+      21                ciscoMgmt
+      22                        FROM CISCO-SMI;
+      23
+      24
+      25ciscoPnniMIB MODULE-IDENTITY
+      26        LAST-UPDATED    "9610280000Z"
+      27        ORGANIZATION    "Cisco Systems, Inc."
+      28        CONTACT-INFO
+      29                "       Cisco Systems
+      30                        Customer Service
+      31
+      32                Postal: 170 W Tasman Drive
+      33                        San Jose, CA  95134
+      34                        USA
+      35
+      36                   Tel: +1 800 553-NETS
+      37
+      38                E-mail: cs-atm@cisco.com"
+      39        DESCRIPTION
+      40                "The MIB module for managing Cisco specific
+      41                 extensions to the ATM Forum PNNI MIB."
+      42        REVISION        "9610280000Z"
+      43        DESCRIPTION
+      44                "Initial version of this MIB module."
+      45        ::= { ciscoMgmt 65 }    -- assigned by cana@cisco.com
+      46
+      47
+      48ciscoPnniMIBObjects OBJECT IDENTIFIER ::= { ciscoPnniMIB 1 }
+      49
+      50
+      51    E164Address ::= TEXTUAL-CONVENTION
+      52        STATUS        current
+      53        DESCRIPTION
+      54            "A native E.164 address, encoded in BCD format.  An
+      55             address of length zero indicates that no address is
+      56             specified."
+      57        SYNTAX        OCTET STRING (SIZE(0|8))
+      58
+      59
+      60-- The Base Group (per switching system objects)
+      61
+      62ciscoPnniBase OBJECT IDENTIFIER ::= { ciscoPnniMIBObjects 1 }
+      63
+      64ciscoPnniBackgroundRoutes OBJECT-TYPE
+      65        SYNTAX        TruthValue
+      66        MAX-ACCESS    read-write
+      67        STATUS        current
+      68        DESCRIPTION
+      69            "Specifies whether background route computation is enabled
+      70             on this switching system.  In this mode, multiple
+      71             background trees are precomputed for several service
+      72             categories and QoS metrics.  If no route is found in the
+      73             background trees that satisfies the QoS requirements of a
+      74             particular setup request, route selection reverts to
+      75             on-demand computation.
+      76
+      77             When the value of this object is `false', only on-demand
+      78             route computation is used (i.e., a separate route
+      79             computation is performed for each SETUP or ADD PARTY
+      80             message received over a UNI or IISP interface, or for which
+      81             this node is a PNNI entry border node).
+      82
+      83             It is recommended that background route computation be
+      84             enabled in large networks, due to better scalability in
+      85             terms of processing requirements."
+      86        DEFVAL { false }
+      87        ::= { ciscoPnniBase 1 }
+      88
+      89ciscoPnniBackgroundPollInterval OBJECT-TYPE
+      90        SYNTAX        INTEGER (1..60)
+      91        UNITS         "seconds"
+      92        MAX-ACCESS    read-write
+      93        STATUS        current
+      94        DESCRIPTION
+      95            "Specifies how often the switching system polls for a
+      96             significant change that triggers new computation of the
+      97             background routes.
+      98
+      99             Increasing the value of this object causes the switching
+      100             system to throttle background route computation."
+      101        DEFVAL { 10 }
+      102        ::= { ciscoPnniBase 2 }
+      103
+      104ciscoPnniBackgroundInsignificantThreshold OBJECT-TYPE
+      105        SYNTAX        INTEGER (1..100)
+      106        UNITS         "changes"
+      107        MAX-ACCESS    read-write
+      108        STATUS        current
+      109        DESCRIPTION
+      110            "Specifies the number of insignificant changes necessary to
+      111             trigger a new computation of the background routes."
+      112        DEFVAL { 32 }
+      113        ::= { ciscoPnniBase 3 }
+      114
+      115ciscoPnniResourceMgmtPollInterval OBJECT-TYPE
+      116        SYNTAX        INTEGER (1..60)
+      117        UNITS         "seconds"
+      118        MAX-ACCESS    read-write
+      119        STATUS        current
+      120        DESCRIPTION
+      121            "Specifies how often PNNI polls resource management to
+      122             update the values of local interface metrics and
+      123             attributes.
+      124
+      125             The value of this object impacts the number of new
+      126             instances of PTSEs originated by this switching system.  A
+      127             larger interval reduces the number of new instances of
+      128             PTSEs caused by interface traffic fluctuation.  A smaller
+      129             interval allows PNNI to track traffic fluctuations more
+      130             quickly, at the expense of increased processing load.
+      131
+      132             In normal situations, this object should not be changed
+      133             from its default value.  Care should be taken when
+      134             adjusting this parameter so as not to overload switch
+      135             processing."
+      136        DEFVAL { 5 }
+      137        ::= { ciscoPnniBase 4 }
+      138
+      139ciscoPnniAdminWeightMode OBJECT-TYPE
+      140        SYNTAX        INTEGER {
+      141                                uniform(1),
+      142                                linespeed(2)
+      143                                }
+      144        MAX-ACCESS    read-write
+      145        STATUS        current
+      146        DESCRIPTION
+      147            "Specifies the mode of default administrative weight
+      148             assignment for PNNI interfaces.  When this value is set
+      149             to `uniform', by default the administrative weight of
+      150             each PNNI interface is set to 5040, as defined in the
+      151             ATM Forum PNNI 1.0 Specification.  When this value is
+      152             set to `linespeed', by default the administrative weight
+      153             is set based on the linespeed or maximum cell rate of
+      154             the interface.
+      155
+      156             In the absence of other constraints, the `uniform' mode
+      157             causes PNNI routing to minimize the number of hops.
+      158             Basing administrative weight on linespeed allows path
+      159             selection to prefer paths along higher bandwidth
+      160             interfaces."
+      161        DEFVAL { uniform }
+      162        ::= { ciscoPnniBase 5 }
+      163
+      164ciscoPnniMaxAdminWeightPercentage OBJECT-TYPE
+      165        SYNTAX        INTEGER (0 | 100..2000)
+      166        MAX-ACCESS    read-write
+      167        STATUS        current
+      168        DESCRIPTION
+      169            "Specifies the maximum acceptable administrative weight
+      170             for alternate routes as a percentage factor of the least
+      171             administrative weight of any route to the destination.
+      172             The constraint on administrative weight only takes effect
+      173             when background route computation is enabled.
+      174
+      175             The constraint on administrative weight increases network
+      176             efficiency under heavy loads by preventing alternate 
+routes
+      177             that use too many network resources from being specified.
+      178             This constraint provides a generalized form of a hop count
+      179             limit.
+      180
+      181             The distinguished value zero indicates that there is no
+      182             constraint on administrative weight for alternate routes.
+      183             All other valid values are greater than or equal to 100
+      184             percent."
+      185        DEFVAL { 0 }
+      186        ::= { ciscoPnniBase 6 }
+      187
+      188ciscoPnniRouteOptimizationThreshold OBJECT-TYPE
+      189        SYNTAX         INTEGER (5..100)
+      190        UNITS          "percent"
+      191        MAX-ACCESS     read-write
+      192        STATUS         current
+      193        DESCRIPTION
+      194            "Specifies the percentage reduction in the administrative
+      195             weight of the existing path required to trigger route
+      196             optimization.   When route optimization is enabled and the
+      197             threshold is exceeded, the existing path is partially torn
+      198             down and a new path is established."
+      199        DEFVAL { 30 }
+      200        ::= { ciscoPnniBase 7 }
+      201
+      202-- Cisco PNNI Node Table
+      203
+      204ciscoPnniNode OBJECT IDENTIFIER ::= { ciscoPnniMIBObjects 2 }
+      205
+      206ciscoPnniNodeTable OBJECT-TYPE
+      207        SYNTAX        SEQUENCE OF CiscoPnniNodeEntry
+      208        MAX-ACCESS    not-accessible
+      209        STATUS        current
+      210        DESCRIPTION
+      211            "A table of cisco specific attributes that affect the
+      212             operation of a PNNI logical node."
+      213        ::= { ciscoPnniNode 1 }
+      214
+      215ciscoPnniNodeEntry OBJECT-TYPE
+      216        SYNTAX        CiscoPnniNodeEntry
+      217        MAX-ACCESS    not-accessible
+      218        STATUS        current
+      219        DESCRIPTION
+      220            "An entry in the table, containing cisco specific
+      221             information about a node in this switching system."
+      222        AUGMENTS      { pnniNodeEntry }
+      223        ::= { ciscoPnniNodeTable 1 }
+      224
+      225CiscoPnniNodeEntry ::=
+      226        SEQUENCE {
+      227                ciscoPnniNodeAutoSummary        TruthValue,
+      228                ciscoPnniNodeRedistributeStatic TruthValue,
+      229                ciscoPnniNodePtseRequest        INTEGER,
+      230                ciscoPnniNodeName               DisplayString,
+      231                ciscoPnniNodeScopeMappingMode   INTEGER
+      232                }
+      233
+      234ciscoPnniNodeAutoSummary OBJECT-TYPE
+      235        SYNTAX        TruthValue
+      236        MAX-ACCESS    read-create
+      237        STATUS        current
+      238        DESCRIPTION
+      239            "Specifies whether automatic generation of internal
+      240             summary address(es) based on the switch address(es) or
+      241             node ID is enabled.  Automatically generated summary
+      242             addresses can only be removed by setting this object to
+      243             `false'.  They cannot be removed through the
+      244             pnniSummaryTable in the ATM Forum PNNI MIB.
+      245
+      246             For lowest-level nodes with auto-summary enabled, each
+      247             switching system generates one or more 13-byte summary
+      248             address prefixes based on the switch address(es).  Switch
+      249             addresses are configured in the ciscoAtmSwAddrTable."
+      250        DEFVAL { true }
+      251        ::= { ciscoPnniNodeEntry 1 }
+      252
+      253ciscoPnniNodeRedistributeStatic OBJECT-TYPE
+      254        SYNTAX        TruthValue
+      255        MAX-ACCESS    read-create
+      256        STATUS        current
+      257        DESCRIPTION
+      258            "Specifies whether redistribution of ATM static routes
+      259             to the PNNI routing domain is enabled.  Exterior static
+      260             routes are advertised in exterior reachable address
+      261             PTSEs.  Internal static routes are advertised in
+      262             internal reachable address PTSEs."
+      263        DEFVAL { true }
+      264        ::= { ciscoPnniNodeEntry 2 }
+      265
+      266ciscoPnniNodePtseRequest OBJECT-TYPE
+      267        SYNTAX        INTEGER(1..1000)
+      268        MAX-ACCESS    read-create
+      269        STATUS        current
+      270        DESCRIPTION
+      271            "Specifies the maximum number of PTSEs that can be
+      272             requested in one PTSE request packet."
+      273        DEFVAL { 32 }
+      274        ::= { ciscoPnniNodeEntry 3 }
+      275
+      276ciscoPnniNodeName OBJECT-TYPE
+      277        SYNTAX        DisplayString
+      278        MAX-ACCESS    read-create
+      279        STATUS        current
+      280        DESCRIPTION
+      281            "Specifies the textual name of the PNNI node.  The node
+      282             name is distributed to all other nodes via PNNI
+      283             flooding, using a cisco specific encoding in the System
+      284             Capabilities information group.  This allows all cisco
+      285             PNNI nodes to use this node name to identify this PNNI
+      286             node.
+      287
+      288             The default value of the node name is the value of the
+      289             switching system's host name."
+      290        ::= { ciscoPnniNodeEntry 4 }
+      291
+      292ciscoPnniNodeScopeMappingMode OBJECT-TYPE
+      293        SYNTAX        INTEGER {
+      294                                automatic(1),
+      295                                manual(2)
+      296                                }
+      297        MAX-ACCESS    read-create
+      298        STATUS        current
+      299        DESCRIPTION
+      300            "Specifies the configuration mode of the mapping from
+      301             organizational scope values (used at UNI interfaces) to
+      302             PNNI scope (i.e., in terms of PNNI routing level
+      303             indicators).
+      304
+      305             In `automatic' mode, for each organizational scope value
+      306             the corresponding PNNI level is the minimum of the ATM
+      307             Forum PNNI 1.0 default value (see Section 5.3.6 of
+      308             PNNI 1.0) and the level l of this node:
+      309
+      310                 org scope    ATM Forum default level    auto mode 
+level
+      311                    1-3                 96                  min(l,96)
+      312                    4-5                 80                  min(l,80)
+      313                    6-7                 72                  min(l,72)
+      314                    8-10                64                  min(l,64)
+      315                   11-12                48                  min(l,48)
+      316                   13-14                32                  min(l,32)
+      317                 15(global)              0                      0
+      318
+      319             Use of the `automatic' mode ensures that all
+      320             organizational scope values cover an area at least as
+      321             wide as this node's peer group.
+      322
+      323             When this object is written with the value `automatic',
+      324             objects in the pnniScopeMappingEntry for this node are
+      325             overwritten.  These objects cannot be modified while 
+      326             this object is set to `automatic'.
+      327
+      328             When this object is written with the value `manual',
+      329             the objects in the pnniScopeMappingEntry for this node
+      330             are allowed to be modified."
+      331        DEFVAL { automatic }
+      332        ::= { ciscoPnniNodeEntry 5 }
+      333
+      334
+      335-- Cisco PNNI Interface Table
+      336
+      337ciscoPnniInterface OBJECT IDENTIFIER ::= { ciscoPnniMIBObjects 3 }
+      338
+      339ciscoPnniIfTable OBJECT-TYPE
+      340        SYNTAX        SEQUENCE OF CiscoPnniIfEntry
+      341        MAX-ACCESS    not-accessible
+      342        STATUS        current
+      343        DESCRIPTION
+      344            "A table of cisco specific attributes used to configure a
+      345             physical interface or subinterface on a switching system
+      346             which is capable of being used for PNNI routing.
+      347             Interfaces may represent physical connection points (i.e.
+      348             copper/fiber connection points) or VPCs which have been
+      349             configured for PNNI's use."
+      350        ::= { ciscoPnniInterface 1 }
+      351
+      352ciscoPnniIfEntry OBJECT-TYPE
+      353        SYNTAX        CiscoPnniIfEntry
+      354        MAX-ACCESS    not-accessible
+      355        STATUS        current
+      356        DESCRIPTION
+      357            "An entry in the table, containing cisco specific PNNI
+      358             information about an interface in this switching system."
+      359        AUGMENTS      { pnniIfEntry }
+      360        ::= { ciscoPnniIfTable 1 }
+      361
+      362CiscoPnniIfEntry ::=
+      363        SEQUENCE {
+      364                ciscoPnniIfLinkSelection          INTEGER,
+      365                ciscoPnniIfRouteOptimization      INTEGER,
+      366                ciscoPnniIfRouteOptimInterval     Integer32,
+      367                ciscoPnniIfRouteOptimStartHour    Integer32,
+      368                ciscoPnniIfRouteOptimStartMinute  Integer32,
+      369                ciscoPnniIfRouteOptimEndHour      Integer32,
+      370                ciscoPnniIfRouteOptimEndMinute    Integer32
+      371                }
+      372
+      373ciscoPnniIfLinkSelection OBJECT-TYPE
+      374        SYNTAX        INTEGER {
+      375                                adminWeightMinimize(1),
+      376                                blockingMinimize(2),
+      377                                transmitSpeedMaximize(3),
+      378                                loadBalance(4)
+      379                                }
+      380        MAX-ACCESS    read-write
+      381        STATUS        current
+      382        DESCRIPTION
+      383            "For CBR or VBR call setups, specifies a method for
+      384             selecting one link out of multiple links with sufficient
+      385             resources to the same neighbor node.  Link selection
+      386             applies whenever the port specified in the Designated
+      387             Transit List (DTL) is zero and there are multiple
+      388             interfaces to the next node.  Valid values are:
+      389                adminWeightMinimize   - transmits call on the interface
+      390                                        with the lowest administrative
+      391                                        weight,
+      392                blockingMinimize      - Minimizes subsequent call
+      393                                        blocking,
+      394                transmitSpeedMaximize - Transmits call on highest speed
+      395                                        parallel link,
+      396                loadBalance           - Balances calls across all
+      397                                        parallel links.
+      398
+      399             When multiple parallel links are configured 
+inconsistently,
+      400             the order of precedence of configured values is
+      401             `adminWeightMinimize', `blockingMinimize',
+      402             `transmitSpeedMaximize', and then `loadBalance'; i.e., if
+      403             any of the links is configured as adminWeightMinimize, 
+that
+      404             is used for the entire link group.
+      405
+      406             For Best Effort call setups (UBR or ABR), load balancing 
+is
+      407             always used."
+      408        DEFVAL { blockingMinimize }
+      409        ::= { ciscoPnniIfEntry 1 }
+      410
+      411ciscoPnniIfRouteOptimization OBJECT-TYPE
+      412          SYNTAX    INTEGER {
+      413                disable            (1),
+      414                soft               (2),
+      415                switched           (3),
+      416                switchedAndSoft    (4)
+      417                }
+      418          MAX-ACCESS    read-write
+      419          STATUS        current
+      420          DESCRIPTION
+      421          "To enable or disable the route optimization
+      422          (automatic rerouting) feature on an ATM interface.
+      423 
+      424           To disable route optimization on the interface,
+      425           set this object to 'disable'.
+      426 
+      427           To enable route optimization only for ATM
+      428           soft PVCs on the interface, set this object
+      429           to 'soft'.
+      430 
+      431           To enable route optimization only for ATM
+      432           switched PVCs on the interface, set this
+      433           object to 'switched'.
+      434 
+      435           To enable route optimization for both ATM
+      436           soft PVCs and SVCs on the interface,
+      437           set this object to 'switchedAndSoft'."
+      438          DEFVAL {disable}
+      439          ::= { ciscoPnniIfEntry 2 }
+      440
+      441ciscoPnniIfRouteOptimInterval OBJECT-TYPE
+      442          SYNTAX     Integer32 (10..10000)
+      443          UNITS          "minutes"
+      444          MAX-ACCESS     read-write
+      445          STATUS         current
+      446          DESCRIPTION
+      447          "Specifies how often route optimization takes
+      448          place on this interface. This object applies only when
+      449          the object ciscoPnniIfRouteOptimization is NOT set
+      450          to 'disable'."
+      451          DEFVAL { 60 }
+      452          ::= { ciscoPnniIfEntry 3 }
+      453 
+      454ciscoPnniIfRouteOptimStartHour  OBJECT-TYPE
+      455          SYNTAX         Integer32 (0..23)
+      456          UNITS          "hour"
+      457          MAX-ACCESS     read-write
+      458          STATUS         current
+      459          DESCRIPTION
+      460          "Specifies the start hour of Time-of-Day
+      461          route optimization on an ATM interface. This
+      462          object applies only when the object
+      463          ciscoPnniIfRouteOptimization is NOT set to
+      464          'disable'."
+      465          DEFVAL { 0 }
+      466          ::= { ciscoPnniIfEntry 4 }
+      467
+      468ciscoPnniIfRouteOptimStartMinute  OBJECT-TYPE
+      469          SYNTAX         Integer32 (0..59)
+      470          UNITS          "minutes"
+      471          MAX-ACCESS     read-write
+      472          STATUS         current
+      473          DESCRIPTION
+      474          "Specifies the start minute of Time-of-Day
+      475          route optimization on an ATM interface.
+      476          This object applies only when the object
+      477          ciscoPnniIfRouteOptimization is NOT set to
+      478          'disable'."
+      479         DEFVAL { 0 }
+      480          ::= { ciscoPnniIfEntry 5 }
+      481
+      482ciscoPnniIfRouteOptimEndHour  OBJECT-TYPE
+      483          SYNTAX         Integer32 (0..23)
+      484          UNITS          "hour"
+      485          MAX-ACCESS     read-write
+      486          STATUS         current
+      487          DESCRIPTION
+      488          "Specifies the end hour of Time-Of-Day
+      489          route optimization on an ATM interface.
+      490          This object applies only when the object
+      491          ciscoPnniIfRouteOptimization is NOT set to
+      492          'disable'."
+      493          DEFVAL { 0 }
+      494          ::= { ciscoPnniIfEntry 6 }
+      495 
+      496ciscoPnniIfRouteOptimEndMinute  OBJECT-TYPE
+      497          SYNTAX         Integer32 (0..59)
+      498          UNITS          "minutes"
+      499          MAX-ACCESS     read-write
+      500          STATUS         current
+      501          DESCRIPTION
+      502          "Specifies the end minute of Time-Of-Day
+      503          route optimization on an ATM interface.
+      504          This object applies only when the object
+      505          ciscoPnniIfRouteOptimization is NOT set to
+      506          'disable'."
+      507          DEFVAL { 0 }
+      508          ::= { ciscoPnniIfEntry 7 }
+      509
+      510
+      511-- Cisco PNNI Precedence Table
+      512
+      513ciscoPnniPrecedence OBJECT IDENTIFIER ::= { ciscoPnniMIBObjects 4 }
+      514
+      515ciscoPnniPrecedenceTable OBJECT-TYPE
+      516        SYNTAX        SEQUENCE OF CiscoPnniPrecedenceEntry
+      517        MAX-ACCESS    not-accessible
+      518        STATUS        current
+      519        DESCRIPTION
+      520            "A table that specifies the precedence of different types
+      521             of reachable addresses."
+      522        ::= { ciscoPnniPrecedence 1 }
+      523
+      524ciscoPnniPrecedenceEntry OBJECT-TYPE
+      525        SYNTAX        CiscoPnniPrecedenceEntry
+      526        MAX-ACCESS    not-accessible
+      527        STATUS        current
+      528        DESCRIPTION
+      529            "An entry in the table, containing information about the
+      530             precedence of a specific reachable address type.  One row
+      531             is created by the managed system for each reachable
+      532             address type."
+      533        INDEX         { ciscoPnniPrecedenceAddressType }
+      534        ::= { ciscoPnniPrecedenceTable 1 }
+      535
+      536CiscoPnniPrecedenceEntry ::=
+      537        SEQUENCE {
+      538                ciscoPnniPrecedenceAddressType          INTEGER,
+      539                ciscoPnniPrecedenceValue                INTEGER
+      540                }
+      541
+      542ciscoPnniPrecedenceAddressType OBJECT-TYPE
+      543        SYNTAX        INTEGER {
+      544                                staticLocalInternalWithMetrics(1),
+      545                                staticLocalExterior(2),
+      546                                staticLocalExteriorWithMetrics(3),
+      547                                pnniRemoteInternal(4),
+      548                                pnniRemoteInternalWithMetrics(5),
+      549                                pnniRemoteExterior(6),
+      550                                pnniRemoteExteriorWithMetrics(7)
+      551                                }
+      552        MAX-ACCESS    not-accessible
+      553        STATUS        current
+      554        DESCRIPTION
+      555            "The reachable address type for which the precedence is
+      556             specified."
+      557        ::= { ciscoPnniPrecedenceEntry 1 }
+      558
+      559ciscoPnniPrecedenceValue OBJECT-TYPE
+      560        SYNTAX        INTEGER(2..4)
+      561        MAX-ACCESS    read-write
+      562        STATUS        current
+      563        DESCRIPTION
+      564            "Specifies the precedence of a reachable address type.
+      565             When there are multiple reachable address types associated
+      566             with the longest match reachable address prefix, the route
+      567             selection algorithm first attempts to find routes to
+      568             reachable address types of greatest precedence.  Among
+      569             routes to the same longest match reachable address prefix
+      570             with the same reachable address type, routes with the
+      571             least total administrative weight are preferred.
+      572
+      573             Smaller values take precedence over larger values.  Local
+      574             internal reachable addresses, whether learned through ILMI
+      575             or as static routes, are given the highest priority
+      576             (i.e. 1)."
+      577        ::= { ciscoPnniPrecedenceEntry 2 }
+      578
+      579
+      580-- Cisco PNNI Route Address Table
+      581
+      582ciscoPnniRouteAddr OBJECT IDENTIFIER ::= { ciscoPnniMIBObjects 5 }
+      583
+      584ciscoPnniRouteAddrTable OBJECT-TYPE
+      585        SYNTAX        SEQUENCE OF CiscoPnniRouteAddrEntry
+      586        MAX-ACCESS    not-accessible
+      587        STATUS        current
+      588        DESCRIPTION
+      589            "A table of cisco specific attributes used to configure
+      590             cisco specific properties of ATM static routes."
+      591        ::= { ciscoPnniRouteAddr 1 }
+      592
+      593ciscoPnniRouteAddrEntry OBJECT-TYPE
+      594        SYNTAX        CiscoPnniRouteAddrEntry
+      595        MAX-ACCESS    not-accessible
+      596        STATUS        current
+      597        DESCRIPTION
+      598            "An entry in the table, containing cisco specific PNNI
+      599             information about a reachable address prefix."
+      600        AUGMENTS      { pnniRouteAddrEntry }
+      601        ::= { ciscoPnniRouteAddrTable 1 }
+      602
+      603CiscoPnniRouteAddrEntry ::=
+      604        SEQUENCE {
+      605                ciscoPnniRouteAddrForwardingE164Address     E164Address
+      606                }
+      607
+      608ciscoPnniRouteAddrForwardingE164Address OBJECT-TYPE
+      609        SYNTAX        E164Address
+      610        MAX-ACCESS    read-create
+      611        STATUS        current
+      612        DESCRIPTION
+      613            "The native E.164 address used as the called party address
+      614             when the call matching pnniRouteAddrAddress is forwarded
+      615             across the interface identified by pnniRouteAddrIfIndex.
+      616
+      617             If this address is specified, the received called party
+      618             address is passed on as the called party subaddress, and
+      619             the received calling party address (if any) is passed on
+      620             as the calling party subaddress.  The specified address is
+      621             ignored if the value of pnniRouteAddrProto is `pnni', the
+      622             value of pnniRouteAddrType is `reject', or the node
+      623             identified by pnniRouteAddrAdvertisingNodeId is not
+      624             instantiated in this switching system.
+      625
+      626             If no address is specified, the received called party
+      627             address and calling party address are passed on 
+unchanged."
+      628        DEFVAL { ''H }
+      629        ::= { ciscoPnniRouteAddrEntry 1 }
+      630
+      631
+      632-- conformance information
+      633
+      634ciscoPnniMIBConformance
+      635                OBJECT IDENTIFIER ::= { ciscoPnniMIB 3 }
+      636ciscoPnniMIBCompliances
+      637                OBJECT IDENTIFIER ::= { ciscoPnniMIBConformance 1 }
+      638ciscoPnniMIBGroups
+      639                OBJECT IDENTIFIER ::= { ciscoPnniMIBConformance 2 }
+      640
+      641
+      642-- compliance statements
+      643
+      644ciscoPnniMIBCompliance MODULE-COMPLIANCE
+      645        STATUS        current
+      646        DESCRIPTION
+      647            "The compliance statement for entities which implement the
+      648             Cisco PNNI MIB."
+      649        MODULE  -- this module
+      650            MANDATORY-GROUPS { ciscoPnniBasicGroup }
+      651
+      652            GROUP ciscoPnniRouteOptimizationGroup
+      653            DESCRIPTION
+      654                "This group is mandatory for switching systems that 
+      support
+      655                 PNNI route optimization."
+      656
+      657        ::= { ciscoPnniMIBCompliances 1 }
+      658
+      659
+      660-- units of conformance
+      661
+      662ciscoPnniBasicGroup OBJECT-GROUP
+      663        OBJECTS {
+      664                  ciscoPnniBackgroundRoutes,
+      665                  ciscoPnniBackgroundPollInterval,
+      666                  ciscoPnniBackgroundInsignificantThreshold,
+      667                  ciscoPnniResourceMgmtPollInterval,
+      668                  ciscoPnniAdminWeightMode,
+      669                  ciscoPnniMaxAdminWeightPercentage,
+      670                  ciscoPnniNodeAutoSummary,
+      671                  ciscoPnniNodeRedistributeStatic,
+      672                  ciscoPnniNodePtseRequest,
+      673                  ciscoPnniNodeName,
+      674                  ciscoPnniNodeScopeMappingMode,
+      675                  ciscoPnniIfLinkSelection,
+      676                  ciscoPnniPrecedenceValue,
+      677                  ciscoPnniRouteAddrForwardingE164Address
+      678                  }
+      679        STATUS current
+      680        DESCRIPTION
+      681            "A collection of cisco specific MIB objects used for
+      682             management of PNNI routing."
+      683        ::= { ciscoPnniMIBGroups 1 }
+      684
+      685ciscoPnniRouteOptimizationGroup OBJECT-GROUP
+      686        OBJECTS {
+      687                  ciscoPnniRouteOptimizationThreshold,
+      688                                  ciscoPnniIfRouteOptimization,
+      689                                  ciscoPnniIfRouteOptimInterval,
+      690                                  ciscoPnniIfRouteOptimStartHour,
+      691                                  ciscoPnniIfRouteOptimStartMinute,
+      692                                  ciscoPnniIfRouteOptimEndHour,
+      693                                  ciscoPnniIfRouteOptimEndMinute
+      694                  }
+      695        STATUS current
+      696        DESCRIPTION
+      697            "A collection of cisco specific MIB objects used for
+      698             management of route optimization."
+      699        ::= { ciscoPnniMIBGroups 2 }
+      700
+      701
+      702END
+
+Note: See TracBrowser for help on using the browser. 
+     Download in other formats:
+  Original Format 
+
+
+ Powered by Trac 0.11.3
+By Edgewall Software. Visit the Trac open source project at
+http://trac.edgewall.org/
