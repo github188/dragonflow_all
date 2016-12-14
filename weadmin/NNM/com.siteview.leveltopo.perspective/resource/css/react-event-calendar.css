@@ -1,0 +1,91 @@
+.flexContainer {
+  max-width: 100%;
+  width: 100%;
+  border-top: 1px solid #3b91ad;
+  border-left: 1px solid #3b91ad;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.flexColumn {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  width: 14.2857142857%;
+  border-bottom: 1px solid #3b91ad;
+  border-right: 1px solid #3b91ad;
+  -webkit-flex: 0 1 auto;
+  -ms-flex: 0 1 auto;
+  flex: 0 1 auto;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+.flexColumnHeader {
+    height: 30px;
+    line-height: 30px;
+}
+.day:hover {
+    /*background-color: red;*/
+}
+.day.inactive {
+  background-color: #f8f8f8;
+  color: #ccc;
+}
+.day.today {
+  background-color: #adfdce;
+}
+.day.selectedDay {
+  background-color: #0ee830;
+  color: white;
+}
+.day .inner-grid {
+  width: 100%;
+  position: relative;
+}
+.day .event-slot {
+  position: relative;
+  margin: 3px 0;
+  min-height: 24px;
+  font-size: 14px;
+}
+.day .event-slot.event {
+  /*background: #3b91ad;*/
+  /*color: #3b91ad;*/
+  white-space: nowrap;
+  text-indent: -10000px;
+  cursor: default;
+}
+.day .event-slot .event-title {
+  position: relative;
+  /*top: 3.5px;
+  left: 0.5rem;*/
+  padding: 0 0.5rem;
+  z-index: 100;
+  /*color: #fff;*/
+  z-index: 1;
+  overflow: visible;
+  text-indent: 0;
+  white-space: normal;
+}
+.day .event.event-first-day {
+  margin-left: 0.5rem;
+  border-top-left-radius: 0.3rem;
+  border-bottom-left-radius: 0.3rem;
+}
+.day .event.event-last-day {
+  margin-right: 0.5rem;
+  border-top-right-radius: 0.3rem;
+  border-bottom-right-radius: 0.3rem;
+}
+.day .date {
+  height: 30px;
+  padding: 0.25rem 0.5rem;
+  text-align: right;
+}
