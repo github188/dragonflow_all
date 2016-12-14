@@ -41,6 +41,7 @@ import com.siteview.NNM.modles.SubChartModle;
 import com.siteview.NNM.modles.TopoModle;
 import com.siteview.NNM.uijobs.refreshDevice;
 import com.siteview.NNM.uijobs.refreshWorker;
+import com.siteview.NNM.util.DevicePanelUtils;
 import com.siteview.ecc.authorization.ItossAuthorizeServiceImpl;
 import com.siteview.ecc.authorization.PermissionFactory;
 import com.siteview.ecc.constants.Operation;
@@ -81,7 +82,7 @@ public class DevicePanel extends Dialog {
 
 	/**
 	 * Create the dialog.
-	 * 
+	 *
 	 * @param parentShell
 	 */
 	public DevicePanel(Shell parentShell, String nodeid, String lab) {
@@ -111,23 +112,18 @@ public class DevicePanel extends Dialog {
 		newShell.setText("设备面板图("+this.entityobj.getLocalip()+")");
 		super.configureShell(newShell);
 	}
-
 	/**
 	 * Create contents of the dialog.
-	 * 
 	 * @param parent
 	 */
 	@Override
 	protected Control createDialogArea(final Composite parent) {
-		// Composite container = (Composite) super.createDialogArea(parent);
-		
 		final VisioMap visioChart = new VisioMap(parent, SWT.NONE);
 		parent.setLayout(new GridLayout(1, false));
 		visioChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		// 处理ui事件
 		visioChart.addListener(SWT.Selection, new Listener() {
 			private static final long serialVersionUID = 1L;
-
 			public void handleEvent(Event event) {
 				String eventag = event.text;
 				String portindex = ((JsonValue) event.data).asString();
@@ -137,7 +133,6 @@ public class DevicePanel extends Dialog {
 				String sql = "select pindex from ports where (porttype='6' or porttype='117') and id='"
 						+ nodeid + "'";
 				String pindex = "";
-
 				try {
 					ResultSet rs = ConfigDB.query(sql, conn);
 					int i = 1;
@@ -156,7 +151,6 @@ public class DevicePanel extends Dialog {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				} catch (Exception ex) {
-
 				}
 				ConfigDB.close(conn);
 				if (eventag.equals("openport")) {
@@ -168,7 +162,6 @@ public class DevicePanel extends Dialog {
 							.getShell(), entityobj, pindex, false);
 					cdialog.open();
 				} else if (eventag.equals("deviceip")) {
-
 					svNode obj = null;
 					for (String lid : EntityManager.allEdges.keySet()) {
 						String lport = EntityManager.allEdges.get(lid)
@@ -183,7 +176,6 @@ public class DevicePanel extends Dialog {
 									.get(EntityManager.allEdges.get(lid)
 											.getLtarget());
 							obj = (svNode) enode;
-
 						}
 					}
 					if (obj == null) {
@@ -202,226 +194,46 @@ public class DevicePanel extends Dialog {
 						rr=-1;
 					}
 					}
-					
 				}
-
 			}
 		});
-		// visioChart.setBarWidth( 25 );
-		// 1.3.6.1.4.1.3224.1.13.vdxn
-		// 1.3.6.1.4.1.2011.10.1.80.vdx漂亮
-		// String path = com.siteview.nnm.data.DBManage.getVisioPath();
-		Connection connn = ConfigDB.getConn();
-		String sql3 = "select count(*) as rowCount from ports where (porttype='6' or porttype='117')  and  id='"
-				+ this.entityobj.getSvid() + "'";
-		ResultSet rs3 = ConfigDB.query(sql3, connn);
-		try {
-			if (rs3 != null) {
-				rs3.next();
-				rowCount = rs3.getInt("rowCount");
-			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		ConfigDB.close(connn);
+
+		rowCount = DevicePanelUtils.getRowCountBySvid(this.entityobj.getSvid());
 		if (VisioDB.visiodb.containsKey(this.sysoid)) {
 			Map<String, Integer> vmain = VisioDB.visiodb.get(this.sysoid);
 			int xh = vmain.get("xh");
 			// VisioImporter vi = new VisioImporter();// 1.3.6.1.4.1.9.1.516.vdx
 			// 1.3.6.1.4.1.2011.10.1.80.vdx
 			// 1.3.6.1.4.1.9.1.324.vdx
-		
-			
-			Connection conn = ConfigDB.getvConn();
-			List<Map<String,String>> ltips=new ArrayList<Map<String,String>>(); 
-			Map<String, String> tipss =null;
-			sql3 = "select svid from  visiopanel"+xh+" where svid like 'models%' LIMIT 1";
-			String vvid="";
-			rs3 = ConfigDB.query(sql3, conn);
-			try {
-				if (rs3 != null) {
-					rs3.next();
-					vvid = rs3.getString("svid");
-				}
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			if(vvid!=null && !vvid.isEmpty()){
-				this.models = Integer.parseInt(vvid.substring(6));
+			String svid = DevicePanelUtils.getSvidByXh(xh);
+			if(svid!=null && !svid.isEmpty()){
+				this.models = Integer.parseInt(svid.substring(6));
 			}
 			if(this.rowCount>0 && this.models>0){
 				this.svhide=this.rowCount/this.models;
 			}
-			
-			String sql = "select svgtype,transform,itemid,svid,linewidth,fillcolor,linecolor,fontname,fontsize,textanchor,cssclass,ecx,ecy,erx,ery,vvalue from visiopanel"
-					+ xh;
-			ResultSet rs = ConfigDB.query(sql, conn);
-			try {
-				while (rs.next()) {
-					
-					int svgtype = rs.getInt("svgtype");
-					String transform = rs.getString("transform");
-					if (transform == null)
-						transform = "";
-					String itemid = rs.getString("itemid");
-					if (itemid == null)
-						itemid = "";
-					String svid = rs.getString("svid");
-					if (svid == null)
-						svid = "";
-					int linewidth = rs.getInt("linewidth");
-					String fillcolor = rs.getString("fillcolor");
-					String linecolor = rs.getString("linecolor");
-					String fontname = rs.getString("fontname");
-					if (fontname == null)
-						fontname = "";
-					String fontsize = rs.getString("fontsize");
-					if (fontsize == null)
-						fontsize = "";
-					if (!fontsize.isEmpty()) {
-						try {
-							String tempv = fontsize.substring(0, 3);
-							float emsize = Float.parseFloat(tempv);
-							if (emsize < 0.3) {
-								continue;
-							}
-						} catch (Exception ex) {
+			List<Map<String,String>> ltips=new ArrayList<Map<String,String>>();
+			ltips = DevicePanelUtils.getVisiopanelDataByXh(xh);
 
+			for(Map<String,String> obj:ltips){
+				if(obj.get("cssclass").trim().toLowerCase().equals("cc1")){
+					addOneShapeItem(obj,visioChart);
+				}else{
+					boolean createitme=true;
+					if(obj.get("svid").startsWith("svhide")){
+						int hdindex=Integer.parseInt(obj.get("svid").substring(6));
+						if(this.svhide>0 && hdindex<=this.svhide){
+							createitme=false;
+						}
+						if(this.rowCount==0){
+							createitme=false;
 						}
 					}
-					String textanchor = rs.getString("textanchor");
-					if (textanchor == null)
-						textanchor = "";
-					
-					String ecx = rs.getString("ecx");
-					if (ecx == null)
-						ecx = "";
-					String ecy = rs.getString("ecy");
-					if (ecy == null)
-						ecy = "";
-					String erx = rs.getString("erx");
-					if (erx == null)
-						erx = "";
-					String ery = rs.getString("ery");
-					if (ery == null)
-						ery = "";
-					String vvalue = rs.getString("vvalue");
-					if (vvalue == null)
-						vvalue = "";
-					String cssclass = rs.getString("cssclass");
-					if (cssclass == null)
-						cssclass = "";
-				    if(cssclass.trim().toLowerCase().equals("cc1")){
-				    	tipss= new HashMap<String,String>();
-				    	tipss.put("fillcolor", fillcolor);
-				    	tipss.put("linecolor", linecolor);
-				    	tipss.put("linewidth", linewidth+"");
-				    	tipss.put("itemid", itemid);
-				    	tipss.put("svgtype", svgtype+"");
-				    	tipss.put("transform", transform);
-				    	tipss.put("svid", svid);
-				    	tipss.put("fontname", fontname);
-				    	tipss.put("fontsize", fontsize);
-				    	tipss.put("textanchor", textanchor);
-				    	tipss.put("cssclass", cssclass);
-				    	tipss.put("ecx", ecx);
-				    	tipss.put("ecy", ecy);
-				    	tipss.put("erx", erx);
-				    	tipss.put("ery", ery);
-				    	tipss.put("vvalue", vvalue);
-				    	ltips.add(tipss);
-				    }else{
-				    
-				    boolean createitme=true;
-				    if(svid.startsWith("svhide")){
-				    	int hdindex=Integer.parseInt(svid.substring(6));
-				    	if(this.svhide>0 && hdindex<=this.svhide){
-				    		createitme=false;
-				    	}
-				    	if(this.rowCount==0){
-				    		createitme=false;
-				    	}
-				    }
-				    if(createitme){
-					ShapeItem tempitem = null;
-					tempitem = new ShapeItem(visioChart);
-					tempitem.setFillcolor(fillcolor);
-					tempitem.setLinecolor(linecolor);
-					tempitem.setLinewidth(linewidth);
-					if (!itemid.isEmpty())
-						tempitem.setItemid(itemid);
-					tempitem.setSvgtype(svgtype);
-					if (!transform.isEmpty())
-						tempitem.setTransform(transform);
-					if (!svid.isEmpty())
-						tempitem.setSvid(svid);
-					if (!fontname.isEmpty())
-						tempitem.setFontname(fontname);
-					if (!fontsize.isEmpty())
-						tempitem.setFontsize(fontsize);
-					if (!textanchor.isEmpty())
-						tempitem.setTextanchor(textanchor);
-					if (!cssclass.isEmpty())
-						tempitem.setCssclass(cssclass);
-					if (!ecx.isEmpty())
-						tempitem.setEcx(ecx);
-					if (!ecy.isEmpty())
-						tempitem.setEcy(ecy);
-					if (!erx.isEmpty())
-						tempitem.setErx(erx);
-					if (!ery.isEmpty())
-						tempitem.setEry(ery);
-					if (!vvalue.isEmpty())
-						tempitem.setValue(vvalue);
-				    }
-				    }
-
+					if(createitme){
+						addOneShapeItem(obj,visioChart);
+					}
 				}
-				
-				for(Map<String,String> obj:ltips){
-					ShapeItem tempitem = null;
-					tempitem = new ShapeItem(visioChart);
-					tempitem.setFillcolor(obj.get("fillcolor") );
-					tempitem.setLinecolor(obj.get("linecolor"));
-					tempitem.setLinewidth(Integer.parseInt(obj.get("linewidth")));
-					if (!obj.get("itemid").isEmpty())
-						tempitem.setItemid(obj.get("itemid"));
-					tempitem.setSvgtype(Integer.parseInt(obj.get("svgtype")));
-					if (!obj.get("transform").isEmpty())
-						tempitem.setTransform(obj.get("transform"));
-					if (!obj.get("svid").isEmpty())
-						tempitem.setSvid(obj.get("svid"));
-					if (!obj.get("fontname").isEmpty())
-						tempitem.setFontname(obj.get("fontname"));
-					if (!obj.get("fontsize").isEmpty())
-						tempitem.setFontsize(obj.get("fontsize"));
-					if (!obj.get("textanchor").isEmpty())
-						tempitem.setTextanchor(obj.get("textanchor"));
-					if (!obj.get("cssclass").isEmpty())
-						tempitem.setCssclass(obj.get("cssclass"));
-					if (!obj.get("ecx").isEmpty())
-						tempitem.setEcx(obj.get("ecx"));
-					if (!obj.get("ecy").isEmpty())
-						tempitem.setEcy(obj.get("ecy"));
-					if (!obj.get("erx").isEmpty())
-						tempitem.setErx(obj.get("erx"));
-					if (!obj.get("ery").isEmpty())
-						tempitem.setEry(obj.get("ery"));
-					if (!obj.get("vvalue").isEmpty())
-						tempitem.setValue(obj.get("vvalue"));
-				}
-			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (Exception ex) {
-
 			}
-			ConfigDB.close(conn);
 			// vi.ImportPage(path+"visio\\1.3.6.1.4.1.9.1.324.vdx", visioChart,
 			// 0, 10, 10);
 			visioChart.setLayoutData(new GridData((vmain.get("width") + 15),
@@ -441,7 +253,6 @@ public class DevicePanel extends Dialog {
 					parent.getDisplay().timerExec(10000, this);
 				}
 			});
-
 		} else {
 			String filename = DBManage.getPlatformPath() + "visiopanel/"
 					+ this.sysoid + ".vdx";
@@ -837,6 +648,39 @@ public class DevicePanel extends Dialog {
 		return visioChart;
 	}
 
+	private void addOneShapeItem(Map<String,String> obj, VisioMap visioChart){
+		ShapeItem tempitem = null;
+		tempitem = new ShapeItem(visioChart);
+		tempitem.setFillcolor(obj.get("fillcolor") );
+		tempitem.setLinecolor(obj.get("linecolor"));
+		tempitem.setLinewidth(Integer.parseInt(obj.get("linewidth")));
+		if (!obj.get("itemid").isEmpty())
+		tempitem.setItemid(obj.get("itemid"));
+		tempitem.setSvgtype(Integer.parseInt(obj.get("svgtype")));
+		if (!obj.get("transform").isEmpty())
+		tempitem.setTransform(obj.get("transform"));
+		if (!obj.get("svid").isEmpty())
+		tempitem.setSvid(obj.get("svid"));
+		if (!obj.get("fontname").isEmpty())
+		tempitem.setFontname(obj.get("fontname"));
+		if (!obj.get("fontsize").isEmpty())
+		tempitem.setFontsize(obj.get("fontsize"));
+		if (!obj.get("textanchor").isEmpty())
+		tempitem.setTextanchor(obj.get("textanchor"));
+		if (!obj.get("cssclass").isEmpty())
+		tempitem.setCssclass(obj.get("cssclass"));
+		if (!obj.get("ecx").isEmpty())
+		tempitem.setEcx(obj.get("ecx"));
+		if (!obj.get("ecy").isEmpty())
+		tempitem.setEcy(obj.get("ecy"));
+		if (!obj.get("erx").isEmpty())
+		tempitem.setErx(obj.get("erx"));
+		if (!obj.get("ery").isEmpty())
+		tempitem.setEry(obj.get("ery"));
+		if (!obj.get("vvalue").isEmpty())
+		tempitem.setValue(obj.get("vvalue"));
+	}
+
 	private void getstatus() {
 		statuss = null;
 		tooltips = null;
@@ -845,24 +689,6 @@ public class DevicePanel extends Dialog {
 			return;
 		}
 		Connection conn = ConfigDB.getConn();
-//		String sql = "select count(*) as rowCount from ports where (porttype='6' or porttype='117')  and  id='"
-//				+ this.entityobj.getSvid() + "'";
-//		ResultSet rs1 = ConfigDB.query(sql, conn);
-//		int rowCount = 0;
-//		try {
-//			if (rs1 != null) {
-//				rs1.next();
-//				rowCount = rs1.getInt("rowCount");
-//			}
-//		} catch (SQLException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
-//		if (rowCount == 0)
-//		{
-//			ConfigDB.close(conn);
-//			return;
-//		}
 		statuss = new int[rowCount];
 		tooltips = new String[rowCount];
 		String sql = "select id,desc,pindex,portnum,porttype,mac,speed from ports where (porttype='6' or porttype='117')  and id='"
@@ -882,7 +708,6 @@ public class DevicePanel extends Dialog {
 				try {
 					lspeed = Long.parseLong(speed);
 				} catch (Exception dx) {
-
 				}
 
 				FlowData fdata = null;
@@ -903,18 +728,18 @@ public class DevicePanel extends Dialog {
 					float tempvv = fdata.getPortSpeed();
 					if(tempvv>1000000000)
 						tempvv=10000000000f;
-					String speedd = getSpeed1(tempvv);
+					String speedd = DevicePanelUtils.getSpeed1(tempvv);
 					String inflow ="0";
 					String outflow = "0";
 					if (fdata.getPortSpeed() >= 1000000000) {
-						inflow = getSpeed(fdata.getHcInSpeed()*1000);
-						outflow = getSpeed(fdata.getHcOutSpeed()*1000);
-						
+						inflow = DevicePanelUtils.getSpeed(fdata.getHcInSpeed()*1000);
+						outflow = DevicePanelUtils.getSpeed(fdata.getHcOutSpeed()*1000);
+
 					} else {
-						inflow = getSpeed(fdata.getInFlow()) ;
-						outflow = getSpeed(fdata.getOutFlow());
-						
-						
+						inflow = DevicePanelUtils.getSpeed(fdata.getInFlow()) ;
+						outflow = DevicePanelUtils.getSpeed(fdata.getOutFlow());
+
+
 					}
 					tooltips[i] = PortManage.portTypenum2TypeDesc.get(porttype)
 							+ ":"
@@ -932,7 +757,7 @@ public class DevicePanel extends Dialog {
 							+ inflow + ":"
 							+ outflow + ":" + speedd;
 				} else {
-					String speedd = getSpeed(lspeed);
+					String speedd = DevicePanelUtils.getSpeed(lspeed);
 					statuss[i] = 0;
 					tooltips[i] = PortManage.portTypenum2TypeDesc.get(porttype)
 							+ ":" + pindex + ":" + desc + ":" + pindex + ":-"
@@ -948,100 +773,16 @@ public class DevicePanel extends Dialog {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception ex) {
-
 		}
 		ConfigDB.close(conn);
-
 	}
-	private String getSpeed(double v1) {
-		double vv = 0;
-		String dww = " Kbps";
-		vv = v1;
-		if (vv >= 1024) {
-			vv = (vv / 1024);
-			if (vv >= 1024) {
-				vv = (vv / 1024);
-				dww = " Gbps";
-				if (vv >= 1024) {
-					vv = (int) (vv / 1024);
-					dww = " Tbps";
-				}
-			} else {
-				dww = " Mbps";
-
-			}
-		}
-		BigDecimal bg = new BigDecimal(vv);
-		return bg.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue() + dww;
-	}
-	private String getSpeed(float v1) {
-		float vv = 0;
-		String dww = " Kbps";
-		vv = v1;
-		if (vv >= 1024) {
-			vv = (vv / 1024);
-			if (vv >= 1024) {
-				vv = (vv / 1024);
-				dww = " Gbps";
-				if (vv >= 1024) {
-					vv = (int) (vv / 1024);
-					dww = " Tbps";
-				}
-			} else {
-				dww = " Mbps";
-
-			}
-		}
-		BigDecimal bg = new BigDecimal(vv);
-		return bg.setScale(2, BigDecimal.ROUND_HALF_UP).floatValue() + dww;
-	}
-	private String getSpeed1(float v1) {
-		long vv = 0;
-		String dww = " Kbps";
-		vv = (int) (v1 / 1000);
-		if (vv >= 1000) {
-			vv = (int) (vv / 1000);
-			if (vv >= 1000) {
-				vv = (int) (vv / 1000);
-				dww = " Gbps";
-			} else {
-				dww = " Mbps";
-
-			}
-		}
-		return vv + dww;
-	}
-	/**
-	 * 
-	 * @param v1
-	 * @return
-	 */
-	private String getSpeed(long v1) {
-		long vv = 0;
-		String dww = " Kbps";
-		vv = (int) (v1 / 1000);
-		if (vv >= 1000) {
-			vv = (int) (vv / 1000);
-			if (vv >= 1000) {
-				vv = (int) (vv / 1000);
-				dww = " Gbps";
-			} else {
-				dww = " Mbps";
-
-			}
-		}
-		return vv + dww;
-	}
-
 	/**
 	 * Create contents of the button bar.
-	 * 
 	 * @param parent
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 	}
-
 	/**
 	 * Return the initial size of the dialog.
 	 */
