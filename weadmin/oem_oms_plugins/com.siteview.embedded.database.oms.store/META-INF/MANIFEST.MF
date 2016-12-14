@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Store
+Bundle-SymbolicName: com.siteview.embedded.database.oms.store
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: com.siteview.embedded.database;bundle-version="1.0.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

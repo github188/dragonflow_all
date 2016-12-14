@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="Siteview.Forms.Common.SiteviewFunctionExtension">
+      <FunctionExtension
+            class="com.siteview.authority.yft.odata.GetUploadAlarmUI"
+            descript="获取升级报警界面数据"
+            functionName="GetUploadAlarmUI">
+         <OutputParameters>
+            <Parameters
+                  descript="组织机构"
+                  paramName="ORGANIZATION">
+            </Parameters>
+            <Parameters
+                  descript="设备类型"
+                  paramName="EQUIPMENTTYPE">
+            </Parameters>
+         </OutputParameters>
+      </FunctionExtension>
+   </extension>
+
+</plugin>
