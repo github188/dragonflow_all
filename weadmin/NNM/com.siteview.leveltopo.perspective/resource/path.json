@@ -1,0 +1,7 @@
+{
+  "ServiceAddress":"/bods.svc/",
+  "ServletServiceAddress":"/",
+  "TokenVerify":"/rest/auth/login",
+  "mapUrl":"",
+  "ServiceItoss":"/webloader"
+}

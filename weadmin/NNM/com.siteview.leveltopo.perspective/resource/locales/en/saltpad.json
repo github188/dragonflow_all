@@ -1,0 +1,69 @@
+{
+  "dashboard":{
+    "recentJobs":"Recent Jobs",
+    "ViewAllJobs":"View All Jobs"
+
+  },
+  "job_history":{
+    "executedJobs":"List of executed jobs",
+    "JobID":"Job ID",
+    "Function":"Function",
+    "Target":"Target",
+    "Arguments":"Arguments",
+    "LaunchedAt":"Launched At",
+    "User":"User",
+    "Output":"Output"
+  },
+
+  "minion_list":{
+    "ListMinions":"List of minions",
+    "MinionId":"Minion id",
+    "MinionVersion":"Minion version",
+    "Status":"Status"
+  },
+
+  "job_run":{
+    "RunJob":"Run Job",
+    "Function":"Function",
+    "FunctionJob":"The function of the job",
+    "Minion":"Minion",
+    "JobTarget":"The target of the job",
+    "Matcher":"Matcher",
+    "JobMatcher":"The matcher of the job"
+  },
+
+  "job_templates":{
+    "jobsTemplates":"List of jobs templates",
+    "Name":"Name",
+    "Description":"Description",
+    "Matcher":"Matcher",
+    "Target":"Target",
+    "Function":"Function",
+    "Arguments":"Arguments",
+    "Copy":"Copy",
+    "Launch":"Launch",
+    "CopyJobParameters":"Copy job parameters",
+    "LaunchJobTemplate":"Launch job template"
+  },
+
+  "job_counter":{
+    "jobs":"jobs."
+  },
+
+  "minion_counter":{
+    "minionsDetected":"On",
+    "minions":"minions detected on the platform,",
+    "minionsAlive":"minions were alive recently."
+  },
+
+  "minion_keys":{
+    "keysAccepted":"keys accepted,",
+    "keysRefused":"keys refused and ",
+    "FakeData":"keys refused.(Fake data)"
+  },
+
+  "notification":{
+    "LastLaunchedJobs":"LAST LAUNCHED JOBS"
+  }
+
+}

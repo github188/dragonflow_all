@@ -1,0 +1,71 @@
+{
+  "dashboard":{
+    "recentJobs":"最近作业",
+    "ViewAllJobs":"查看所有作业"
+
+  },
+
+  "job_history":{
+    "executedJobs":"作业记录",
+    "JobID":"名称",
+    "Function":"功能",
+    "Target":"目标",
+    "Arguments":"参数",
+    "LaunchedAt":"始于",
+    "User":"用户",
+    "Output":"产量"
+  },
+
+  "minion_list":{
+    "ListMinions":"作业代理",
+    "MinionId":"名称",
+    "MinionVersion":"版本",
+    "Status":"状态"
+  },
+
+  "job_run":{
+    "RunJob":"运行作业",
+    "Function":"功能",
+    "FunctionJob":"作业的功能",
+    "Minion":"代理",
+    "JobTarget":"作业目标",
+    "Matcher":"匹配器",
+    "JobMatcher":"作业匹配"
+  },
+
+  "job_templates":{
+    "jobsTemplates":"作业模版",
+    "Name":"名称",
+    "Description":"描述",
+    "Matcher":"匹配器",
+    "Target":"目标",
+    "Function":"功能",
+    "Arguments":"参数",
+    "Copy":"复制",
+    "Launch":"开始",
+    "CopyJobParameters":"复制作业模板",
+    "LaunchJobTemplate":"开始作业模版"
+  },
+
+  "job_counter": {
+    "jobs":"项作业"
+  },
+
+    "minion_counter":{
+      "minionsDetected":"最近在这平台上检测到",
+      "minions":"项作业代理，",
+      "minionsAlive":"项代理已存在"
+    },
+
+    "minion_keys":{
+      "keysAccepted":"接收,",
+      "keysRefused":"拒绝和 ",
+      "FakeData":"拒绝.(伪造数据)"
+    },
+
+    "notification":{
+      "LastLaunchedJobs":"上一项开始的作业"
+    }
+
+
+}
