@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Fragment
+Bundle-SymbolicName: core.webloader.oms.fragment;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: core.webloader;bundle-version="3.2.2"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

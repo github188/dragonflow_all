@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<fragment>
+   <extension
+         point="org.eclipse.rap.ui.entrypoint">
+      <entrypoint
+            brandingId="org.eclipse.rap.design.example.fancy.branding"
+            class="core.webloader.StandEntryPointImpl"
+            id="core.webloader.EntryPointImpl"
+            path="/webloader">
+      </entrypoint>
+      <entrypoint
+            brandingId="org.eclipse.rap.design.example.fancy.branding"
+            class="core.webloader.ServerConfig"
+            id="core.webloader.ServerConfig"
+            path="/connectionconfig">
+      </entrypoint>
+   </extension>
+   <extension
+         point="org.eclipse.rap.ui.branding">
+      <branding
+            body="aquarium/aquarium.html"
+            favicon="html/logo.png"
+            id="org.eclipse.rap.design.example.fancy.branding"
+            themeId="org.eclipse.rap.design.example.fancy.theme"
+            title="INFINOVA OMS">
+         <presentationFactory
+               defaultLayoutId="org.eclipse.rap.design.example.fancy.layout"
+               id="org.eclipse.rap.design.example.fancy.factory"
+               name="Fancy Presentation Factory"
+               viewActionsVisible="true">
+            <defaultStackPresentation
+                  id="org.eclipse.rap.design.example.stack.view">
+            </defaultStackPresentation>
+         </presentationFactory>
+      </branding>
+   </extension>
+   <extension
+         point="Siteview.Forms.Common.BrandExtension">
+      <branding
+            CompanyName="INFINOVA"
+            DefaultIcon="html/logo.png"
+            MessageBoxCaption="INFINOVA OMS 应用系统"
+            PhoneNumber="(86)755-86095088"
+            ProductName="OMS"
+            Website="www.infinova.com.cn">
+      </branding>
+   </extension>
+</fragment>
