@@ -1,0 +1,227 @@
+-- ==========================================================================
+-- Copyright (C) 2004 by H3C Technologies. All rights reserved.
+--
+-- Description: The purpose of this MIB file is to provide the definition of
+--              voice call active record.
+-- Reference:
+-- ==========================================================================
+HH3C-VOCALLACTIVE-MIB DEFINITIONS ::= BEGIN
+    IMPORTS
+        OBJECT-TYPE, MODULE-IDENTITY, IpAddress, Integer32
+            FROM SNMPv2-SMI
+        CodecType
+            FROM HH3C-VO-TYPE-MIB
+        InetAddressType, InetAddress 
+            FROM INET-ADDRESS-MIB 
+        hh3cVoice
+            FROM HH3C-OID-MIB;   
+    
+        
+        hh3cVoiceCallActive MODULE-IDENTITY 
+            LAST-UPDATED "200503150000Z"
+            ORGANIZATION
+                "Hangzhou H3C Tech. Co., Ltd."
+            CONTACT-INFO
+                "Platform Team Hangzhou H3C Tech. Co., Ltd.
+                Hai-Dian District Beijing P.R. China
+                http://www.h3c.com
+                Zip:100085
+                "
+            DESCRIPTION 
+                "This MIB file is to provide the definition of voice call 
+                active record."
+            REVISION "200503150000Z"
+            DESCRIPTION 
+                "The initial version of this MIB file."
+            ::= { hh3cVoice 6 }
+
+        
+        hh3cVoCallActiveObjects OBJECT IDENTIFIER ::= { hh3cVoiceCallActive 1 }
+
+--===========================================================================
+--                        hh3cVoCallActiveTable
+--
+--===========================================================================
+        hh3cVoCallActiveTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVoCallActiveEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The table contains the voice active call information."
+            ::= { hh3cVoCallActiveObjects 1 }
+
+        
+        hh3cVoCallActiveEntry OBJECT-TYPE
+            SYNTAX HH3CVoCallActiveEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of hh3cVoCallActiveTable."
+            INDEX { hh3cVoCallActiveChannel }
+            ::= { hh3cVoCallActiveTable 1 }
+
+        
+        HH3CVoCallActiveEntry ::=
+            SEQUENCE { 
+                hh3cVoCallActiveChannel
+                    Integer32,
+                hh3cVoCallActiveCallerNumber
+                    OCTET STRING,
+                hh3cVoCallActiveCalledNumber
+                    OCTET STRING,
+                hh3cVoCallActiveEncodeType
+                    CodecType,
+                hh3cVoCallActiveLocalAddressType
+                    InetAddressType,
+                hh3cVoCallActiveLocalAddress
+                    InetAddress,
+                hh3cVoCallActivePeerAddressType
+                    InetAddressType,
+                hh3cVoCallActivePeerAddress
+                    InetAddress,
+                hh3cVoCallActiveCallOrigin
+                    INTEGER,
+                hh3cVoCallActiveIPSigType
+                    INTEGER,
+                hh3cVoCallActivePSTNSigType
+                    INTEGER,
+                hh3cVoCallActiveStatus
+                    INTEGER
+             }
+
+        hh3cVoCallActiveChannel OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "This object indicates the logic channel number of a call."
+            ::= { hh3cVoCallActiveEntry 1 }
+
+        
+        hh3cVoCallActiveCallerNumber OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the caller number of a call."
+            ::= { hh3cVoCallActiveEntry 2 }
+
+        
+        hh3cVoCallActiveCalledNumber OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the called number of a call."
+            ::= { hh3cVoCallActiveEntry 3 }
+
+        
+        hh3cVoCallActiveEncodeType OBJECT-TYPE
+            SYNTAX CodecType
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the encode type of a call."
+            ::= { hh3cVoCallActiveEntry 4 }
+
+
+        hh3cVoCallActiveLocalAddressType OBJECT-TYPE
+            SYNTAX  InetAddressType
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the local IP address type of a call."
+            ::= { hh3cVoCallActiveEntry 5 }
+
+        
+        hh3cVoCallActiveLocalAddress OBJECT-TYPE
+            SYNTAX InetAddress
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the local IP address of a call."
+            ::= { hh3cVoCallActiveEntry 6 }
+
+
+        hh3cVoCallActivePeerAddressType OBJECT-TYPE
+            SYNTAX  InetAddressType
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the peer IP address type of a call."
+            ::= { hh3cVoCallActiveEntry 7 }
+
+        
+        hh3cVoCallActivePeerAddress OBJECT-TYPE
+            SYNTAX InetAddress
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the peer IP address of a call."
+            ::= { hh3cVoCallActiveEntry 8 }
+
+        
+        hh3cVoCallActiveCallOrigin OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                caller(1),
+                called(2)
+                }
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the direction of a call."
+            ::= { hh3cVoCallActiveEntry 9 }
+
+        
+        hh3cVoCallActiveIPSigType OBJECT-TYPE
+            SYNTAX INTEGER 
+                { 
+                unknown(1),
+                h323(2),
+                sip(3)
+                }
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the ip signal type."
+            ::= { hh3cVoCallActiveEntry 10 }
+
+        
+        hh3cVoCallActivePSTNSigType OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                unknown(1),
+                fxs(2),
+                fxo(3),
+                em(4),
+                r2(5),
+                dss1(6),
+                dem(7)
+                }
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the PSTN(Public Switched Telephone Network) 
+                signal type."
+            ::= { hh3cVoCallActiveEntry 11 }
+
+        
+        hh3cVoCallActiveStatus OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                idle(1),
+                calling(2),
+                alerting(3),
+                talking(4),
+                release(5)
+                }
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the current progress status of a call."
+            ::= { hh3cVoCallActiveEntry 12 }
+    
+    END
+
+

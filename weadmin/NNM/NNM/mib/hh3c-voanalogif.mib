@@ -1,0 +1,855 @@
+-- ==========================================================================
+-- Copyright (C) 2004 by H3C Technologies. All rights reserved.
+--
+-- Description: The purpose of this MIB file is to provide the definition of
+--              the general analog voice interface configuration. 
+-- Reference:
+-- ==========================================================================
+HH3C-VOANALOGIF-MIB DEFINITIONS ::= BEGIN
+    IMPORTS
+        OBJECT-TYPE, MODULE-IDENTITY, Integer32
+            FROM SNMPv2-SMI
+        hh3cVoice
+            FROM HH3C-OID-MIB;   
+    
+        
+        hh3cVoiceAnalogInterface MODULE-IDENTITY 
+            LAST-UPDATED "200503150000Z"
+            ORGANIZATION
+                "Hangzhou H3C Tech. Co., Ltd."
+            CONTACT-INFO
+                "Platform Team Hangzhou H3C Tech. Co., Ltd.
+                Hai-Dian District Beijing P.R. China
+                http://www.h3c.com
+                Zip:100085
+                "
+            DESCRIPTION 
+                "The MIB file is to provide the definition of the
+                general analog voice interface configuration."
+            REVISION "200503150000Z"
+            DESCRIPTION 
+                "The initial version of this MIB file."
+            ::= { hh3cVoice 3 }
+
+        
+        hh3cVoAnalogIfCommonObjects OBJECT IDENTIFIER ::= 
+                                            { hh3cVoiceAnalogInterface 1 }
+
+--==========================================================================
+--                      hh3cVoAnalogIfCommonCfgTable
+--
+--==========================================================================
+        hh3cVoAnalogIfCommonCfgTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVoAnalogIfCommonCfgEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "This table contains the information about configurable 
+                parameters for an voice analog interface."
+            ::= { hh3cVoAnalogIfCommonObjects 1 }
+
+        
+        hh3cVoAnalogIfCommonCfgEntry OBJECT-TYPE
+            SYNTAX HH3CVoAnalogIfCommonCfgEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of hh3cVoAnalogIfCommonCfgTable, which is 
+                automatically created when an analog voice module 
+                has been found."
+            INDEX { hh3cVoAIfCfgPortIndex }
+            ::= { hh3cVoAnalogIfCommonCfgTable 1 }
+
+        
+        HH3CVoAnalogIfCommonCfgEntry ::=
+            SEQUENCE { 
+                hh3cVoAIfCfgPortIndex
+                    Integer32,
+                hh3cVoAIfCfgPortType
+                    INTEGER,
+                hh3cVoAIfCfgPortSubLine
+                    OCTET STRING
+             }
+
+        hh3cVoAIfCfgPortIndex OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The index of a voice analog interface common configuration 
+                table." 
+            ::= { hh3cVoAnalogIfCommonCfgEntry 1 }
+
+        
+        hh3cVoAIfCfgPortType OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                fxs(1),
+                fxo(2),
+                em(3)
+                }
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the type of a voice analog interface."
+            ::= { hh3cVoAnalogIfCommonCfgEntry 2 }
+
+
+        hh3cVoAIfCfgPortSubLine OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the port subscriber line name."
+            ::= { hh3cVoAnalogIfCommonCfgEntry 3 }
+
+
+        
+        hh3cVoAnalogIfFXSObjects OBJECT IDENTIFIER ::= 
+                                            { hh3cVoiceAnalogInterface 2 }
+
+--==========================================================================
+--                      hh3cVoAnalogIfFXSCfgTable
+--
+--==========================================================================
+        hh3cVoAnalogIfFXSCfgTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVoAnalogIfFXSCfgEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "This table contains the information about configurable 
+                parameters for an analog fxs interface."
+            ::= { hh3cVoAnalogIfFXSObjects 1 }
+
+        
+        hh3cVoAnalogIfFXSCfgEntry OBJECT-TYPE
+            SYNTAX HH3CVoAnalogIfFXSCfgEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of hh3cVoAnalogIfFXSCfgTable, which is automatically   
+                created when an analog fxs voice module has been found."
+            INDEX { hh3cVoAIfFXSCfgPortIndex }
+            ::= { hh3cVoAnalogIfFXSCfgTable 1 }
+
+        
+        HH3CVoAnalogIfFXSCfgEntry ::=
+            SEQUENCE { 
+                hh3cVoAIfFXSCfgPortIndex
+                    Integer32,
+                hh3cVoAIfFXSCfgCidDisplay
+                    INTEGER,
+                hh3cVoAIfFXSCfgCidSend
+                    INTEGER,
+                hh3cVoAIfFXSCfgCidType
+                    INTEGER,
+                hh3cVoAIfFXSCfgSubLine
+                    OCTET STRING
+             }
+
+        hh3cVoAIfFXSCfgPortIndex OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The index of voice analog interface fxs configuration table." 
+            ::= { hh3cVoAnalogIfFXSCfgEntry 1 }
+
+        hh3cVoAIfFXSCfgCidDisplay OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                enable(1),
+                disable(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates whether displays the calling number
+                of analog fxs interface or not."
+            ::= { hh3cVoAnalogIfFXSCfgEntry 3 }
+            
+        hh3cVoAIfFXSCfgCidSend OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                enable(1),
+                disable(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates whether sends the calling number 
+                of analog fxs interface or not."
+            ::= { hh3cVoAnalogIfFXSCfgEntry 4 }
+
+        hh3cVoAIfFXSCfgCidType OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                complex(1),
+                simple(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the type of cid message on an analog
+                fxs interface."
+            DEFVAL { complex }
+            ::= { hh3cVoAnalogIfFXSCfgEntry 5 }
+
+        hh3cVoAIfFXSCfgSubLine OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the port subscriber line name."
+            ::= { hh3cVoAnalogIfFXSCfgEntry 6 }
+
+
+--==========================================================================
+--                      hh3cVoAnalogIfFXSTimerTable
+--
+--==========================================================================
+        hh3cVoAnalogIfFXSTimerTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVoAnalogIfFXSTimerEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "This table contains the timer information for an 
+                analog fxs interface."
+            ::= { hh3cVoAnalogIfFXSObjects 3 }
+
+        
+        hh3cVoAnalogIfFXSTimerEntry OBJECT-TYPE
+            SYNTAX HH3CVoAnalogIfFXSTimerEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of hh3cVoAnalogIfFXSTimerTable, which is automatically 
+                created when an analog fxs voice module has been found."
+            INDEX { hh3cVoAIfFXSTimerPortIndex }
+            ::= { hh3cVoAnalogIfFXSTimerTable 1 }
+
+        
+        HH3CVoAnalogIfFXSTimerEntry ::=
+            SEQUENCE { 
+                hh3cVoAIfFXSTimerPortIndex
+                    Integer32,
+                hh3cVoAIfFXSTimerDialInterval
+                    Integer32,
+                hh3cVoAIfFXSTimerFirstDial
+                    Integer32,
+                hh3cVoAIfFXSTimerRingBack
+                    Integer32,
+                hh3cVoAIfFXSTimerSubLine
+                    OCTET STRING
+             }
+
+        hh3cVoAIfFXSTimerPortIndex OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The index of a voice analog interface fxs timer table."
+            ::= { hh3cVoAnalogIfFXSTimerEntry 1 }
+
+        hh3cVoAIfFXSTimerDialInterval OBJECT-TYPE
+            SYNTAX Integer32(1..300)
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "The interval, in seconds, between two dialing numbers."               
+            ::= { hh3cVoAnalogIfFXSTimerEntry 4 }
+
+        hh3cVoAIfFXSTimerFirstDial OBJECT-TYPE
+            SYNTAX Integer32(1..300)
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "The period of time, in seconds, before dialing the first number."
+            ::= { hh3cVoAnalogIfFXSTimerEntry 5 }
+    
+        hh3cVoAIfFXSTimerRingBack OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the maximum duration the ring back
+                to persist. Unit is second."
+            ::= { hh3cVoAnalogIfFXSTimerEntry 6 }
+
+        hh3cVoAIfFXSTimerSubLine OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the port subscriber line name."
+            ::= { hh3cVoAnalogIfFXSTimerEntry 7 }
+    
+
+
+        hh3cVoAnalogIfFXOObjects OBJECT IDENTIFIER ::= { hh3cVoiceAnalogInterface 3 }
+
+--==========================================================================
+--                      hh3cVoAnalogIfFXOCfgTable
+--
+--==========================================================================
+        hh3cVoAnalogIfFXOCfgTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVoAnalogIfFXOCfgEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "This table contains the information about configurable 
+                parameters for analog fxo voice interface."
+            ::= { hh3cVoAnalogIfFXOObjects 1 }
+
+        
+        hh3cVoAnalogIfFXOCfgEntry OBJECT-TYPE
+            SYNTAX HH3CVoAnalogIfFXOCfgEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of hh3cVoAnalogIfFXOCfgTable, which is automatically 
+                created when an analog fxo interface has been found."
+            INDEX { hh3cVoAIfFXOCfgPortIndex }
+            ::= { hh3cVoAnalogIfFXOCfgTable 1 }
+
+        
+        HH3CVoAnalogIfFXOCfgEntry ::=
+            SEQUENCE { 
+                hh3cVoAIfFXOCfgPortIndex
+                    Integer32,
+               hh3cVoAIfFXOCfgArea
+                    INTEGER,
+                hh3cVoAIfFXOPreDialDelay
+                    Integer32,
+                hh3cVoAIfFXOCfgPortImpedance
+                    INTEGER,
+                hh3cVoAIfFXOCfgCidEnable
+                    INTEGER,
+                hh3cVoAnalogIfFXOCfgCidSend
+                    INTEGER,
+                hh3cVoAIfFXOCfgCidType
+                    INTEGER,
+                hh3cVoAIfFXOCfgSubLine
+                    OCTET STRING
+             }
+
+        hh3cVoAIfFXOCfgPortIndex OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The index of voice analog interface fxo configuration 
+                table."
+            ::= { hh3cVoAnalogIfFXOCfgEntry 1 }
+
+
+        hh3cVoAIfFXOCfgArea OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                custom(1),
+                europe(2),
+                northmerica(3)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the area where this product is
+                used."
+            ::= { hh3cVoAnalogIfFXOCfgEntry 4 }
+
+        
+        hh3cVoAIfFXOPreDialDelay OBJECT-TYPE
+            SYNTAX Integer32(0..10)
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "The maximum length of time, in seconds, of pre-dial 
+                delay on the analog fxo interface."
+            ::= { hh3cVoAnalogIfFXOCfgEntry 5 }
+
+        
+        hh3cVoAIfFXOCfgPortImpedance OBJECT-TYPE
+            SYNTAX INTEGER 
+                {
+                australia(1),
+                austria(2),
+                belgiumLong(3),
+                belgiumShort(4),
+                brazil(5),
+                germanSwiss(6),
+                china(7),
+                greece(8),
+                czechRepublic(9),
+                denmark(10),
+                eTSIHarmanized(11),
+                finland(12),
+                france(13),
+                hungary(14),
+                india(15),
+                italy(16),
+                japan(17),
+                korea(18),
+                mexico(19),
+                netherlands(20),
+                norway(21),
+                portugal(22),
+                slovakia(23),
+                spain(24),
+                sweden(25),
+                uk(26),
+                usLoadedLine(27),
+                usNonLoaded(28),
+                usSpecialService(29),
+                r550(30),
+                r600(31),
+                r650(32),
+                r700(33),
+                r750(34),
+                r800(35),
+                r850(36),
+                r900(37),
+                r950(38)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the port impedance of a FXO interface."
+            ::= { hh3cVoAnalogIfFXOCfgEntry 6 }
+            
+        hh3cVoAIfFXOCfgCidEnable OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                enable(1),
+                disable(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates whether enables the cid receiving 
+                function on an analog fxo interface." 
+            ::= { hh3cVoAnalogIfFXOCfgEntry 7 }
+
+        hh3cVoAnalogIfFXOCfgCidSend OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                enable(1),
+                disable(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates whether sends the calling 
+                number."
+            ::= { hh3cVoAnalogIfFXOCfgEntry 8 }
+
+        hh3cVoAIfFXOCfgCidType OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                complex(1),
+                simple(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the type of cid message on an analog
+                 fxo interface." 
+            ::= { hh3cVoAnalogIfFXOCfgEntry 9 }
+
+        hh3cVoAIfFXOCfgSubLine OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the port subscriber line name."
+            ::= { hh3cVoAnalogIfFXOCfgEntry 10 }
+        
+
+--==========================================================================
+--                      hh3cVoAnalogIfFXOTimerTable
+--
+--==========================================================================
+        hh3cVoAnalogIfFXOTimerTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVoAnalogIfFXOTimerEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "This table contains the timer information for an 
+                analog fxo interface."
+            ::= { hh3cVoAnalogIfFXOObjects 3 }
+
+        
+        hh3cVoAnalogIfFXOTimerEntry OBJECT-TYPE
+            SYNTAX HH3CVoAnalogIfFXOTimerEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of hh3cVoAnalogIfFXOTimerTable, which is automatically 
+                created when an analog fxo interface has been found."
+            INDEX { hh3cVoAIfFXOTimerPortIndex }
+            ::= { hh3cVoAnalogIfFXOTimerTable 1 }
+
+        
+        HH3CVoAnalogIfFXOTimerEntry ::=
+            SEQUENCE { 
+                hh3cVoAIfFXOTimerPortIndex
+                    Integer32,
+                hh3cVoAIfFXOTimerDtmf
+                    Integer32,
+                hh3cVoAIfFXOTimerDtmfInterval
+                    Integer32,
+                hh3cVoAIfFXOTimerDialInterval
+                    Integer32,
+                hh3cVoAIfFXOTimerFirstDial
+                    Integer32,
+                hh3cVoAIfFXOTimerRingBack
+                    Integer32,
+                hh3cVoAIfFXOTimerSubLine
+                    OCTET STRING
+             }
+
+        hh3cVoAIfFXOTimerPortIndex OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The index of voice analog interface fxo timer table." 
+            ::= { hh3cVoAnalogIfFXOTimerEntry 1 }
+
+        
+        hh3cVoAIfFXOTimerDtmf OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates duration of DTMF(Dual Tone Multi-Frequency) 
+                signal in milliseconds."
+            ::= { hh3cVoAnalogIfFXOTimerEntry 2 }
+
+        
+        hh3cVoAIfFXOTimerDtmfInterval OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates DTMF(Dual Tone Multi-Frequency) sending 
+                interval in milliseconds."
+            ::= { hh3cVoAnalogIfFXOTimerEntry 3 }
+
+        hh3cVoAIfFXOTimerDialInterval OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "The interval, in seconds, between two dialing numbers." 
+            ::= { hh3cVoAnalogIfFXOTimerEntry 4 }
+
+        hh3cVoAIfFXOTimerFirstDial OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "The period of time, in seconds, before dialing the first number." 
+            ::= { hh3cVoAnalogIfFXOTimerEntry 5 }
+    
+        hh3cVoAIfFXOTimerRingBack OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the maximum duration the ring back 
+                to persist. Unit is second."
+            ::= { hh3cVoAnalogIfFXOTimerEntry 6 }
+
+        hh3cVoAIfFXOTimerSubLine OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the port subscriber line name."
+            ::= { hh3cVoAnalogIfFXOTimerEntry 7 }
+
+
+
+        hh3cVoAnalogIfEMObjects OBJECT IDENTIFIER ::= { hh3cVoiceAnalogInterface 4 }
+
+--==========================================================================
+--                      hh3cVoAnalogIfEMCfgTable
+--
+--==========================================================================
+        hh3cVoAnalogIfEMCfgTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVoAnalogIfEMCfgEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "This table contains the information about configurable 
+                parameters for an analog EM interface."
+            ::= { hh3cVoAnalogIfEMObjects 1 }
+
+        
+        hh3cVoAnalogIfEMCfgEntry OBJECT-TYPE
+            SYNTAX HH3CVoAnalogIfEMCfgEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of hh3cVoAnalogIfEMCfgTable, which is automatically 
+                created when an analog EM voice module has been found."
+            INDEX { hh3cVoAIfEMCfgPortIndex }
+            ::= { hh3cVoAnalogIfEMCfgTable 1 }
+
+        
+        HH3CVoAnalogIfEMCfgEntry ::=
+            SEQUENCE { 
+                hh3cVoAIfEMCfgPortIndex
+                    Integer32,
+                hh3cVoAIfEMCfgSignalMode
+                    INTEGER,
+                hh3cVoAIfEMCfgPhyParm
+                    INTEGER,
+                hh3cVoAIfEMCfgPhyType
+                    INTEGER,
+                hh3cVoAIfEMCfgTimeoutRing
+                    Integer32,
+                hh3cVoAIfEMCfgTimeoutWaitDigit
+                    Integer32,
+                hh3cVoAIfEMCfgSubLine
+                    OCTET STRING
+             }
+
+        hh3cVoAIfEMCfgPortIndex OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The index of voice analog interface EM configuration table."
+            ::= { hh3cVoAnalogIfEMCfgEntry 1 }
+
+        
+        hh3cVoAIfEMCfgSignalMode OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                delayDial(1),
+                immediateDial(2),
+                winkStart(3)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the signal modes of an analog 
+                EM interfaces."
+            ::= { hh3cVoAnalogIfEMCfgEntry 2 }
+
+        
+        hh3cVoAIfEMCfgPhyParm OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                twoWiresOperation(1),
+                fourWiresOperation(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the operation of an analog EM 
+                signal."
+            ::= { hh3cVoAnalogIfEMCfgEntry 3 }
+
+        
+        hh3cVoAIfEMCfgPhyType OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                type1(1),
+                type2(2),
+                type3(3),
+                type5(5)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the EM type of the 
+                analog interface. "
+            ::= { hh3cVoAnalogIfEMCfgEntry 4 }
+
+        
+        hh3cVoAIfEMCfgTimeoutRing OBJECT-TYPE
+            SYNTAX Integer32(5..120)
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "The maximum seconds, to wait for the ring back on the 
+                EM interface."
+            ::= { hh3cVoAnalogIfEMCfgEntry 5 }
+
+        
+        hh3cVoAIfEMCfgTimeoutWaitDigit OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "The maximum length of time, in  seconds, to wait for called 
+                number on an analog EM interface."
+            ::= { hh3cVoAnalogIfEMCfgEntry 6 }
+
+        hh3cVoAIfEMCfgSubLine OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the port subscriber line name."
+            ::= { hh3cVoAnalogIfEMCfgEntry 7 }
+
+
+--==========================================================================
+--                      hh3cVoAnalogIfEMTimerTable
+--
+--==========================================================================
+        hh3cVoAnalogIfEMTimerTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVoAnalogIfEMTimerEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "This table contains the timer information for an analog 
+                EM interface."
+            ::= { hh3cVoAnalogIfEMObjects 3 }
+
+        
+        hh3cVoAnalogIfEMTimerEntry OBJECT-TYPE
+            SYNTAX HH3CVoAnalogIfEMTimerEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of hh3cVoAnalogIfEMTimerTable, which is automatically
+                created when an analog EM voice module has been found."
+            INDEX { hh3cVoAIfEMTimerPortIndex }
+            ::= { hh3cVoAnalogIfEMTimerTable 1 }
+
+        
+        HH3CVoAnalogIfEMTimerEntry ::=
+            SEQUENCE { 
+                hh3cVoAIfEMTimerPortIndex
+                    Integer32,
+                hh3cVoAIfEMTimerDtmf
+                    Integer32,
+                hh3cVoAIfEMTimerDtmfInterval
+                    Integer32,
+                hh3cVoAIfEMTimerSendWink
+                    Integer32,
+                hh3cVoAIfEMTimerWinkRising
+                    Integer32,
+                hh3cVoAIfEMTimerWinkHold
+                    Integer32,
+                hh3cVoAIfEMTimerDialoutDelay
+                    Integer32,
+                hh3cVoAIfEMTimerDelayRising
+                    Integer32,
+                hh3cVoAIfEMTimerDelayHold
+                    Integer32,
+                hh3cVoAIfEMTimerSubLine
+                    OCTET STRING
+             }
+
+        hh3cVoAIfEMTimerPortIndex OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The index of voice analog interface EM timer table."
+            ::= { hh3cVoAnalogIfEMTimerEntry 1 }
+
+        
+        hh3cVoAIfEMTimerDtmf OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates DTMF(Dual Tone Multi-Frequency) 
+                sending duration in milliseconds." 
+            ::= { hh3cVoAnalogIfEMTimerEntry 2 }
+
+        
+        hh3cVoAIfEMTimerDtmfInterval OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates DTMF(Dual Tone Multi-Frequency) 
+                sending interval in milliseconds."
+            ::= { hh3cVoAnalogIfEMTimerEntry 3 }
+
+        
+        hh3cVoAIfEMTimerSendWink OBJECT-TYPE
+            SYNTAX Integer32(100..5000)
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the maximum time in milliseconds
+                between receiving seizure signal and sending wink signal. 
+                This object can only take effect when hh3cVoAIfEMCfgSignalMode 
+                is set to 'winkStart'." 
+            DEFVAL { 200 }
+            ::= { hh3cVoAnalogIfEMTimerEntry 5 }
+
+        
+        hh3cVoAIfEMTimerWinkRising OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the maximum time in milliseconds
+                between sending seizure signal and receiving wink signal. 
+                This object can only take effect when hh3cVoAIfEMCfgSignalMode 
+                is set to 'winkStart'." 
+            ::= { hh3cVoAnalogIfEMTimerEntry 6 }
+
+        
+        hh3cVoAIfEMTimerWinkHold OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the maximum duration in milliseconds
+                to send wink signal. This object can only take effect 
+                when hh3cVoAIfEMCfgSignalMode is set to 'winkStart'."
+            ::= { hh3cVoAnalogIfEMTimerEntry 7 }
+
+        
+        hh3cVoAIfEMTimerDialoutDelay OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the maximum duration in milliseconds
+                to send called digits. This object can only take effect 
+                when hh3cVoAIfEMCfgSignalMode is set to 'immediateDial'." 
+            ::= { hh3cVoAnalogIfEMTimerEntry 8 }
+
+        
+        hh3cVoAIfEMTimerDelayRising OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the maximum duration in milliseconds
+                between receiveing seizure signal and sending delay signal. 
+                This object can only take effect when 
+                hh3cVoAIfEMCfgSignalMode is set to 'delayDial'." 
+            ::= { hh3cVoAnalogIfEMTimerEntry 9 }
+
+        
+        hh3cVoAIfEMTimerDelayHold OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the maximum duration in milliseconds 
+                to send delay signal. This object can only take effect when 
+                hh3cVoAIfEMCfgSignalMode is set to 'delayDial'."
+            ::= { hh3cVoAnalogIfEMTimerEntry 10 }
+
+        hh3cVoAIfEMTimerSubLine OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the port subscriber line name."
+            ::= { hh3cVoAnalogIfEMTimerEntry 11 }
+    
+    END

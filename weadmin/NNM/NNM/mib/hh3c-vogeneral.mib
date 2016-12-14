@@ -1,0 +1,672 @@
+-- Copyright (C) 2004 by H3C Technologies. All rights reserved.
+--
+-- Description: The purpose of this MIB file is to provide the definition of
+--              voice general configuration.
+-- Reference:
+-- ==========================================================================
+HH3C-VOGENERAL-MIB DEFINITIONS ::= BEGIN
+    IMPORTS
+        OBJECT-TYPE, MODULE-IDENTITY, Integer32
+            FROM SNMPv2-SMI
+        RowStatus
+             FROM SNMPv2-TC
+        hh3cVoice
+            FROM HH3C-OID-MIB;
+
+
+        hh3cVoiceGeneral MODULE-IDENTITY
+            LAST-UPDATED "200503150000Z"
+            ORGANIZATION
+                "Hangzhou H3C Tech. Co., Ltd."
+            CONTACT-INFO
+                "Platform Team Hangzhou H3C Tech. Co., Ltd.
+                Hai-Dian District Beijing P.R. China
+                http://www.h3c.com
+                Zip:100085
+                "
+            DESCRIPTION
+                "This MIB is to provide the definition of voice voice
+                general configuration."
+            REVISION "200503150000Z"
+            DESCRIPTION
+                "The initial version of this MIB file."
+           ::= { hh3cVoice 1 }
+
+
+
+
+--===========================================================================
+--                            hh3cVoiceGeneralObjects
+--
+--===========================================================================
+        hh3cVoiceGeneralObjects OBJECT IDENTIFIER ::= { hh3cVoiceGeneral 1 }
+
+        hh3cVoGeneralJitterLen OBJECT-TYPE
+            SYNTAX Integer32 (0..10)
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the length of the Jitter buffer."
+            ::= { hh3cVoiceGeneralObjects 1 }
+
+
+        hh3cVoGeneralMatchPolicy OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                long(1),
+                short(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the policy of number matching."
+            ::= { hh3cVoiceGeneralObjects 2 }
+
+
+        hh3cVoGeneralDataStatistics OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                enable(1),
+                disable(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates whether the data statistics is enabled."
+            DEFVAL { disable }
+            ::= { hh3cVoiceGeneralObjects 5 }
+
+
+        hh3cVoGeneralDialTerminator OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the global character, which is used to
+                notify gateway that dialing is completed."
+            ::= { hh3cVoiceGeneralObjects 7 }
+
+
+        hh3cVoGeneralCallStart OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                fast(1),
+                normal(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates whether to support the FAST START mode
+                which the caller side initiates."
+            ::= { hh3cVoiceGeneralObjects 8 }
+
+
+        hh3cVoGeneralCalledTunnel OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                enable(1),
+                disable(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates whether the called tunnel function
+                is enabled."
+            ::= { hh3cVoiceGeneralObjects 9 }
+
+
+        hh3cVoGeneralSpecialService OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                enable(1),
+                disable(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates whether special service number
+                function is enabled."
+            ::= { hh3cVoiceGeneralObjects 10 }
+
+
+        hh3cVoGeneralPeerSearchStop OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the maximum amount of the entities which
+                the system will scan when a call has been initiated."
+            ::= { hh3cVoiceGeneralObjects 12 }
+
+
+        hh3cVoGeneralPeerSelectOrderRule OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                epr(1),
+                epl(2),
+                elp(3),
+                elr(4),
+                per(5),
+                pel(6),
+                ple(7),
+                plr(8),
+                lep(9),
+                ler(10),
+                lpe(11),
+                lpr(12),
+                er(13),
+                pr(14),
+                lr(15),
+                explicitMatch(16),
+                priority(17),
+                random(18),
+                longestNoUse(19),
+                ep(20),
+                el(21),
+                pe(22),
+                pl(23),
+                le(24),
+                lp(25)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the rule order applied in voice
+                entity selection.
+                epr(1)  --- explicit match, priority, random
+                epl(2)  --- explicit match, priority, longest no use
+                elp(3)  --- explicit match, longest no use, priority
+                elr(4)  --- explicit match, longest no use, random
+                per(5)  --- priority, explicit match, random
+                pel(6)  --- priority, explicit match, longest no use
+                ple(7)  --- priority, longest no use, explicit match
+                plr(8)  --- priority, longest no use, random
+                lep(9)  --- longest no use, explicit match, priority
+                ler(10) --- longest no use, explicit match, random
+                lpe(11) --- longest no use, priority, explicit match
+                lpr(12) --- longest no use, priority, random
+                er(13)  --- explicit match, random
+                pr(14)  --- priority, random
+                lr(15)  --- longest no use, random
+                explicitMatch(16)    --- explicit match
+                priority(17)         --- priority
+                random(18)           --- random
+                longestNoUse(19)     --- longest no use
+                ep(20)  --- explicit match, priority
+                el(21)  --- explicit match, longest no use
+                pe(22)  --- priority, explicit match
+                pl(23)  --- priority, longest no use
+                le(24)  --- longest no use, explicit match
+                lp(25)  --- longest no use, priority
+                "
+            ::= { hh3cVoiceGeneralObjects 13 }
+
+
+        hh3cVoGeneralPeerSelectTypePriority OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                noneType(1),
+                voipPotsVofr(2),
+                voipVofrPots(3),
+                potsVoipVofr(4),
+                potsVofrVoip(5),
+                vofrPotsVoip(6),
+                vofrVoipPots(7)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the priority-ranked type of voice entity.
+                                         1ST  2DN  3RD
+                noneType(1)          --- NONE TYPE
+                voipPotsVofr(2)      --- VOIP POTS VOFR
+                voipVofrPots(3)      --- VOIP VOFR POTS
+                potsVoipVofr(4)      --- POTS VOIP VOFR
+                potsVofrVoip(5)      --- POTS VOFR VOIP
+                vofrPotsVoip(6)      --- VOFR POTS VOIP
+                vofrVoipPots(7)      --- VOFR VOIP POTS
+                "
+            ::= { hh3cVoiceGeneralObjects 14 }
+
+        hh3cVoGeneralDscpSignal OBJECT-TYPE
+            SYNTAX Integer32(0..63)
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates DSCP(Different Service Code Point)
+                signal value."
+            ::= { hh3cVoiceGeneralObjects 15 }
+
+        hh3cVoGeneralDscpMedia OBJECT-TYPE
+            SYNTAX Integer32(0..63)
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates DSCP(Different Service Code Point)
+                media value."
+            ::= { hh3cVoiceGeneralObjects 16 }
+
+
+--===========================================================================
+--                            hh3cVoNumSubstTable
+--
+--===========================================================================
+        hh3cVoiceNumberSubstGroup OBJECT IDENTIFIER ::= { hh3cVoiceGeneral 4 }
+
+        hh3cVoNumSubstTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVoNumSubstEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The table contains the number substitute rule."
+            ::= { hh3cVoiceNumberSubstGroup 1 }
+
+
+        hh3cVoNumSubstEntry OBJECT-TYPE
+            SYNTAX HH3CVoNumSubstEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of hh3cVoNumSubstTable."
+            INDEX { hh3cVoNumSubstIndex }
+            ::= { hh3cVoNumSubstTable 1 }
+
+        HH3CVoNumSubstEntry ::= SEQUENCE
+            {
+            hh3cVoNumSubstIndex
+                Integer32,
+            hh3cVoNumSubstFirstRule
+                Integer32,
+            hh3cVoNumSubstDotMatchRule
+                INTEGER,
+            hh3cVoNumSubstRowStatus
+                RowStatus
+            }
+
+
+        hh3cVoNumSubstIndex OBJECT-TYPE
+            SYNTAX Integer32(1..2147483647)
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The index of the number substitute rule table."
+            ::= { hh3cVoNumSubstEntry 1 }
+
+
+        hh3cVoNumSubstFirstRule  OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-create
+            STATUS current
+            DESCRIPTION
+                "This object indicates the first rule to be used."
+            ::= { hh3cVoNumSubstEntry 2 }
+
+
+        hh3cVoNumSubstDotMatchRule  OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                endOnly(1),
+                leftRight(2),
+                rightLeft(3)
+                }
+            MAX-ACCESS read-create
+            STATUS current
+            DESCRIPTION
+                "This object indicates the dot wildcard match rule.
+                endOnly   - only end of E.164 number (input format)
+                leftRight - match form left to right (input format)
+                rightLeft - match form right to left (input format)
+                "
+            ::= { hh3cVoNumSubstEntry 3 }
+
+
+        hh3cVoNumSubstRowStatus OBJECT-TYPE
+            SYNTAX RowStatus
+            MAX-ACCESS read-create
+            STATUS current
+            DESCRIPTION
+                "This object is used to create, delete or modify a row in
+                this table."
+            ::= { hh3cVoNumSubstEntry 4 }
+
+
+--===========================================================================
+--                         hh3cVoNumSubstRuleTable
+--
+--===========================================================================
+        hh3cVoNumSubstRuleTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVoNumSubstRuleEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The table contains the number-substitute rule information."
+            ::= { hh3cVoiceNumberSubstGroup 2 }
+
+        hh3cVoNumSubstRuleEntry OBJECT-TYPE
+            SYNTAX HH3CVoNumSubstRuleEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of a single number substitute rule."
+            INDEX { hh3cVoNumSubstIndex,hh3cVoNumSubstRuleIndex }
+            ::= { hh3cVoNumSubstRuleTable 1 }
+
+        HH3CVoNumSubstRuleEntry ::=
+            SEQUENCE{
+                hh3cVoNumSubstRuleIndex
+                    Integer32,
+                hh3cVoNumSubstRuleInputFormat
+                    OCTET STRING,
+                hh3cVoNumSubstRuleOutputFormat
+                    OCTET STRING,
+                hh3cVoNumSubstRuleRowStatus
+                    RowStatus
+            }
+
+
+        hh3cVoNumSubstRuleIndex OBJECT-TYPE
+        SYNTAX Integer32(0..127)
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "The index of a number-substitute rule."
+        ::= { hh3cVoNumSubstRuleEntry 1 }
+
+
+        hh3cVoNumSubstRuleInputFormat OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-create
+        STATUS current
+        DESCRIPTION
+            "This object specifies the match format for input."
+        ::= { hh3cVoNumSubstRuleEntry 2 }
+
+
+        hh3cVoNumSubstRuleOutputFormat OBJECT-TYPE
+        SYNTAX OCTET STRING
+        MAX-ACCESS read-create
+        STATUS current
+        DESCRIPTION
+            "This object specifies the output format."
+        ::= { hh3cVoNumSubstRuleEntry 3 }
+
+
+        hh3cVoNumSubstRuleRowStatus OBJECT-TYPE
+        SYNTAX RowStatus
+        MAX-ACCESS read-create
+        STATUS current
+        DESCRIPTION
+            "This object is used to create, delete or modify a row in
+            this table."
+        ::= { hh3cVoNumSubstRuleEntry 4 }
+
+
+--===========================================================================
+--                            hh3cVoMaxCallTable
+--
+--===========================================================================
+        hh3cVoMaxCallTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF HH3CVoMaxCallEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "The table contains the maximum number of the calls which
+            can be established simultaneously."
+        ::= { hh3cVoiceGeneral 5 }
+
+
+        hh3cVoMaxCallEntry OBJECT-TYPE
+        SYNTAX HH3CVoMaxCallEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "The entry of the max call table."
+        INDEX { hh3cVoMaxCallTableIndex }
+        ::= { hh3cVoMaxCallTable 1 }
+
+        HH3CVoMaxCallEntry ::=
+            SEQUENCE {
+                hh3cVoMaxCallTableIndex
+                    Integer32,
+                hh3cVoMaxCallValue
+                    Integer32,
+                hh3cVoMaxCallTableRowStatus
+                    RowStatus
+            }
+
+
+        hh3cVoMaxCallTableIndex OBJECT-TYPE
+            SYNTAX Integer32(1..2147483647)
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The index uniquely identifies a single maximum call value."
+            ::= { hh3cVoMaxCallEntry 1 }
+
+
+        hh3cVoMaxCallValue OBJECT-TYPE
+        SYNTAX Integer32(0..120)
+        MAX-ACCESS read-create
+        STATUS current
+        DESCRIPTION
+            "This object specifies a single maximum call value."
+        ::= { hh3cVoMaxCallEntry 2 }
+
+
+        hh3cVoMaxCallTableRowStatus OBJECT-TYPE
+        SYNTAX RowStatus
+        MAX-ACCESS read-create
+        STATUS current
+        DESCRIPTION
+            "This object is used to create, delete or modify a row in
+            this table.
+            Note: when create a new row, hh3cVoMaxCallValue must be configured."
+        ::= { hh3cVoMaxCallEntry 3 }
+
+
+--===========================================================================
+--                      hh3cVoInCallingNumSubstTable
+--
+--===========================================================================
+        hh3cVoInCallingNumSubstTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF HH3CVoInCallingNumSubstEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "This table contains the rules of caller number substitute for
+            incoming call."
+        ::= { hh3cVoiceGeneral 6 }
+
+
+        hh3cVoInCallingNumSubstEntry OBJECT-TYPE
+        SYNTAX HH3CVoInCallingNumSubstEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "The entry of hh3cVoInCallingNumSubstTable."
+        INDEX { hh3cVoInCallingNumSubstIndex }
+        ::= { hh3cVoInCallingNumSubstTable 1 }
+
+        HH3CVoInCallingNumSubstEntry ::=
+            SEQUENCE {
+                hh3cVoInCallingNumSubstIndex
+                    Integer32,
+                hh3cVoInCallingSubstRowStatus
+                    RowStatus
+            }
+
+
+        hh3cVoInCallingNumSubstIndex OBJECT-TYPE
+        SYNTAX Integer32(1..2147483647)
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "The index of incoming call substitute table."
+        ::= { hh3cVoInCallingNumSubstEntry 1 }
+
+
+        hh3cVoInCallingSubstRowStatus OBJECT-TYPE
+        SYNTAX RowStatus
+        MAX-ACCESS read-create
+        STATUS current
+        DESCRIPTION
+            "This object is used to create, delete or modify a row in
+            this table."
+        ::= { hh3cVoInCallingNumSubstEntry 2 }
+
+
+--===========================================================================
+--                      hh3cVoInCalledNumSubstTable
+--
+--===========================================================================
+        hh3cVoInCalledNumSubstTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF HH3CVoInCalledNumSubstEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "This table contains the rules of called number substitute for
+            incoming call."
+        ::= { hh3cVoiceGeneral 7 }
+
+
+        hh3cVoInCalledNumSubstEntry OBJECT-TYPE
+        SYNTAX HH3CVoInCalledNumSubstEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "The entry of hh3cVoInCalledNumSubstTable."
+        INDEX { hh3cVoInCalledNumSubstIndex }
+        ::= { hh3cVoInCalledNumSubstTable 1 }
+
+        HH3CVoInCalledNumSubstEntry ::=
+            SEQUENCE {
+                hh3cVoInCalledNumSubstIndex
+                    Integer32,
+                hh3cVoInCalledSubstRowStatus
+                    RowStatus
+            }
+
+
+        hh3cVoInCalledNumSubstIndex OBJECT-TYPE
+            SYNTAX Integer32(1..2147483647)
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The index of incomed call substitute table."
+            ::= { hh3cVoInCalledNumSubstEntry 1 }
+
+
+        hh3cVoInCalledSubstRowStatus OBJECT-TYPE
+        SYNTAX RowStatus
+        MAX-ACCESS read-create
+        STATUS current
+        DESCRIPTION
+            "This object is used to create, delete or modify a row in
+            this table."
+        ::= { hh3cVoInCalledNumSubstEntry 2 }
+
+
+--===========================================================================
+--                      hh3cVoOutCallingNumSubstTable
+--
+--===========================================================================
+        hh3cVoOutCallingNumSubstTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF HH3CVoOutCallingNumSubstEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "This table contains the rules of caller number substitute for
+            outgoing call."
+        ::= { hh3cVoiceGeneral 8 }
+
+
+        hh3cVoOutCallingNumSubstEntry OBJECT-TYPE
+        SYNTAX HH3CVoOutCallingNumSubstEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "The entry of hh3cVoOutCallingNumSubstTable."
+        INDEX { hh3cVoOutCallingNumSubstIndex }
+        ::= { hh3cVoOutCallingNumSubstTable 1 }
+
+
+        HH3CVoOutCallingNumSubstEntry ::=
+            SEQUENCE {
+                hh3cVoOutCallingNumSubstIndex
+                    Integer32,
+                hh3cVoOutCallingSubstRowStatus
+                    RowStatus
+            }
+
+
+        hh3cVoOutCallingNumSubstIndex OBJECT-TYPE
+        SYNTAX Integer32(1..2147483647)
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "The index of outgoing calling substitute table."
+        ::= { hh3cVoOutCallingNumSubstEntry 1 }
+
+
+        hh3cVoOutCallingSubstRowStatus OBJECT-TYPE
+        SYNTAX RowStatus
+        MAX-ACCESS read-create
+        STATUS current
+        DESCRIPTION
+            "This object is used to create, delete or modify a row in
+            this table."
+        ::= { hh3cVoOutCallingNumSubstEntry 2 }
+
+
+
+--===========================================================================
+--                      hh3cVoOutCalledNumSubstTable
+--
+--===========================================================================
+        hh3cVoOutgoingCalledNumSubstTable OBJECT-TYPE
+        SYNTAX SEQUENCE OF HH3CVoOutgoingCalledNumSubstEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "This table contains the rules of called number substitute for
+            outgoing call."
+        ::= { hh3cVoiceGeneral 9 }
+
+
+        hh3cVoOutgoingCalledNumSubstEntry OBJECT-TYPE
+        SYNTAX HH3CVoOutgoingCalledNumSubstEntry
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "The entry of hh3cVoOutCalledNumSubstTable."
+        INDEX { hh3cVoOutCalledNumSubstIndex }
+        ::= { hh3cVoOutgoingCalledNumSubstTable 1 }
+
+        HH3CVoOutgoingCalledNumSubstEntry ::=
+        SEQUENCE {
+            hh3cVoOutCalledNumSubstIndex
+                Integer32,
+            hh3cVoOutCalledSubstRowStatus
+                RowStatus
+        }
+
+
+        hh3cVoOutCalledNumSubstIndex OBJECT-TYPE
+        SYNTAX Integer32(1..2147483647)
+        MAX-ACCESS not-accessible
+        STATUS current
+        DESCRIPTION
+            "The index of outgoing called substitute table."
+        ::= { hh3cVoOutgoingCalledNumSubstEntry 1 }
+
+
+        hh3cVoOutCalledSubstRowStatus OBJECT-TYPE
+            SYNTAX RowStatus
+            MAX-ACCESS read-create
+            STATUS current
+            DESCRIPTION
+                "This object is used to create, delete or modify a row in
+                this table."
+            ::= { hh3cVoOutgoingCalledNumSubstEntry 2 }
+
+    END

@@ -1,0 +1,1102 @@
+TOS-MIB DEFINITIONS ::= BEGIN
+
+	IMPORTS
+	    MODULE-IDENTITY,NOTIFICATION-TYPE,OBJECT-TYPE,enterprises,
+	    Integer32, Opaque,IpAddress   FROM SNMPv2-SMI
+	    TEXTUAL-CONVENTION,DisplayString
+		FROM SNMPv2-TC;
+		
+	topsec MODULE-IDENTITY
+	    LAST-UPDATED "06-10-13" 
+	    ORGANIZATION "TOPSEC"
+	    CONTACT-INFO
+	            " Topsec Beijing
+	              China
+	              E-mail: support@topsec.com.cn "
+	    DESCRIPTION
+	            "The MIB module for management of Topsec Operating System Security Product, independent of the specific encapsulation scheme in use."
+	    REVISION     "05-09-14" 
+	    DESCRIPTION
+	            "Initial version."
+	    REVISION    "20060809"
+	    DESCRIPTION
+	            "enterprises revised."
+	    REVISION    "20061020"
+	    DESCRIPTION
+	            "Mgmt revised."
+	    ::= { enterprises 14331 }
+
+	topsecMgmt	OBJECT IDENTIFIER ::= { topsec 5 }
+
+	topsecExperiment	OBJECT IDENTIFIER ::= { topsecMgmt 4 }
+	objects			OBJECT IDENTIFIER ::= { topsecMgmt 5 }
+	
+	tosMib	OBJECT IDENTIFIER ::= { objects 1 }
+	
+	--start list TOS simple information 	
+	tosProductType OBJECT-TYPE
+	    SYNTAX      DisplayString (SIZE (0..255))
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "TOPSEC TOS product type."
+	    ::= { tosMib 1 }
+		
+	tosSysVersion OBJECT-TYPE
+	    SYNTAX      DisplayString (SIZE (0..255))
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "System version."
+	    ::= { tosMib 2 }	
+
+	tosDeviceName OBJECT-TYPE
+	    SYNTAX      DisplayString (SIZE (0..255))
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "Device name, set by system devname set command"
+	    ::= { tosMib 3 }
+
+	--sysrunning status information
+	sysrunning	OBJECT IDENTIFIER ::= { tosMib 4 }
+
+	systemTime OBJECT-TYPE
+	    SYNTAX      DisplayString (SIZE (0..255))
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "System time."
+	    ::= { sysrunning 1 }
+
+	cpuLoad OBJECT-TYPE
+	    SYNTAX      Integer32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "CPU load."
+	    ::= { sysrunning 2 }
+
+	memoryLoad OBJECT-TYPE
+	    SYNTAX      Integer32 
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "Memory load."
+	    ::= { sysrunning 3}
+
+	memoryFree OBJECT-TYPE
+	    SYNTAX      Integer32 
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "Memory free."
+	    ::= { sysrunning 4 }  
+	    
+	currentConnections OBJECT-TYPE
+	    SYNTAX      Integer32 
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "current connections."
+	    ::= { sysrunning 5  }	    
+
+	cps OBJECT-TYPE
+	    SYNTAX      Integer32 
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "new connections per second."
+	    ::= { sysrunning 6  }	 
+		    	       
+	--end running
+
+	--start list TOS interface table information
+	tosIfTable OBJECT-TYPE
+	SYNTAX     SEQUENCE OF TosIfEntry
+	MAX-ACCESS not-accessible
+	STATUS     current
+	DESCRIPTION
+	        "The (conceptual) table containing information about Network Interface card status."
+	::= { tosMib 5 }
+
+	tosIfEntry	OBJECT-TYPE
+	    SYNTAX     TosIfEntry
+	    MAX-ACCESS not-accessible
+	    STATUS     current
+	    DESCRIPTION
+	            "information about NIC status."
+	    INDEX      { ifIdx }
+	    ::= { tosIfTable 1 }
+	
+	TosIfEntry ::= SEQUENCE {
+	    ifIdx		         INTEGER,
+	    ifName		         DisplayString,
+	    ifDuplex           	         DisplayString, -- auto,half,full,NA
+	    ifSpeed		         INTEGER,	-- 10/100/1000,NA
+	    ifNoLock			 INTEGER,	-- always 1
+	    ifLineUp			 INTEGER,	-- no shutdown 
+	    ifLinkUp			 INTEGER,	-- link up	
+	    ifNotBad			 INTEGER,	-- just ok 
+
+	    ifPhysAddress		 DisplayString,
+	    ifAddress	     	         DisplayString,
+
+	    ifInPkts           	         Counter32,     -- dirver statistics
+	    ifInOctets			 Counter32,     -- similar to MIBII
+	    ifInErrors			 Counter32,
+	    ifInDiscards		 Counter32,
+
+	    ifInErrorsRate		 Integer32,	-- 5 minutes average
+	    ifInDiscardsRate		 Integer32,	-- KBit/s
+	    ifInSpeed			 Integer32,	-- 
+
+	    ifOutPkts                    Counter32,
+	    ifOutOctets			 Counter32,	    
+	    ifOutErrors			 Counter32,	    
+            ifOutDiscards		 Counter32,
+
+	    ifOutErrorsRate		 Integer32,	-- 5 minutes average
+	    ifOutDiscardsRate		 Integer32,	-- KBit/s
+	    ifOutSpeed			 Integer32,	-- 
+
+	    ifBandInUse			 Integer32,	-- 
+
+	    ifRcvChkSumErr               Counter32,	-- tos protocol stack statistis
+	    ifRcvL2bCastErr		 Counter32,
+	    ifRcvIpPkts                  Counter32,
+	    ifRcvArpPkts                 Counter32,
+	    ifRcvUdpPkts                 Counter32,
+	    ifRcvTcpPkts                 Counter32,
+	    ifRcvIcmpPkts                Counter32,
+	    ifRcvL3mCast                 Counter32,
+	    ifRcvFragPkts		 Counter32,
+	    ifDropPkts		         Counter32,
+	    ifColliPkts                  Counter32	    	    
+    }
+	
+	ifIdx OBJECT-TYPE
+		SYNTAX     INTEGER
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		    "Table index."
+		::= { tosIfEntry 1 }
+		
+	ifName OBJECT-TYPE
+		SYNTAX     DisplayString
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "Name of the NIC."
+		::= { tosIfEntry 2 }
+
+	ifNoLock OBJECT-TYPE
+		SYNTAX     INTEGER 
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "No safe lock"
+		::= { tosIfEntry 3 }
+
+	-- mode and speed
+
+	ifDuplex OBJECT-TYPE
+		SYNTAX     DisplayString
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "Negotiation mode."
+		::= { tosIfEntry 4 }
+
+	ifSpeed OBJECT-TYPE
+		SYNTAX     INTEGER 
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "NIC speed."
+		::= { tosIfEntry 5 }
+
+	-- link and line status
+
+	ifLineUp OBJECT-TYPE
+		SYNTAX     INTEGER 
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "line up."
+		::= { tosIfEntry 6 }
+
+	ifLinkUp OBJECT-TYPE
+		SYNTAX     INTEGER 
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "link up."
+		::= { tosIfEntry 7 }
+
+	ifNotBad OBJECT-TYPE
+		SYNTAX     INTEGER 
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "No hardware error."
+		::= { tosIfEntry 8 }
+
+	-- mac, ip address
+
+	ifPhyAddress OBJECT-TYPE
+		SYNTAX     DisplayString
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "Physical address of the NIC."
+		::= { tosIfEntry 9 }
+
+	ifAddress OBJECT-TYPE
+		SYNTAX     DisplayString
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "IP address of the NIC."
+		::= { tosIfEntry 10 }
+	
+	-- nic driver statistics
+	-- inboud 
+	ifInPkts OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The total number of the packets received."
+		::= { tosIfEntry 11 }
+
+	ifInOctets OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The total number of octets received."
+		::= { tosIfEntry 12 }
+
+	ifInDiscards OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The number of inbound packets which were chosen to be
+			discarded even though no errors had been detected to
+			prevent their being deliverable to a higher-layer protocol."
+		::= { tosIfEntry 13 }
+
+	ifInErrors OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The number of inbound packets that contained errors 
+			preventing them from being deliverable to a higher-layer protocol."
+		::= { tosIfEntry 14 }
+
+	-- inbound II
+
+	ifInDiscardsRate OBJECT-TYPE
+		SYNTAX     Integer32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The ratio of inbound discarded packets vs total packets in a certain time.
+			(x1000)"
+		::= { tosIfEntry 15 }
+
+	ifInErrorsRate OBJECT-TYPE
+		SYNTAX     Integer32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The ratio of inbound error packets vs total packets in a certain time.
+			(x1000)"
+		::= { tosIfEntry 16 }
+
+	ifInSpeed OBJECT-TYPE
+		SYNTAX     Integer32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The flow speed of inbound.
+			KBit/s"
+		::= { tosIfEntry 17 }
+
+	-- nic driver statistics
+	-- outboud 
+	ifOutPkts OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The total number of the packets transmitted."
+		::= { tosIfEntry 18 }
+
+	ifOutOctets OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The total number of octets transmitted."
+		::= { tosIfEntry 19 }
+
+	ifOutDiscards OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The number of outbound packets which were chosen to
+	                 be discarded even though no errors had been detected 
+			 to prevent their being transmitted."
+		::= { tosIfEntry 20 }
+
+	ifOutErrors OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The number of outbound packets that could not 
+			be transmitted because of errors."
+		::= { tosIfEntry 21 }
+
+	-- outbound II
+	ifOutDiscardsRate OBJECT-TYPE
+		SYNTAX     Integer32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The ratio of outbound discarded packets vs total packets in a certain time.
+			(x1000)"
+		::= { tosIfEntry 22 }
+
+	ifOutErrorsRate OBJECT-TYPE
+		SYNTAX     Integer32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The ratio of outbound error packets vs total packets in a certain time.
+			(x1000)"
+		::= { tosIfEntry 23 }
+
+	ifOutSpeed OBJECT-TYPE
+		SYNTAX     Integer32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The flow speed of outbound.
+			KBit/s"
+		::= { tosIfEntry 24 }
+
+	-- end driver statistics
+	ifBandInUse OBJECT-TYPE
+		SYNTAX     Integer32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The band in use.
+			(x1000)"
+		::= { tosIfEntry 25 }
+
+	-- tos protocol statistics	
+	ifRcvChkSumErr OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "The number of packets received with error checksum."
+		::= { tosIfEntry 26 }
+	
+	ifRcvL2bCastErr OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "The number of the other error packets including second level broadcast packets received."
+		::= { tosIfEntry 27 }
+	
+	ifRcvIpPkts OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "The total number of the ip packets received."
+		::= { tosIfEntry 28 }
+	
+	ifRcvArpPkts OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "The total number of the arp packets received."
+		::= { tosIfEntry 29 }
+	
+	ifRcvUdpPkts OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "The total number of the udp packets received."
+		::= { tosIfEntry 30 }
+	
+	ifRcvTcpPkts OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "The total number of the tcp packets received."
+		::= { tosIfEntry 31 }
+	
+	ifRcvIcmpPkts OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "The total number of the icmp packets received."
+		::= { tosIfEntry 32 }
+	
+	ifRcvL3mCast OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "The total number of the third level broadcast and multicast packets received."
+		::= { tosIfEntry 33 }
+	
+	ifRcvFragPkts OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "The total number of the packets denied and discarded."
+		::= { tosIfEntry 34 }
+
+	ifDropPkts OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "The number of the packets dropped."
+		::= { tosIfEntry 35 }
+	
+	ifColliPkts OBJECT-TYPE
+		SYNTAX     Counter32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		         "The number of the packets collisioned."
+		::= { tosIfEntry 36 }
+	
+	--end interface 
+	
+	-- adsl and linkbak
+	
+	--start list TOS MAC table information
+	
+	tosMACTable	OBJECT-TYPE
+		SYNTAX     SEQUENCE OF TosMACEntry
+		MAX-ACCESS not-accessible
+		STATUS     current
+		DESCRIPTION
+		        "The (conceptual) table containing information on MAC table."
+		::= { tosMib 6 }
+
+		
+	tosMACEntry	OBJECT-TYPE
+	    SYNTAX     TosMACEntry
+	    MAX-ACCESS not-accessible
+	    STATUS     current
+	    DESCRIPTION
+	            "An entry (conceptual row) containing the information of a MAC information."
+	    INDEX      { macIndex }
+	    ::= { tosMACTable 1 }
+	    
+	TosMACEntry ::= SEQUENCE {
+		macIndex           INTEGER,
+		macAddress         DisplayString,
+		macVlanID          INTEGER,
+		macDevName         DisplayString
+	}
+
+	macIndex    OBJECT-TYPE
+		SYNTAX	INTEGER
+		MAX-ACCESS	read-only
+		STATUS	current
+		DESCRIPTION  
+		"Index of the Tos MAC table ."
+		::= { tosMACEntry 1  } 
+
+	macAddress      OBJECT-TYPE
+		SYNTAX	DisplayString
+		MAX-ACCESS	read-only
+		STATUS	current
+		DESCRIPTION  
+		"The MAC address."
+		::= { tosMACEntry 2  } 
+
+	macVlanID    OBJECT-TYPE
+		SYNTAX		INTEGER	
+		MAX-ACCESS	read-only
+		STATUS	current
+		DESCRIPTION  
+		"The VLAN id of the MAC."
+		::= { tosMACEntry 3  } 
+
+	macDevName    OBJECT-TYPE
+		SYNTAX	DisplayString
+		MAX-ACCESS	read-only
+		STATUS	current
+		DESCRIPTION  
+		"The dev name of the MAC."
+		::= { tosMACEntry 4  } 
+
+	--end list TOS MAC table information
+	
+	
+	--start list TOS VLAN table information
+	tosVLANTable OBJECT-TYPE
+		SYNTAX     SEQUENCE OF TosVLANEntry
+		MAX-ACCESS not-accessible
+		STATUS     current
+		DESCRIPTION
+		        "The (conceptual) table containing information on VLAN table."
+		::= { tosMib 7 }
+
+	tosVLANEntry OBJECT-TYPE
+		SYNTAX     TosVLANEntry
+		MAX-ACCESS not-accessible
+		STATUS     current
+		DESCRIPTION
+		        "An entry (conceptual row) containing the information of a VLAN information."
+		INDEX      { vlanIndex }
+		::= { tosVLANTable 1 }
+
+	TosVLANEntry ::= SEQUENCE {
+		vlanIndex          INTEGER,
+		vlanId	           INTEGER,
+		vlanStatus         DisplayString,
+		vlanPorts          DisplayString
+	}
+		             
+	vlanIndex    OBJECT-TYPE
+		SYNTAX	INTEGER
+		MAX-ACCESS	read-only
+		STATUS	current
+		DESCRIPTION  
+		"Index of the Tos VLAN table ."
+		::= { tosVLANEntry 1  } 
+
+	vlanId    OBJECT-TYPE
+		SYNTAX	INTEGER
+		MAX-ACCESS	read-only
+		STATUS	current
+		DESCRIPTION  
+		"The VLAN id."
+		::= { tosVLANEntry 2  } 
+
+
+	vlanStatus     OBJECT-TYPE
+		SYNTAX	DisplayString
+		MAX-ACCESS	read-only
+		STATUS	current
+		DESCRIPTION  
+		"The VLAN status."
+		::= { tosVLANEntry 3  } 
+
+	vlanPorts    OBJECT-TYPE
+		SYNTAX	 DisplayString
+		MAX-ACCESS	read-only
+		STATUS	current
+		DESCRIPTION  
+		"The VLAN ports."
+		::= { tosVLANEntry 4  } 
+	--end list TOS VLAN table information
+	
+	--start list TOS Route table information
+	tosRouteTable OBJECT-TYPE
+		SYNTAX     SEQUENCE OF TosRouteEntry
+		MAX-ACCESS not-accessible
+		STATUS     current
+		DESCRIPTION
+		        "The (conceptual) table containing Route information ."
+		::= {  tosMib 8 }
+
+	tosRouteEntry OBJECT-TYPE
+		SYNTAX     TosRouteEntry
+		MAX-ACCESS not-accessible
+		STATUS     current
+		DESCRIPTION
+		        "An entry (conceptual row) containing the Route table ."
+		INDEX      { routeIndex }
+		::= { tosRouteTable 1 }
+		
+	TosRouteEntry ::= SEQUENCE {
+		routeIndex              INTEGER,
+		routeId                 Integer32,
+		routeNetSrc		DisplayString,
+		routeNetDst             DisplayString,
+		routeGateway		DisplayString,
+		routeFlags              DisplayString,
+		routeMetric             Integer32,
+		routeIface              DisplayString
+		}
+		
+		
+	routeIndex OBJECT-TYPE
+		SYNTAX      INTEGER (0..10000)
+		MAX-ACCESS  read-only
+		STATUS      current
+		DESCRIPTION
+		    "Index of Route Table ."
+		::= { tosRouteEntry 1 }
+
+
+	routeId OBJECT-TYPE
+		SYNTAX     Integer32
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "Id of the route ."
+		::= { tosRouteEntry 2 }
+
+	routeNetSrc OBJECT-TYPE
+		SYNTAX     DisplayString
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "the source of route ."
+		::= { tosRouteEntry 3 }
+
+	routeNetDst OBJECT-TYPE
+		SYNTAX     DisplayString
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "the destination of route ."
+		::= { tosRouteEntry 4 }
+
+
+	routeGateway OBJECT-TYPE
+		SYNTAX	DisplayString
+		MAX-ACCESS	read-only
+		STATUS	current
+		DESCRIPTION  
+		"the gateway of route ."
+		::= { tosRouteEntry 5  } 
+
+	routeFlags OBJECT-TYPE
+		SYNTAX		DisplayString
+		MAX-ACCESS	read-only
+		STATUS	current
+		DESCRIPTION  
+		"the flags of route ."
+		::= { tosRouteEntry 6  } 
+
+	routeMetric OBJECT-TYPE
+		SYNTAX		Integer32
+		MAX-ACCESS	read-only
+		STATUS	current
+		DESCRIPTION  
+		" the metric of route."
+		::= { tosRouteEntry 7 } 
+
+	routeIface OBJECT-TYPE
+		SYNTAX		DisplayString
+		MAX-ACCESS	read-only
+		STATUS	current
+		DESCRIPTION  
+		" the interface name."
+		::= { tosRouteEntry 8 } 
+	--end list TOS Route table information
+	
+	
+	--start list TOS ARP table information
+	tosARPTable OBJECT-TYPE
+		SYNTAX     SEQUENCE OF TosARPEntry
+		MAX-ACCESS not-accessible
+		STATUS     current
+		DESCRIPTION
+		        "The (conceptual) table containing ARP information."
+		::= { tosMib 9  }
+	
+	tosARPEntry OBJECT-TYPE
+		SYNTAX     TosARPEntry
+		MAX-ACCESS not-accessible
+		STATUS     current
+		DESCRIPTION
+		        "An entry (conceptual row) containing the information on ARP."
+		INDEX      {  arpIndex }
+		::= {  tosARPTable 1 }
+	
+	TosARPEntry ::= SEQUENCE {
+		arpIndex                INTEGER,
+		arpDevName		DisplayString,
+		arpIpAdrress		DisplayString,
+		arpMacAddress		DisplayString,
+		arpStatus               DisplayString
+	     }
+	     
+	arpIndex OBJECT-TYPE
+		SYNTAX      INTEGER (0..1000)
+		MAX-ACCESS  read-only
+		STATUS      current
+		DESCRIPTION
+		    "The Index of the ARP table ."
+		::= { tosARPEntry 1 }
+
+
+	arpDevName  OBJECT-TYPE
+		SYNTAX      DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS      current
+		DESCRIPTION
+		        "The device name of the ARP."
+		::= { tosARPEntry 2 }
+
+	arpIpAdrress OBJECT-TYPE
+		SYNTAX      DisplayString   
+		MAX-ACCESS  read-only
+		STATUS      current
+		DESCRIPTION
+		        "The IP address."
+		::= { tosARPEntry 3 }
+
+	arpMacAddress  OBJECT-TYPE
+		SYNTAX      DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS      current
+		DESCRIPTION
+		        "The MAC address of the ARP."
+		::= { tosARPEntry 4}
+
+	arpStatus  OBJECT-TYPE
+		SYNTAX      DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS      current
+		DESCRIPTION
+		        "Status."
+		::= { tosARPEntry 5 }
+	--end list TOS ARP table information
+
+
+	--start list TOS ARP proxy table information
+	tosARPProxyTable OBJECT-TYPE
+		SYNTAX     SEQUENCE OF TosARPProxyEntry
+		MAX-ACCESS not-accessible
+		STATUS     current
+		DESCRIPTION
+		        "The (conceptual) table containing ARPProxy information."
+		::= { tosMib 10  }
+
+	tosARPProxyEntry OBJECT-TYPE
+		SYNTAX     TosARPProxyEntry
+		MAX-ACCESS not-accessible
+		STATUS     current
+		DESCRIPTION
+		        "An entry (conceptual row) containing the information on ARPProxy."
+		INDEX      {  arpProxyIndex }
+		::= {  tosARPProxyTable 1 }
+
+	TosARPProxyEntry ::= SEQUENCE {
+		arpProxyIndex                   INTEGER,
+		arpProxyDevName			DisplayString,
+		arpProxyMaxIpAddress		IpAddress,
+		arpProxyMinIpAddress		IpAddress,
+		arpProxyStat        		DisplayString
+	     }
+
+	arpProxyIndex OBJECT-TYPE
+		SYNTAX      INTEGER 
+		MAX-ACCESS  read-only
+		STATUS      current
+		DESCRIPTION
+		        "The Index of the ARPProxy table ."
+		::= { tosARPProxyEntry 1 }
+
+	arpProxyMaxIpAdrress OBJECT-TYPE
+		SYNTAX      IpAddress   
+		MAX-ACCESS  read-only
+		STATUS      current
+		DESCRIPTION
+		        "The Max IP address."
+		::= { tosARPProxyEntry 2 }
+
+	arpProxyMinIpAddress  OBJECT-TYPE
+		SYNTAX      IpAddress   
+		MAX-ACCESS  read-only
+		STATUS      current
+		DESCRIPTION
+		        "The Min IP address."
+		::= { tosARPProxyEntry 3 }
+
+	arpProxyHWaddress  OBJECT-TYPE
+		SYNTAX      DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS      current
+		DESCRIPTION
+		        "The HWaddress."
+		::= { tosARPProxyEntry 4 }
+
+	arpProxyStat  OBJECT-TYPE
+		SYNTAX      DisplayString (SIZE (0..255))
+		MAX-ACCESS  read-only
+		STATUS      current
+		DESCRIPTION
+		        "The device arp proxy status."
+		::= { tosARPProxyEntry 5 }
+	--end list TOS ARP proxy table information
+
+	--ids
+	tosIDS	OBJECT IDENTIFIER ::= { tosMib 11 }
+
+	idsTotal OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "attack totals."
+	    ::= { tosIDS 1 }		
+
+        idsIpoption OBJECT-TYPE
+            SYNTAX      Counter32
+            MAX-ACCESS  read-only
+            STATUS      current
+            DESCRIPTION 
+                    "ipoption."
+            ::= { tosIDS 2 }
+
+	idsIpprotocol OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "ipprotocol."
+	    ::= { tosIDS 3 }
+	    
+	idsPort OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "port."
+	    ::= { tosIDS 4 }
+
+	idsTcpscan OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "tcpscan."
+	    ::= { tosIDS 5 }
+
+	idsWinnuke OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "winnuke."
+	    ::= { tosIDS 6 }
+
+	idsIcmpContent OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "icmp_content."
+	    ::= { tosIDS 7 }
+
+	idsSmurf OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "smurf."
+	    ::= { tosIDS 8 }
+
+	idsLand OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "land ."
+	    ::= { tosIDS 9 }
+	
+	idsPingofdeath OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "pingofdeath."
+	    ::= { tosIDS 10 }
+
+	idsTeardrop OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "teardrop ."
+	    ::= { tosIDS 11 }
+
+
+        idsTarga3 OBJECT-TYPE
+            SYNTAX      Counter32
+            MAX-ACCESS  read-only
+            STATUS      current
+            DESCRIPTION
+                    "targa3."
+            ::= { tosIDS 12 }
+
+	idsIpspoof  OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "ipspoof ."
+	    ::= { tosIDS 13 }
+
+	idsPortscan OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "portscan."
+	    ::= { tosIDS 14 }
+
+	idsSynflood  OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "synflood."
+	    ::= { tosIDS 15 }
+
+	idsUdpflood OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "udpflood."
+	    ::= { tosIDS 16 }
+
+	idsIcmpflood  OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "icmpflood ."
+	    ::= { tosIDS 17 }
+
+	idsIpsweep  OBJECT-TYPE
+	    SYNTAX      Counter32
+	    MAX-ACCESS  read-only
+	    STATUS      current
+	    DESCRIPTION
+	            "ipsweep ."
+	    ::= { tosIDS 18 }
+
+	--start list TOS User table information
+	tosUserTable OBJECT-TYPE
+		SYNTAX     SEQUENCE OF TosUserEntry
+		MAX-ACCESS not-accessible
+		STATUS     current
+		DESCRIPTION
+		        "The (conceptual) table containing information on the current device user."
+		::= {  tosMib 18 }
+
+	tosUserEntry OBJECT-TYPE
+		SYNTAX     TosUserEntry
+		MAX-ACCESS not-accessible
+		STATUS     current
+		DESCRIPTION
+		        "An entry (conceptual row) containing the information on current vpn users."
+		INDEX      {  userIndex }
+		::= { tosUserTable 1 }
+
+	TosUserEntry ::= SEQUENCE {
+		userIndex               INTEGER,
+		userName                DisplayString,
+		userLoginIp             IpAddress,
+		userLoginTime           DisplayString
+	    }
+
+	userIndex OBJECT-TYPE
+		SYNTAX      INTEGER 
+		MAX-ACCESS  read-only
+		STATUS      current
+		DESCRIPTION
+		        "Index of User Table ."
+		::= { tosUserEntry 1 }
+
+	userName OBJECT-TYPE
+		SYNTAX	DisplayString
+		MAX-ACCESS	read-only
+		STATUS	current
+		DESCRIPTION  
+		"Name of  User Table ."
+		::= { tosUserEntry 2  } 
+
+	userLoginIp OBJECT-TYPE
+		SYNTAX     IpAddress
+		MAX-ACCESS read-only
+		STATUS     current
+		DESCRIPTION
+		        "The IP where User login."
+		::= { tosUserEntry 3 }
+
+	userLoginTime OBJECT-TYPE
+		SYNTAX	DisplayString
+		MAX-ACCESS	read-only
+		STATUS	current
+		DESCRIPTION  
+		"The Time when User login ."
+		::= { tosUserEntry 4 } 
+	--end list TOS User table information
+	
+	--start list TOS Configure table information
+	tosConfigTable OBJECT-TYPE
+		SYNTAX     SEQUENCE OF TosConfigEntry
+		MAX-ACCESS not-accessible
+		STATUS     current
+		DESCRIPTION
+		        "The (conceptual) table containing Config information."
+		::= { tosMib 19  }
+
+	tosConfigEntry OBJECT-TYPE
+		SYNTAX     TosConfigEntry
+		MAX-ACCESS not-accessible
+		STATUS     current
+		DESCRIPTION
+		        "An entry (conceptual row) containing the information of configure information."
+		INDEX      {  configIndex }
+		::= {  tosConfigTable 1 }
+
+	TosConfigEntry ::= SEQUENCE {
+		configIndex              INTEGER,
+		configContent            DisplayString
+	     }
+
+	configIndex OBJECT-TYPE
+		SYNTAX      INTEGER
+		MAX-ACCESS  read-only
+		STATUS      current
+		DESCRIPTION
+		        "The Index of the Config table ."
+		::= { tosConfigEntry 1 }
+
+
+	configContent  OBJECT-TYPE
+		SYNTAX      DisplayString
+		MAX-ACCESS  read-only
+		STATUS      current
+		DESCRIPTION
+		        "The detail information of configure."
+		::= { tosConfigEntry 2 }
+	--end list TOS Configure table information
+
+END
+
+

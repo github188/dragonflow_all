@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Svgmap
+Bundle-SymbolicName: com.siteview.svgmap;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: SITEVIEW
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Require-Bundle: org.eclipse.rap.rwt;bundle-version="2.2.0"
+Bundle-ActivationPolicy: lazy
+Export-Package: com.siteview.svgmap;version="1.0.1"
+Bundle-ClassPath: lib/dom4j-1.6.1.jar,
+ .,
+ lib/jaxen-1.1.1.jar

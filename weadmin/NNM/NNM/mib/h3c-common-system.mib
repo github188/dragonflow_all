@@ -1,0 +1,83 @@
+-- =========================================================================
+-- Copyright (C) 2001,2002 by  HUAWEI TECHNOLOGIES. All rights reserved.
+--
+-- Description:This file describes the huawei mib implementation of router system,
+--             include:memory,configuration,flash,loghost and so on.
+-- Reference:Huawei enterprise MIB
+-- =========================================================================
+	H3C-COMMON-SYSTEM-MIB DEFINITIONS ::= BEGIN
+ 
+		IMPORTS			
+			OBJECT-TYPE,TimeTicks, IpAddress, NOTIFICATION-TYPE			
+				FROM SNMPv2-SMI
+			DisplayString			
+				FROM SNMPv2-TC
+			huawei,h3c,hwSystem
+				FROM HUAWEI-3COM-OID-MIB;
+		
+-- ==============================
+-- Begin define of hwmHostName
+-- ==============================
+	
+		hwWriteConfig OBJECT-TYPE
+			SYNTAX INTEGER{
+			               save(1)
+			              }			               
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"Write config to router."
+			::= { hwSystem 5 }
+		
+		hwStartFtpServer OBJECT-TYPE
+			SYNTAX INTEGER{
+			               enable(1),
+			               disable(2)
+			               }			               
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"Decide whether start ftp-server.enable(1) indicates to start ftp-server;
+				disable(2) indicates to stop ftp-server."
+			::= { hwSystem 6 }	 	
+			
+		hwReboot OBJECT-TYPE
+			SYNTAX INTEGER{
+			               reboot(1)
+			               }			               
+			MAX-ACCESS read-write
+			STATUS current
+			DESCRIPTION
+				"Reboot router."
+			::= { hwSystem 7 }	 
+	
+	hwSystemNotification OBJECT IDENTIFIER ::= { hwSystem 8 }
+					
+		hwWriteSuccessTrap NOTIFICATION-TYPE			
+			STATUS current
+			DESCRIPTION
+				"send a trap about write success."
+			::= { hwSystemNotification 1 }	 
+		
+		hwWriteFailureTrap NOTIFICATION-TYPE			
+			STATUS current
+			DESCRIPTION
+				"send a trap about write failure."
+			::= { hwSystemNotification 2 }	 
+			
+		hwRebootSendTrap NOTIFICATION-TYPE
+			STATUS current
+			DESCRIPTION 
+				"When users restart the device with command 
+				'reboot', this trap will be sent two seconds
+				 before the device reboots." 
+			::= { hwSystemNotification 3 }
+  	 			
+		hwSoftwareVersion OBJECT-TYPE
+			SYNTAX DisplayString
+			MAX-ACCESS read-only
+			STATUS current
+			DESCRIPTION
+				"Software version."
+			::= { hwSystem 9 }	 	
+	END

@@ -1,0 +1,225 @@
+-- ==========================================================================
+-- Copyright (C) 2004 by H3C Technologies. All rights reserved.
+--
+-- Description: The purpose of this MIB file is to provide the definition of
+--              the voice interface general configuration.
+-- Reference:
+-- ==========================================================================
+HH3C-VOIF-MIB DEFINITIONS ::= BEGIN
+
+        IMPORTS
+            OBJECT-TYPE, MODULE-IDENTITY, Integer32
+                FROM SNMPv2-SMI
+            hh3cVoice
+                FROM HH3C-OID-MIB;
+
+        hh3cVoiceIf MODULE-IDENTITY
+            LAST-UPDATED "200503150000Z"
+            ORGANIZATION
+                "Hangzhou H3C Tech. Co., Ltd."
+            CONTACT-INFO
+                "Platform Team Hangzhou H3C Tech. Co., Ltd.
+                Hai-Dian District Beijing P.R. China
+                http://www.h3c.com
+                Zip:100085
+                "
+            DESCRIPTION
+                "This MIB file is to provide the definition of the voice
+                interface general configuration."
+            REVISION "200503150000Z"
+            DESCRIPTION
+                "The initial version of this MIB file."
+            ::= { hh3cVoice 2 }
+
+
+        hh3cVoIfObjects OBJECT IDENTIFIER ::= { hh3cVoiceIf 1 }
+
+--===========================================================================
+--                            hh3cVoIfConfigTable
+--
+--===========================================================================
+        hh3cVoIfConfigTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVoIfConfigEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The table contains configurable parameters for both analog
+                voice interface and digital voice interface."
+            ::= { hh3cVoIfObjects 1 }
+
+
+        hh3cVoIfConfigEntry OBJECT-TYPE
+            SYNTAX HH3CVoIfConfigEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of voice interface table."
+            INDEX { hh3cVoIfCfgPortNumber, hh3cVoIfCfgGroupNumber }
+            ::= { hh3cVoIfConfigTable 1 }
+
+
+        HH3CVoIfConfigEntry ::=
+            SEQUENCE {
+                hh3cVoIfCfgPortNumber
+                    Integer32,
+                hh3cVoIfCfgGroupNumber
+                    Integer32,
+                hh3cVoIfCfgCngOn
+                    INTEGER,
+                hh3cVoIfConfigInputGain
+                    Integer32,
+                hh3cVoIfConfigOutputGain
+                    Integer32,
+                hh3cVoIfCfgEchoCancelSwitch
+                    INTEGER,
+                hh3cVoIfCfgEchoCancellDelay
+                    Integer32,
+                hh3cVoIfCfgPlarNumber
+                    OCTET STRING,
+                hh3cVoIfCfgDescription
+                    OCTET STRING,
+                hh3cVoIfCfgStatus
+                    INTEGER,
+                 hh3cVoIfCfgCallingNumSubstRule
+                    Integer32,
+                hh3cVoIfCfgCalledNumSubstRule
+                    Integer32,
+                hh3cVoIfCfgSubLine
+                    OCTET STRING
+             }
+
+        hh3cVoIfCfgPortNumber OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The port number of voice interface."
+            ::= { hh3cVoIfConfigEntry 1 }
+
+
+        hh3cVoIfCfgGroupNumber OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The group number of voice interface. For an analog interface,
+                the value is 255."
+            ::= { hh3cVoIfConfigEntry 2 }
+
+
+        hh3cVoIfCfgCngOn OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                enable(1),
+                disable(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates whether the silence gaps should be
+                filled with background noise."
+            ::= { hh3cVoIfConfigEntry 3 }
+
+
+        hh3cVoIfConfigInputGain OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the amount of gain added to the receiver
+                side of the voice interface. Unit is 0.1 db."
+            ::= { hh3cVoIfConfigEntry 4 }
+
+
+        hh3cVoIfConfigOutputGain OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the amount of gain added to the send side
+                of the voice interface. Unit is 0.1 db."
+            DEFVAL { 0 }
+            ::= { hh3cVoIfConfigEntry 5 }
+
+
+        hh3cVoIfCfgEchoCancelSwitch OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                enable(1),
+                disable(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates whether the echo cancellation is enabled."
+            ::= { hh3cVoIfConfigEntry 6 }
+
+
+        hh3cVoIfCfgEchoCancellDelay OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the delay of the echo cancellation for
+                the voice interface. This value couldn't be modified unless
+                hh3cVoIfCfgEchoCancelSwitch is enable. Unit is milliseconds."
+            ::= { hh3cVoIfConfigEntry 7 }
+
+
+        hh3cVoIfCfgPlarNumber OBJECT-TYPE
+            SYNTAX OCTET STRING (SIZE (0..31))
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the E.164 phone number for plar mode."
+            ::= { hh3cVoIfConfigEntry 8 }
+
+
+        hh3cVoIfCfgDescription OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the description of voice interface"
+            ::= { hh3cVoIfConfigEntry 9 }
+
+
+        hh3cVoIfCfgStatus OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                up(1),
+                down(2)
+                }
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the status of voice interface."
+            ::= { hh3cVoIfConfigEntry 10 }
+
+
+        hh3cVoIfCfgCallingNumSubstRule OBJECT-TYPE
+            SYNTAX Integer32(0..2147483647)
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates a calling number substitute rule."
+            ::= { hh3cVoIfConfigEntry 11 }
+
+        hh3cVoIfCfgCalledNumSubstRule OBJECT-TYPE
+            SYNTAX Integer32(0..2147483647)
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates a called number substitute rule."
+            ::= { hh3cVoIfConfigEntry 12 }
+
+        hh3cVoIfCfgSubLine OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the port subscriber line name."
+            ::= { hh3cVoIfConfigEntry 13 }
+
+
+    END

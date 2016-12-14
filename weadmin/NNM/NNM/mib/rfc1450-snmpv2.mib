@@ -1,0 +1,186 @@
+SNMPv2-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY, OBJECT-TYPE, NOTIFICATION-TYPE,
+    TimeTicks, Counter32, snmpModules, mib-2
+        FROM SNMPv2-SMI
+    DisplayString, TestAndIncr, TimeStamp
+        FROM SNMPv2-TC
+    MODULE-COMPLIANCE, OBJECT-GROUP, NOTIFICATION-GROUP
+        FROM SNMPv2-CONF;
+
+
+snmpMIB MODULE-IDENTITY
+    LAST-UPDATED "9511090000Z"
+    ORGANIZATION "IETF SNMPv2 Working Group"
+    CONTACT-INFO
+            "        Marshall T. Rose
+
+             Postal: Dover Beach Consulting, Inc.
+                     420 Whisman Court
+                     Mountain View, CA  94043-2186
+                     US
+
+                Tel: +1 415 968 1052
+
+             E-mail: mrose@dbc.mtview.ca.us"
+    DESCRIPTION
+            "The MIB module for SNMPv2 entities."
+    REVISION      "9304010000Z"
+    DESCRIPTION
+            "The initial revision of this MIB module was published as
+            RFC 1450."
+    ::= { snmpModules 1 }
+
+
+snmpMIBObjects OBJECT IDENTIFIER ::= { snmpMIB 1 }
+
+--  ::= { snmpMIBObjects 1 }        this OID is obsolete
+--  ::= { snmpMIBObjects 2 }        this OID is obsolete
+--  ::= { snmpMIBObjects 3 }        this OID is obsolete
+
+
+-- the System group
+--
+-- a collection of objects common to all managed systems.
+
+
+
+-- information for notifications
+--
+-- a collection of objects which allow the SNMPv2 entity, when
+-- acting in an agent role, to be configured to generate
+-- SNMPv2-Trap-PDUs.
+
+snmpTrap       OBJECT IDENTIFIER ::= { snmpMIBObjects 4 }
+
+
+snmpTrapOID OBJECT-TYPE
+    SYNTAX     OBJECT IDENTIFIER
+    MAX-ACCESS accessible-for-notify
+    STATUS     current
+    DESCRIPTION
+            "The authoritative identification of the notification
+            currently being sent.  This variable occurs as the second
+            varbind in every SNMPv2-Trap-PDU and InformRequest-PDU."
+    ::= { snmpTrap 1 }
+
+--  ::= { snmpTrap 2 }   this OID is obsolete
+
+snmpTrapEnterprise OBJECT-TYPE
+    SYNTAX     OBJECT IDENTIFIER
+    MAX-ACCESS accessible-for-notify
+    STATUS     current
+    DESCRIPTION
+            "The authoritative identification of the enterprise
+            associated with the trap currently being sent.  When a
+            SNMPv2 proxy agent is mapping an RFC1157 Trap-PDU into a
+            SNMPv2-Trap-PDU, this variable occurs as the last varbind."
+    ::= { snmpTrap 3 }
+
+--  ::= { snmpTrap 4 }   this OID is obsolete
+
+
+-- well-known traps
+
+snmpTraps      OBJECT IDENTIFIER ::= { snmpMIBObjects 5 }
+
+coldStart NOTIFICATION-TYPE
+    STATUS  current
+    DESCRIPTION
+            "A coldStart trap signifies that the SNMPv2 entity, acting
+            in an agent role, is reinitializing itself and that its
+            configuration may have been altered."
+    ::= { snmpTraps 1 }
+
+warmStart NOTIFICATION-TYPE
+    STATUS  current
+    DESCRIPTION
+            "A warmStart trap signifies that the SNMPv2 entity, acting
+            in an agent role, is reinitializing itself such that its
+            configuration is unaltered."
+    ::= { snmpTraps 2 }
+
+-- Note the linkDown NOTIFICATION-TYPE ::= { snmpTraps 3 }
+-- and the linkUp NOTIFICATION-TYPE ::= { snmpTraps 4 }
+-- are defined in RFC 1573
+
+authenticationFailure NOTIFICATION-TYPE
+    STATUS  current
+    DESCRIPTION
+            "An authenticationFailure trap signifies that the SNMPv2
+            entity, acting in an agent role, has received a protocol
+            message that is not properly authenticated.  While all
+            implementations of the SNMPv2 must be capable of generating
+            this trap, the snmpEnableAuthenTraps object indicates
+            whether this trap will be generated."
+    ::= { snmpTraps 5 }
+
+-- Note the egpNeighborLoss NOTIFICATION-TYPE ::= { snmpTraps 6 }
+-- is defined in RFC 1213
+
+
+-- the set group
+--
+-- a collection of objects which allow several cooperating
+-- SNMPv2 entities, all acting in a manager role, to
+-- coordinate their use of the SNMPv2 set operation.
+
+snmpSet        OBJECT IDENTIFIER ::= { snmpMIBObjects 6 }
+
+
+snmpSetSerialNo OBJECT-TYPE
+    SYNTAX     TestAndIncr
+    MAX-ACCESS read-write
+    STATUS     current
+    DESCRIPTION
+            "An advisory lock used to allow several cooperating SNMPv2
+            entities, all acting in a manager role, to coordinate their
+            use of the SNMPv2 set operation.
+
+            This object is used for coarse-grain coordination.  To
+            achieve fine-grain coordination, one or more similar objects
+            might be defined within each MIB group, as appropriate."
+    ::= { snmpSet 1 }
+
+
+-- conformance information
+
+snmpMIBConformance
+               OBJECT IDENTIFIER ::= { snmpMIB 2 }
+
+snmpMIBCompliances
+               OBJECT IDENTIFIER ::= { snmpMIBConformance 1 }
+snmpMIBGroups  OBJECT IDENTIFIER ::= { snmpMIBConformance 2 }
+
+
+-- compliance statements
+
+--    ::= { snmpMIBCompliances 1 }      this OID is obsolete
+
+snmpBasicCompliance MODULE-COMPLIANCE
+    STATUS  current
+    DESCRIPTION
+            "The compliance statement for SNMPv2 entities which
+            implement the SNMPv2 MIB."
+    MODULE  -- this module
+        MANDATORY-GROUPS { snmpGroup, snmpSetGroup, systemGroup,
+                           snmpBasicNotificationsGroup }
+
+        GROUP   snmpCommunityGroup
+        DESCRIPTION
+            "This group is mandatory for SNMPv2 entities which
+            support community-based authentication."
+
+    ::= { snmpMIBCompliances 2 }
+
+
+-- units of conformance
+
+--  ::= { snmpMIBGroups 1 }           this OID is obsolete
+--  ::= { snmpMIBGroups 2 }           this OID is obsolete
+--  ::= { snmpMIBGroups 3 }           this OID is obsolete
+--  ::= { snmpMIBGroups 4 }           this OID is obsolete
+
+
+END

@@ -1,0 +1,530 @@
+-- ==========================================================================
+-- Copyright (C) 2004 by H3C Technologies. All rights reserved.
+--
+-- Description: The purpose of this MIB file is to provide the definition of
+--              voice call histroy.
+-- Reference:
+-- ==========================================================================
+HH3C-VOCALLHISTORY-MIB DEFINITIONS ::= BEGIN
+    IMPORTS
+        OBJECT-TYPE, MODULE-IDENTITY, TimeTicks, IpAddress, Integer32, Counter32
+            FROM SNMPv2-SMI
+        TimeStamp,DateAndTime
+            FROM SNMPv2-TC
+        CodecType
+            FROM HH3C-VO-TYPE-MIB
+        InetAddressType, InetAddress
+            FROM INET-ADDRESS-MIB
+        hh3cVoice
+            FROM HH3C-OID-MIB;
+
+
+        hh3cVoiceCallHistory MODULE-IDENTITY
+            LAST-UPDATED "200503150000Z"
+            ORGANIZATION
+                "Hangzhou H3C Tech. Co., Ltd."
+            CONTACT-INFO
+                "Platform Team Hangzhou H3C Tech. Co., Ltd.
+                Hai-Dian District Beijing P.R. China
+                http://www.h3c.com
+                Zip:100085
+                "
+            DESCRIPTION
+                "This MIB is to provide the definition of voice call histroy."
+            REVISION "200503150000Z"
+            DESCRIPTION
+                "The initial version of this MIB file."
+            ::= { hh3cVoice 7 }
+
+
+
+--===========================================================================
+--                            hh3cVoCallHistoryObjects
+--
+--===========================================================================
+        hh3cVoCallHistoryObjects OBJECT IDENTIFIER ::= { hh3cVoiceCallHistory 1 }
+
+
+        hh3cVoCallHistoryMaxLen OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the maximum items of history record."
+            ::= { hh3cVoCallHistoryObjects 1 }
+
+        hh3cVoCallHistoryMaxRetainTime OBJECT-TYPE
+            SYNTAX Integer32 (0..2147483647)
+            MAX-ACCESS read-write
+            STATUS current
+            DESCRIPTION
+                "This object indicates the maximum retain time of histroy record.
+                Unit is second."
+            ::= { hh3cVoCallHistoryObjects 2 }
+
+
+--===========================================================================
+--                       hh3cVoCallHistoryGenericTable
+--
+--===========================================================================
+        hh3cVoCallHistoryGenericTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVoCallHistoryGenericEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The table contains the generic call history information."
+            ::= { hh3cVoiceCallHistory 2 }
+
+
+        hh3cVoCallHistoryGenericEntry OBJECT-TYPE
+            SYNTAX HH3CVoCallHistoryGenericEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of hh3cVoCallHistoryGenericTable."
+            INDEX { hh3cVoCallHisIndex }
+            ::= { hh3cVoCallHistoryGenericTable 1 }
+
+
+        HH3CVoCallHistoryGenericEntry ::=
+            SEQUENCE {
+                hh3cVoCallHisIndex
+                    Integer32,
+                hh3cVoCallHisCallerNumber
+                    OCTET STRING,
+                hh3cVoCallHisCalledNumber
+                    OCTET STRING,
+                hh3cVoCallHisEncodeType
+                    CodecType,
+                hh3cVoCallHisChannel
+                    Integer32,
+                hh3cVoCallHisLocalAddressType
+                    InetAddressType,
+                hh3cVoCallHisLocalAddress
+                    InetAddress,
+                hh3cVoCallHisPeerAddressType
+                    InetAddressType,
+                hh3cVoCallHisPeerAddress
+                    InetAddress,
+                hh3cVoCallHisDisconnectText
+                    INTEGER,
+                hh3cVoCallHisCallDuration
+                    TimeTicks,
+                hh3cVoCallHisVoCallDuration
+                    TimeTicks,
+                hh3cVoCallHisFaxCallDuration
+                    TimeTicks,
+                hh3cVoCallHisImgPages
+                    Integer32,
+                hh3cVoCallHisCallOrigin
+                    INTEGER
+             }
+
+        hh3cVoCallHisIndex OBJECT-TYPE
+            SYNTAX Integer32 (1..2147483647)
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The index of the generic call history table."
+            ::= { hh3cVoCallHistoryGenericEntry 1 }
+
+
+        hh3cVoCallHisCallerNumber OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the calling number of a call."
+            ::= { hh3cVoCallHistoryGenericEntry 2 }
+
+
+        hh3cVoCallHisCalledNumber OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the called number of a call."
+            ::= { hh3cVoCallHistoryGenericEntry 3 }
+
+
+        hh3cVoCallHisEncodeType OBJECT-TYPE
+            SYNTAX CodecType
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the encode type of a call."
+            ::= { hh3cVoCallHistoryGenericEntry 4 }
+
+
+        hh3cVoCallHisChannel OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the logic channel of a call."
+            ::= { hh3cVoCallHistoryGenericEntry 5 }
+
+
+         hh3cVoCallHisLocalAddressType OBJECT-TYPE
+            SYNTAX  InetAddressType
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the local IP address type of a call."
+            ::= { hh3cVoCallHistoryGenericEntry 6 }
+
+
+        hh3cVoCallHisLocalAddress OBJECT-TYPE
+            SYNTAX InetAddress
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the local IP address of a call."
+            ::= { hh3cVoCallHistoryGenericEntry 7 }
+
+
+        hh3cVoCallHisPeerAddressType OBJECT-TYPE
+            SYNTAX  InetAddressType
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates peer IP address type of a call."
+            ::= { hh3cVoCallHistoryGenericEntry 8 }
+
+
+        hh3cVoCallHisPeerAddress OBJECT-TYPE
+            SYNTAX InetAddress
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates peer IP address of a call."
+            ::= { hh3cVoCallHistoryGenericEntry 9 }
+
+
+        hh3cVoCallHisDisconnectText OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                normalRelease(1),          -- Normal release.
+                cardNumberNotExist(2),     -- Card number not exist.
+                invalidPassword(3),        -- Password is invalid.
+                thisAccountsIsUsing(4),    -- This Accounts is using.
+                noEnoughBalance(5),        -- Not enough money.
+                theAccountsIsExpired(6),   -- The Accounts is expired.
+                creditLimit(7),            -- Credit limit.
+                userReject(8),             -- User was been rejected.
+                serviceInvalid(9),         -- The requested service is invalid.
+                calledLimit(10),           -- The called is limited.
+                maxRedialTimesLimit(11),   -- Reach the maximum redial times.
+                invalidParameter(12),      -- Invalid parameter.
+                callerHookOn(13),          -- Caller hook on.
+                calledHookOn(14),          -- Called hook on.
+                networkProblem(15),        -- Network problem.
+                unknownReason(16)          -- Unknown Reason.
+                }
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the disconnection reason."
+            ::= { hh3cVoCallHistoryGenericEntry 10 }
+
+
+        hh3cVoCallHisCallDuration OBJECT-TYPE
+            SYNTAX TimeTicks
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the duration of this call(include voice
+                duration and fax duration)."
+            ::= { hh3cVoCallHistoryGenericEntry 11 }
+
+
+        hh3cVoCallHisVoCallDuration OBJECT-TYPE
+            SYNTAX TimeTicks
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the duration of voice in this call."
+            ::= { hh3cVoCallHistoryGenericEntry 12 }
+
+
+        hh3cVoCallHisFaxCallDuration OBJECT-TYPE
+            SYNTAX TimeTicks
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the duration of fax in this call."
+            ::= { hh3cVoCallHistoryGenericEntry 13 }
+
+
+        hh3cVoCallHisImgPages OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of pages which fax received
+                or transmitted."
+            ::= { hh3cVoCallHistoryGenericEntry 14 }
+
+
+        hh3cVoCallHisCallOrigin OBJECT-TYPE
+            SYNTAX INTEGER
+                {
+                caller(1),
+                called(2)
+                }
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the direction of a call."
+            ::= { hh3cVoCallHistoryGenericEntry 15 }
+
+
+--===========================================================================
+--                     hh3cVoCallHistoryVoIPTable
+--
+--===========================================================================
+        hh3cVoCallHistoryVoIPTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVoCallHistoryVoIPEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The table contains the VOIP(Voice over Internet Protocol)
+                call history information."
+            ::= { hh3cVoiceCallHistory 3 }
+
+
+        hh3cVoCallHistoryVoIPEntry OBJECT-TYPE
+            SYNTAX HH3CVoCallHistoryVoIPEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of hh3cVoCallHistoryVoIPTable."
+            INDEX { hh3cVoCallHisVoIPIndex }
+            ::= { hh3cVoCallHistoryVoIPTable 1 }
+
+
+        HH3CVoCallHistoryVoIPEntry ::=
+            SEQUENCE {
+                hh3cVoCallHisVoIPIndex
+                    Integer32,
+                hh3cVoCallHisVoIPSetupTime
+                    DateAndTime,
+                hh3cVoCallHisVoIPConnTime
+                    DateAndTime,
+                hh3cVoCallHisVoIPDiscTime
+                    DateAndTime,
+                hh3cVoCallHisVoIPTxPackets
+                    Counter32,
+                hh3cVoCallHisVoIPTxBytes
+                    Counter32,
+                hh3cVoCallHisVoIPRxPackets
+                    Counter32,
+                hh3cVoCallHisVoIPRxeBytes
+                    Counter32
+             }
+
+        hh3cVoCallHisVoIPIndex OBJECT-TYPE
+            SYNTAX Integer32 (1..2147483647)
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The index of the voice VOIP(Voice over Internet Protocol)
+                call history table."
+            ::= { hh3cVoCallHistoryVoIPEntry 1 }
+
+
+        hh3cVoCallHisVoIPSetupTime OBJECT-TYPE
+            SYNTAX DateAndTime
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the time when the gateway receives the
+                SETUP message from the IP side."
+            ::= { hh3cVoCallHistoryVoIPEntry 2 }
+
+
+        hh3cVoCallHisVoIPConnTime OBJECT-TYPE
+            SYNTAX DateAndTime
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the time when the gateway receives the
+                CONNECT message from the IP side."
+            ::= { hh3cVoCallHistoryVoIPEntry 3 }
+
+
+        hh3cVoCallHisVoIPDiscTime OBJECT-TYPE
+            SYNTAX DateAndTime
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the time when the gateway recieves the
+                DISCONNECT message from the IP side."
+            ::= { hh3cVoCallHistoryVoIPEntry 4 }
+
+
+        hh3cVoCallHisVoIPTxPackets OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of packets which
+                VOIP(Voice over Internet Protocol) sends during a call."
+            ::= { hh3cVoCallHistoryVoIPEntry 5 }
+
+
+        hh3cVoCallHisVoIPTxBytes OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of bytes which VOIP
+                (Voice over Internet Protocol) sends during a call."
+            ::= { hh3cVoCallHistoryVoIPEntry 6 }
+
+
+        hh3cVoCallHisVoIPRxPackets OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of packets which VOIP
+                (Voice over Internet Protocol) receives during a call."
+            ::= { hh3cVoCallHistoryVoIPEntry 7 }
+
+
+        hh3cVoCallHisVoIPRxeBytes OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates the number of bytes which VOIP
+                (Voice over Internet Protocol) receives during a call."
+            ::= { hh3cVoCallHistoryVoIPEntry 8 }
+
+
+
+--===========================================================================
+--                     hh3cVoCallHistoryPSTNTable
+--
+--===========================================================================
+        hh3cVoCallHistoryPSTNTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVoCallHistoryPSTNEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The table contains the PSTN(Public Switched Telephone Network)
+                call history information."
+            ::= { hh3cVoiceCallHistory 4 }
+
+
+        hh3cVoCallHistoryPSTNEntry OBJECT-TYPE
+            SYNTAX HH3CVoCallHistoryPSTNEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The entry of hh3cVoCallHistoryPSTNTable."
+            INDEX { hh3cVoCallHisPSTNIndex }
+            ::= { hh3cVoCallHistoryPSTNTable 1 }
+
+
+        HH3CVoCallHistoryPSTNEntry ::=
+            SEQUENCE {
+                hh3cVoCallHisPSTNIndex
+                    Integer32,
+                hh3cVoCallHisPSTNSetupTime
+                    DateAndTime,
+                hh3cVoCallHisPSTNConnTime
+                    DateAndTime,
+                hh3cVoCallHisPSTNDiscTime
+                    DateAndTime,
+                hh3cVoCallHisPSTNTxPackets
+                    Counter32,
+                hh3cVoCallHisPSTNTxBytes
+                    Counter32,
+                hh3cVoCallHisPSTNRxPackets
+                    Counter32,
+                hh3cVoCallHisPSTNRxBytes
+                    Counter32
+             }
+
+        hh3cVoCallHisPSTNIndex OBJECT-TYPE
+            SYNTAX Integer32 (1..2147483647)
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The index of the voice PSTN(Public Switched Telephone Network)
+                call history table."
+            ::= { hh3cVoCallHistoryPSTNEntry 1 }
+
+
+        hh3cVoCallHisPSTNSetupTime OBJECT-TYPE
+            SYNTAX DateAndTime
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates PSTN(Public Switched Telephone Network)
+                setup time in this call."
+            ::= { hh3cVoCallHistoryPSTNEntry 2 }
+
+
+        hh3cVoCallHisPSTNConnTime OBJECT-TYPE
+            SYNTAX DateAndTime
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates PSTN(Public Switched Telephone Network)
+                connect time in this call."
+            ::= { hh3cVoCallHistoryPSTNEntry 3 }
+
+
+        hh3cVoCallHisPSTNDiscTime OBJECT-TYPE
+            SYNTAX DateAndTime
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "This object indicates PSTN(Public Switched Telephone Network)
+                disconnect time in this call."
+            ::= { hh3cVoCallHistoryPSTNEntry 4 }
+
+
+        hh3cVoCallHisPSTNTxPackets OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The number of packets which PSTN(Public Switched Telephone
+                Network) sends during a call."
+            ::= { hh3cVoCallHistoryPSTNEntry 5 }
+
+
+        hh3cVoCallHisPSTNTxBytes OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                " The number of bytes which PSTN(Public Switched Telephone
+                Netowrk) sends during a call."
+            ::= { hh3cVoCallHistoryPSTNEntry 6 }
+
+
+        hh3cVoCallHisPSTNRxPackets OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                " The number of packets which PSTN(Public Switched Telephone
+                Netowrk) receives during a call."
+            ::= { hh3cVoCallHistoryPSTNEntry 7 }
+
+
+        hh3cVoCallHisPSTNRxBytes OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                " The number of bytes which PSTN(Public Switched Telephone
+                Netowrk)  receives during a call."
+            ::= { hh3cVoCallHistoryPSTNEntry 8 }
+
+    END

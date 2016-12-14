@@ -1,0 +1,787 @@
+-- ============================================================================
+-- Copyright (C) 2006 by H3C TECHNOLOGIES. All rights reserved.
+--
+-- Description: H3C Product OID MIB
+-- Reference: HH3C-OID-MIB
+-- Version: V1.07
+-- History:
+--   V1.00 2006-04-19 Initial version
+--   V1.01 2006-05-09
+--     Add OID 158 under hh3cProductId by gaolong
+--   V1.02 2006-05-18
+--     Add OID from 159 to 169 under hh3cProductId by gaolong
+--     Add OID from 170 to 175 under hh3cProductId by longyin
+--   V1.03 2006-05-31
+--     Add OID from 176 to 178 under hh3cProductId by gaolong
+--   V1.04 2006-06-08
+--     Add OID from 179 to 188 under hh3cProductId by gaolong
+--   V1.05 2006-07-14
+--     Add OID from 189 to 192 under hh3cProductId by longyin
+--   V1.06 2006-07-26
+--     Add OID from 193 to 200 under hh3cProductId by gaolong
+--   V1.07 2006-08-23
+--     Add OID from 201 to 203 under hh3cProductId by gaolong
+-- ============================================================================
+HH3C-PRODUCT-ID-MIB DEFINITIONS ::= BEGIN
+    IMPORTS
+        hh3cProductId
+            FROM HH3C-OID-MIB;
+
+hh3c-s5500-28C-EI                   OBJECT IDENTIFIER ::= { hh3cProductId 1 }
+
+hh3c-s5500-52C-EI                   OBJECT IDENTIFIER ::= { hh3cProductId 2 }
+
+hh3c-s5500-28C-PWR-EI               OBJECT IDENTIFIER ::= { hh3cProductId 3 }
+
+hh3c-s5500-52C-PWR-EI               OBJECT IDENTIFIER ::= { hh3cProductId 4 }
+
+hh3c-s5500-28F-EI                   OBJECT IDENTIFIER ::= { hh3cProductId 5 }
+
+hh3c-s5500-28C-EI-DC                OBJECT IDENTIFIER ::= { hh3cProductId 6 }
+
+hh3c-s6100-20Q-SI                   OBJECT IDENTIFIER ::= { hh3cProductId 7 }
+
+hh3c-s5500-28C-SI                   OBJECT IDENTIFIER ::= { hh3cProductId 8 }
+
+hh3c-s5500-52C-SI                   OBJECT IDENTIFIER ::= { hh3cProductId 9 }
+
+hh3c-s5500-28C-PWR-SI               OBJECT IDENTIFIER ::= { hh3cProductId 10 }
+
+hh3c-s5500-52C-PWR-SI               OBJECT IDENTIFIER ::= { hh3cProductId 11 }
+
+hh3c-s5510-24P                      OBJECT IDENTIFIER ::= { hh3cProductId 12 }
+
+hh3c-s5510-24F                      OBJECT IDENTIFIER ::= { hh3cProductId 13 }
+
+hh3c-s3610-28P                      OBJECT IDENTIFIER ::= { hh3cProductId 14 }
+
+hh3c-s3610-52P                      OBJECT IDENTIFIER ::= { hh3cProductId 15 }
+
+hh3c-s3610-28TP                     OBJECT IDENTIFIER ::= { hh3cProductId 16 }
+
+hh3c-s3610-28F                      OBJECT IDENTIFIER ::= { hh3cProductId 17 }
+
+hh3c-e126                           OBJECT IDENTIFIER ::= { hh3cProductId 18 }
+
+hh3c-e328                           OBJECT IDENTIFIER ::= { hh3cProductId 19 }
+
+hh3c-e352                           OBJECT IDENTIFIER ::= { hh3cProductId 20 }
+
+hh3c-s3100-8C-SI                    OBJECT IDENTIFIER ::= { hh3cProductId 21 }
+
+hh3c-s3100-16C-SI                   OBJECT IDENTIFIER ::= { hh3cProductId 22 }
+
+hh3c-s3100-26C-SI                   OBJECT IDENTIFIER ::= { hh3cProductId 23 }
+
+hh3c-s3100-8T-SI                    OBJECT IDENTIFIER ::= { hh3cProductId 24 }
+
+hh3c-s3100-16T-SI                   OBJECT IDENTIFIER ::= { hh3cProductId 25 }
+
+hh3c-s3100-26T-SI                   OBJECT IDENTIFIER ::= { hh3cProductId 26 }
+
+hh3c-s3100-26TP-SI                  OBJECT IDENTIFIER ::= { hh3cProductId 27 }
+
+hh3c-s5100-24P-EI                   OBJECT IDENTIFIER ::= { hh3cProductId 28 }
+
+hh3c-s5100-26C-EI                   OBJECT IDENTIFIER ::= { hh3cProductId 29 }
+
+hh3c-s5100-50C-EI                   OBJECT IDENTIFIER ::= { hh3cProductId 30 }
+
+hh3c-s5100-48P-EI                   OBJECT IDENTIFIER ::= { hh3cProductId 31 }
+
+hh3c-s3600-28P-SI                   OBJECT IDENTIFIER ::= { hh3cProductId 32 }
+
+hh3c-s3600-52P-SI                   OBJECT IDENTIFIER ::= { hh3cProductId 33 }
+
+hh3c-s3600-28TP-SI                  OBJECT IDENTIFIER ::= { hh3cProductId 34 }
+
+hh3c-s3600-28P-PWR-SI               OBJECT IDENTIFIER ::= { hh3cProductId 35 }
+
+hh3c-s3600-52P-PWR-SI               OBJECT IDENTIFIER ::= { hh3cProductId 36 }
+
+hh3c-s3600-28P-EI                   OBJECT IDENTIFIER ::= { hh3cProductId 37 }
+
+hh3c-s3600-52P-EI                   OBJECT IDENTIFIER ::= { hh3cProductId 38 }
+
+hh3c-s3600-28P-PWR-EI               OBJECT IDENTIFIER ::= { hh3cProductId 39 }
+
+hh3c-s3600-52P-PWR-EI               OBJECT IDENTIFIER ::= { hh3cProductId 40 }
+
+hh3c-s3600-28F-EI                   OBJECT IDENTIFIER ::= { hh3cProductId 41 }
+
+hh3c-s5600-26C                      OBJECT IDENTIFIER ::= { hh3cProductId 42 }
+
+hh3c-s5600-50C                      OBJECT IDENTIFIER ::= { hh3cProductId 43 }
+
+hh3c-s5600-26C-PWR                  OBJECT IDENTIFIER ::= { hh3cProductId 44 }
+
+hh3c-s5600-50C-PWR                  OBJECT IDENTIFIER ::= { hh3cProductId 45 }
+
+hh3c-s5600-26F                      OBJECT IDENTIFIER ::= { hh3cProductId 46 }
+
+hh3c-s3600-52G-HI                   OBJECT IDENTIFIER ::= { hh3cProductId 47 }
+
+hh3c-s3600-52P-HI                   OBJECT IDENTIFIER ::= { hh3cProductId 48 }
+
+hh3c-s3600-28G-HI                   OBJECT IDENTIFIER ::= { hh3cProductId 49 }
+
+hh3c-s3600-28P-HI                   OBJECT IDENTIFIER ::= { hh3cProductId 50 }
+
+hh3c-s3600-52M-HI                   OBJECT IDENTIFIER ::= { hh3cProductId 51 }
+
+hh3c-s7502                          OBJECT IDENTIFIER ::= { hh3cProductId 52 }
+
+hh3c-s7503                          OBJECT IDENTIFIER ::= { hh3cProductId 53 }
+
+hh3c-s7506                          OBJECT IDENTIFIER ::= { hh3cProductId 54 }
+
+hh3c-s7506R                         OBJECT IDENTIFIER ::= { hh3cProductId 55 }
+
+hh3c-ar28-09                        OBJECT IDENTIFIER ::= { hh3cProductId 57 }
+
+hh3c-ar28-10                        OBJECT IDENTIFIER ::= { hh3cProductId 58 }
+
+hh3c-ar28-11                        OBJECT IDENTIFIER ::= { hh3cProductId 59 }
+
+hh3c-ar28-12                        OBJECT IDENTIFIER ::= { hh3cProductId 60 }
+
+hh3c-ar28-13                        OBJECT IDENTIFIER ::= { hh3cProductId 61 }
+
+hh3c-ar28-14                        OBJECT IDENTIFIER ::= { hh3cProductId 62 }
+
+hh3c-ar28-30                        OBJECT IDENTIFIER ::= { hh3cProductId 63 }
+
+hh3c-ar28-31                        OBJECT IDENTIFIER ::= { hh3cProductId 64 }
+
+hh3c-ar28-40                        OBJECT IDENTIFIER ::= { hh3cProductId 65 }
+
+hh3c-ar28-80                        OBJECT IDENTIFIER ::= { hh3cProductId 66 }
+
+hh3c-ar46-20                        OBJECT IDENTIFIER ::= { hh3cProductId 67 }
+
+hh3c-ar46-40                        OBJECT IDENTIFIER ::= { hh3cProductId 68 }
+
+hh3c-ar46-80                        OBJECT IDENTIFIER ::= { hh3cProductId 69 }
+
+hh3c-msr20-20                       OBJECT IDENTIFIER ::= { hh3cProductId 70 }
+
+hh3c-msr20-21                       OBJECT IDENTIFIER ::= { hh3cProductId 71 }
+
+hh3c-msr20-40                       OBJECT IDENTIFIER ::= { hh3cProductId 72 }
+
+hh3c-msr30-20                       OBJECT IDENTIFIER ::= { hh3cProductId 73 }
+
+hh3c-msr30-40                       OBJECT IDENTIFIER ::= { hh3cProductId 74 }
+
+hh3c-msr30-60                       OBJECT IDENTIFIER ::= { hh3cProductId 75 }
+
+hh3c-msr50-40                       OBJECT IDENTIFIER ::= { hh3cProductId 76 }
+
+hh3c-msr50-60                       OBJECT IDENTIFIER ::= { hh3cProductId 77 }
+
+hh3c-ar18-21                        OBJECT IDENTIFIER ::= { hh3cProductId 88 }
+
+hh3c-ar18-21A                       OBJECT IDENTIFIER ::= { hh3cProductId 89 }
+
+hh3c-ar18-21B                       OBJECT IDENTIFIER ::= { hh3cProductId 90 }
+
+hh3c-ar18-22                        OBJECT IDENTIFIER ::= { hh3cProductId 91 }
+
+hh3c-ar18-22-8                      OBJECT IDENTIFIER ::= { hh3cProductId 92 }
+
+hh3c-ar18-22S-8                     OBJECT IDENTIFIER ::= { hh3cProductId 93 }
+
+hh3c-ar18-22-24                     OBJECT IDENTIFIER ::= { hh3cProductId 94 }
+
+hh3c-ar18-23-1                      OBJECT IDENTIFIER ::= { hh3cProductId 95 }
+
+hh3c-ar18-23S-1                     OBJECT IDENTIFIER ::= { hh3cProductId 96 }
+
+hh3c-ar18-30E                       OBJECT IDENTIFIER ::= { hh3cProductId 98 }
+
+hh3c-ar18-31E                       OBJECT IDENTIFIER ::= { hh3cProductId 100 }
+
+hh3c-ar18-32E                       OBJECT IDENTIFIER ::= { hh3cProductId 102 }
+
+hh3c-ar18-33                        OBJECT IDENTIFIER ::= { hh3cProductId 103 }
+
+hh3c-ar18-33E                       OBJECT IDENTIFIER ::= { hh3cProductId 104 }
+
+hh3c-ar18-34                        OBJECT IDENTIFIER ::= { hh3cProductId 105 }
+
+hh3c-ar18-34E                       OBJECT IDENTIFIER ::= { hh3cProductId 106 }
+
+hh3c-ar18-35E                       OBJECT IDENTIFIER ::= { hh3cProductId 108 }
+
+hh3c-ar18-63-1                      OBJECT IDENTIFIER ::= { hh3cProductId 109 }
+
+hh3c-secpathF100-C                  OBJECT IDENTIFIER ::= { hh3cProductId 110 }
+
+hh3c-secpathF100-A                  OBJECT IDENTIFIER ::= { hh3cProductId 111 }
+
+hh3c-secpathF100-S                  OBJECT IDENTIFIER ::= { hh3cProductId 112 }
+
+hh3c-secpathF100-E                  OBJECT IDENTIFIER ::= { hh3cProductId 113 }
+
+hh3c-secpathF1000-S                 OBJECT IDENTIFIER ::= { hh3cProductId 114 }
+
+hh3c-secpathF1000-A                 OBJECT IDENTIFIER ::= { hh3cProductId 115 }
+
+hh3c-secpathF1800-A                 OBJECT IDENTIFIER ::= { hh3cProductId 116 }
+
+hh3c-secpathV100-S                  OBJECT IDENTIFIER ::= { hh3cProductId 117 }
+
+hh3c-secpathV1000-A                 OBJECT IDENTIFIER ::= { hh3cProductId 118 }
+
+hh3c-secpathF100-AW                 OBJECT IDENTIFIER ::= { hh3cProductId 119 }
+
+hh3c-secpathF1800-S                 OBJECT IDENTIFIER ::= { hh3cProductId 120 }
+
+hh3c-secpathF1800-E                 OBJECT IDENTIFIER ::= { hh3cProductId 121 }
+
+hh3c-secpoint                       OBJECT IDENTIFIER ::= { hh3cProductId 122 }
+
+hh3c-vg10-10                        OBJECT IDENTIFIER ::= { hh3cProductId 123 }
+
+hh3c-vg10-11                        OBJECT IDENTIFIER ::= { hh3cProductId 124 }
+
+hh3c-vg10-40                        OBJECT IDENTIFIER ::= { hh3cProductId 125 }
+
+hh3c-vg10-41                        OBJECT IDENTIFIER ::= { hh3cProductId 126 }
+
+hh3c-vg21-08                        OBJECT IDENTIFIER ::= { hh3cProductId 127 }
+
+hh3c-vg20-16                        OBJECT IDENTIFIER ::= { hh3cProductId 128 }
+
+hh3c-vg20-32                        OBJECT IDENTIFIER ::= { hh3cProductId 129 }
+
+hh3c-vg80-20                        OBJECT IDENTIFIER ::= { hh3cProductId 130 }
+
+hh3c-xe200                          OBJECT IDENTIFIER ::= { hh3cProductId 131 }
+
+hh3c-xe2000                         OBJECT IDENTIFIER ::= { hh3cProductId 132 }
+
+hh3c-xe7200                         OBJECT IDENTIFIER ::= { hh3cProductId 133 }
+
+hh3c-xe7300                         OBJECT IDENTIFIER ::= { hh3cProductId 134 }
+
+hh3c-xe7500                         OBJECT IDENTIFIER ::= { hh3cProductId 135 }
+
+hh3c-xe7600                         OBJECT IDENTIFIER ::= { hh3cProductId 136 }
+
+hh3c-xe7205                         OBJECT IDENTIFIER ::= { hh3cProductId 137 }
+
+hh3c-xe7305                         OBJECT IDENTIFIER ::= { hh3cProductId 138 }
+
+hh3c-xe7505                         OBJECT IDENTIFIER ::= { hh3cProductId 139 }
+
+hh3c-xe7605                         OBJECT IDENTIFIER ::= { hh3cProductId 140 }
+
+hh3c-neoceanIX1000                  OBJECT IDENTIFIER ::= { hh3cProductId 141 }
+
+hh3c-neoceanEX1000                  OBJECT IDENTIFIER ::= { hh3cProductId 142 }
+
+hh3c-neoceanEX800                   OBJECT IDENTIFIER ::= { hh3cProductId 143 }
+
+hh3c-neoceanIX5000                  OBJECT IDENTIFIER ::= { hh3cProductId 144 }
+
+hh3c-neoceanIV5100                  OBJECT IDENTIFIER ::= { hh3cProductId 145 }
+
+hh3c-neoceanIV5200                  OBJECT IDENTIFIER ::= { hh3cProductId 146 }
+
+hh3c-s9502                          OBJECT IDENTIFIER ::= { hh3cProductId 147 }
+
+hh3c-s9505                          OBJECT IDENTIFIER ::= { hh3cProductId 148 }
+
+hh3c-s9508                          OBJECT IDENTIFIER ::= { hh3cProductId 149 }
+
+hh3c-s9508V                         OBJECT IDENTIFIER ::= { hh3cProductId 150 }
+
+hh3c-s9512                          OBJECT IDENTIFIER ::= { hh3cProductId 151 }
+
+hh3c-sR8812                         OBJECT IDENTIFIER ::= { hh3cProductId 152 }
+
+hh3c-sR8808                         OBJECT IDENTIFIER ::= { hh3cProductId 153 }
+
+hh3c-sR8805                         OBJECT IDENTIFIER ::= { hh3cProductId 154 }
+
+hh3c-sR8802                         OBJECT IDENTIFIER ::= { hh3cProductId 155 }
+
+hh3c-e126-SI                        OBJECT IDENTIFIER ::= { hh3cProductId 156 }
+
+hh3c-vg31-08                        OBJECT IDENTIFIER ::= { hh3cProductId 157 }
+
+hh3c-dr834                          OBJECT IDENTIFIER ::= { hh3cProductId 158 }
+
+hh3c-s7510E                         OBJECT IDENTIFIER ::= { hh3cProductId 159 }
+
+hh3c-s5100-24P-SI                   OBJECT IDENTIFIER ::= { hh3cProductId 160 }
+
+hh3c-s5100-48P-SI                   OBJECT IDENTIFIER ::= { hh3cProductId 161 }
+
+hh3c-s5100-8P-SI                    OBJECT IDENTIFIER ::= { hh3cProductId 162 }
+
+hh3c-s5100-16P-SI                   OBJECT IDENTIFIER ::= { hh3cProductId 163 }
+
+hh3c-s5100-8P-EI                    OBJECT IDENTIFIER ::= { hh3cProductId 164 }
+
+hh3c-s5100-16P-EI                   OBJECT IDENTIFIER ::= { hh3cProductId 165 }
+
+hh3c-s5100-8P-PWR-EI                OBJECT IDENTIFIER ::= { hh3cProductId 166 }
+
+hh3c-s5100-16P-PWR-EI               OBJECT IDENTIFIER ::= { hh3cProductId 167 }
+
+hh3c-s5100-26C-PWR-EI               OBJECT IDENTIFIER ::= { hh3cProductId 168 }
+
+hh3c-s5100-50C-PWR-EI               OBJECT IDENTIFIER ::= { hh3cProductId 169 }
+
+hh3c-s3108TP-EI                     OBJECT IDENTIFIER ::= { hh3cProductId 170 }
+
+hh3c-s3116TP-EI                     OBJECT IDENTIFIER ::= { hh3cProductId 171 }
+
+hh3c-s3126TP-EI                     OBJECT IDENTIFIER ::= { hh3cProductId 172 }
+
+hh3c-s3108TP-EI-PWR                 OBJECT IDENTIFIER ::= { hh3cProductId 173 }
+
+hh3c-s3116TP-EI-PWR                 OBJECT IDENTIFIER ::= { hh3cProductId 174 }
+
+hh3c-s3126TP-EI-PWR                 OBJECT IDENTIFIER ::= { hh3cProductId 175 }
+
+hh3c-s5500M-20C                     OBJECT IDENTIFIER ::= { hh3cProductId 177 }
+
+hh3c-s5500M-20F                     OBJECT IDENTIFIER ::= { hh3cProductId 178 }
+
+hh3c-bR304plus                      OBJECT IDENTIFIER ::= { hh3cProductId 179 }
+
+hh3c-s9505-V5                       OBJECT IDENTIFIER ::= { hh3cProductId 180 }
+
+hh3c-s9512-V5                       OBJECT IDENTIFIER ::= { hh3cProductId 181 }
+
+hh3c-s9508-V5                       OBJECT IDENTIFIER ::= { hh3cProductId 182 }
+
+hh3c-s9508V-V5                      OBJECT IDENTIFIER ::= { hh3cProductId 183 }
+
+hh3c-s9502-V5                       OBJECT IDENTIFIER ::= { hh3cProductId 184 }
+
+hh3c-sR8802-V5                      OBJECT IDENTIFIER ::= { hh3cProductId 185 }
+
+hh3c-sR8805-V5                      OBJECT IDENTIFIER ::= { hh3cProductId 186 }
+
+hh3c-sR8812-V5                      OBJECT IDENTIFIER ::= { hh3cProductId 187 }
+
+hh3c-sR8808-V5                      OBJECT IDENTIFIER ::= { hh3cProductId 188 }
+
+hh3c-s3100-52P                      OBJECT IDENTIFIER ::= { hh3cProductId 189 }
+
+hh3c-e152                           OBJECT IDENTIFIER ::= { hh3cProductId 190 }
+
+hh3c-s2008                          OBJECT IDENTIFIER ::= { hh3cProductId 191 }
+
+hh3c-s2026                          OBJECT IDENTIFIER ::= { hh3cProductId 192 }
+
+hh3c-sr6602                         OBJECT IDENTIFIER ::= { hh3cProductId 193 }
+
+hh3c-sr6608                         OBJECT IDENTIFIER ::= { hh3cProductId 194 }
+
+hh3c-s3100-08TP-EI                  OBJECT IDENTIFIER ::= { hh3cProductId 195 }
+
+hh3c-s3100-08TP-PWR-EI              OBJECT IDENTIFIER ::= { hh3cProductId 196 }
+
+hh3c-s3100-16TP-EI                  OBJECT IDENTIFIER ::= { hh3cProductId 197 }
+
+hh3c-s3100-16TP-PWR-EI              OBJECT IDENTIFIER ::= { hh3cProductId 198 }
+
+hh3c-s3100-26TP-EI                  OBJECT IDENTIFIER ::= { hh3cProductId 199 }
+
+hh3c-s3100-26TP-PWR-EI              OBJECT IDENTIFIER ::= { hh3cProductId 200 }
+
+hh3c-s7502-v5                       OBJECT IDENTIFIER ::= { hh3cProductId 201 }
+
+hh3c-vg80-21                        OBJECT IDENTIFIER ::= { hh3cProductId 202 }
+
+hh3c-vg80-80                        OBJECT IDENTIFIER ::= { hh3cProductId 203 }
+
+hh3c-wcm-wx5002                     OBJECT IDENTIFIER ::= { hh3cProductId 204 }
+
+hh3c-wcm-wcma                       OBJECT IDENTIFIER ::= { hh3cProductId 205 }
+
+hh3c-msr30-10                       OBJECT IDENTIFIER ::= { hh3cProductId 206 }
+
+hh3c-s7502e                         OBJECT IDENTIFIER ::= { hh3cProductId 207 }
+
+hh3c-s7503E                         OBJECT IDENTIFIER ::= { hh3cProductId 208 }
+
+hh3c-s7506E                         OBJECT IDENTIFIER ::= { hh3cProductId 209 }
+
+hh3c-s7506E-V                       OBJECT IDENTIFIER ::= { hh3cProductId 210 }
+
+hh3c-secBlade-FW                    OBJECT IDENTIFIER ::= { hh3cProductId 211 }
+
+hh3c-secBlade-IPSec                 OBJECT IDENTIFIER ::= { hh3cProductId 212 }
+
+hh3c-s3100-8TP-SI                   OBJECT IDENTIFIER ::= { hh3cProductId 213 }
+
+hh3c-s3100-16TP-SI                  OBJECT IDENTIFIER ::= { hh3cProductId 214 }
+
+hh3c-e126A                          OBJECT IDENTIFIER ::= { hh3cProductId 215 }
+
+hh3c-s3100-26TP-SI-B                OBJECT IDENTIFIER ::= { hh3cProductId 216 }
+
+hh3c-msr30-16                       OBJECT IDENTIFIER ::= { hh3cProductId 217 }
+
+-- This object is reserved for OEM. See in HH3C-OEM-PRODUCT-ID-MIB
+hh3cOEMProductID                    OBJECT IDENTIFIER ::= { hh3cProductId 218 }
+
+hh3c-s2126-ei                       OBJECT IDENTIFIER ::= { hh3cProductId 219 }
+
+hh3c-e150-si                        OBJECT IDENTIFIER ::= { hh3cProductId 220 }
+
+hh3c-msr30-11                       OBJECT IDENTIFIER ::= { hh3cProductId 221 }
+
+hh3c-neoceanIX3040                  OBJECT IDENTIFIER ::= { hh3cProductId 222 }
+
+hh3c-neoceanIX3080                  OBJECT IDENTIFIER ::= { hh3cProductId 223 }
+
+hh3c-secpathF100-M                  OBJECT IDENTIFIER ::= { hh3cProductId 224 }
+
+hh3c-neoceanVX1500                  OBJECT IDENTIFIER ::= { hh3cProductId 225 }
+
+hh3c-neoceanIX1520                  OBJECT IDENTIFIER ::= { hh3cProductId 226 }
+
+hh3c-neoceanIX1540                  OBJECT IDENTIFIER ::= { hh3cProductId 227 }
+
+hh3c-wcm-wx5002-128ap               OBJECT IDENTIFIER ::= { hh3cProductId 228 }
+
+hh3c-msr20-10                       OBJECT IDENTIFIER ::= { hh3cProductId 229 }
+
+hh3c-msr20-11                       OBJECT IDENTIFIER ::= { hh3cProductId 230 }
+
+hh3c-msr20-13                       OBJECT IDENTIFIER ::= { hh3cProductId 231 }
+
+hh3c-msr20-15                       OBJECT IDENTIFIER ::= { hh3cProductId 232 }
+
+hh3c-neoceanDL1008                  OBJECT IDENTIFIER ::= { hh3cProductId 233 }
+
+hh3c-neoceanDL1008S                 OBJECT IDENTIFIER ::= { hh3cProductId 234 }
+
+hh3c-neoceanDL1012                  OBJECT IDENTIFIER ::= { hh3cProductId 235 }
+
+hh3c-s3610-52m                      OBJECT IDENTIFIER ::= { hh3cProductId 236 }
+
+hh3c-IV5680                         OBJECT IDENTIFIER ::= { hh3cProductId 237 }
+
+hh3c-IV5240                         OBJECT IDENTIFIER ::= { hh3cProductId 238 }
+
+hh3c-F1000-E                        OBJECT IDENTIFIER ::= { hh3cProductId 239 }
+
+hh3c-S5024P                         OBJECT IDENTIFIER ::= { hh3cProductId 240 }
+
+hh3c-S5016P                         OBJECT IDENTIFIER ::= { hh3cProductId 241 }
+
+hh3c-LSQ1FWBSC0                     OBJECT IDENTIFIER ::= { hh3cProductId 242 }
+
+hh3c-LSB1FW2A0                      OBJECT IDENTIFIER ::= { hh3cProductId 243 }
+
+hh3c-S3100-8TP-EI                   OBJECT IDENTIFIER ::= { hh3cProductId 244 }
+
+hh3c-S3100-16TP-EI                  OBJECT IDENTIFIER ::= { hh3cProductId 245 }
+
+hh3c-S3100-26TP-EI                  OBJECT IDENTIFIER ::= { hh3cProductId 246 }
+
+hh3c-ET704                          OBJECT IDENTIFIER ::= { hh3cProductId 247 }
+
+hh3c-ec1001                         OBJECT IDENTIFIER ::= { hh3cProductId 248 }
+
+hh3c-ec1001-hf                      OBJECT IDENTIFIER ::= { hh3cProductId 249 }
+
+hh3c-ec1004-hc                      OBJECT IDENTIFIER ::= { hh3cProductId 250 }
+
+hh3c-ec2004-hf                      OBJECT IDENTIFIER ::= { hh3cProductId 251 }
+
+hh3c-dc1001                         OBJECT IDENTIFIER ::= { hh3cProductId 252 }
+
+hh3c-dm8000                         OBJECT IDENTIFIER ::= { hh3cProductId 253 }
+
+hh3c-vm8000                         OBJECT IDENTIFIER ::= { hh3cProductId 254 }
+
+hh3c-ms8000                         OBJECT IDENTIFIER ::= { hh3cProductId 255 }
+
+hh3c-S3100-52TP                     OBJECT IDENTIFIER ::= { hh3cProductId 256 }
+
+hh3c-msr20-12                       OBJECT IDENTIFIER ::= { hh3cProductId 257 }
+
+hh3c-s1550E                         OBJECT IDENTIFIER ::= { hh3cProductId 258 }
+
+hh3c-s1550                          OBJECT IDENTIFIER ::= { hh3cProductId 259 }
+
+hh3c-s1526-EI                       OBJECT IDENTIFIER ::= { hh3cProductId 260 }
+
+hh3c-msr20-12-T                     OBJECT IDENTIFIER ::= { hh3cProductId 261 }
+
+hh3c-msr20-15-I                     OBJECT IDENTIFIER ::= { hh3cProductId 262 }
+
+hh3c-msr20-15-N                     OBJECT IDENTIFIER ::= { hh3cProductId 263 }
+
+hh3c-wx6100EWPX                     OBJECT IDENTIFIER ::= { hh3cProductId 264 }
+
+hh3c-wx6100LSQ                      OBJECT IDENTIFIER ::= { hh3cProductId 265 }
+
+hh3c-wx6100LSB                      OBJECT IDENTIFIER ::= { hh3cProductId 266 }
+
+hh3c-wx6100SW                       OBJECT IDENTIFIER ::= { hh3cProductId 267 }
+
+hh3c-dl1000                         OBJECT IDENTIFIER ::= { hh3cProductId 268 }
+
+hh3c-dl1000s                        OBJECT IDENTIFIER ::= { hh3cProductId 269 }
+
+hh3c-wa1208e-g                      OBJECT IDENTIFIER ::= { hh3cProductId 270 }
+
+hh3c-wa1208e-dg                     OBJECT IDENTIFIER ::= { hh3cProductId 271 }
+
+hh3c-wa1208e-ag                     OBJECT IDENTIFIER ::= { hh3cProductId 272 }
+
+hh3c-wa1208e-agp                    OBJECT IDENTIFIER ::= { hh3cProductId 273 }
+
+hh3c-S7501M-24T                     OBJECT IDENTIFIER ::= { hh3cProductId 274 }
+
+hh3c-s7501M-24TP                    OBJECT IDENTIFIER ::= { hh3cProductId 275 }
+
+hh3c-s7502M                         OBJECT IDENTIFIER ::= { hh3cProductId 276 }
+
+hh3c-s7503M                         OBJECT IDENTIFIER ::= { hh3cProductId 277 }
+
+hh3c-s7506M                         OBJECT IDENTIFIER ::= { hh3cProductId 278 }
+
+hh3c-s7506M-V                       OBJECT IDENTIFIER ::= { hh3cProductId 279 }
+
+hh3c-s7510M                         OBJECT IDENTIFIER ::= { hh3cProductId 280 }
+
+hh3c-secpathT200                    OBJECT IDENTIFIER ::= { hh3cProductId 281 }
+
+hh3c-secpathT200E                   OBJECT IDENTIFIER ::= { hh3cProductId 282 }
+
+hh3c-cc600                          OBJECT IDENTIFIER ::= { hh3cProductId 283 }
+
+hh3c-wa1208e-gp                     OBJECT IDENTIFIER ::= { hh3cProductId 284 }
+
+hh3c-wb2321e-agp                    OBJECT IDENTIFIER ::= { hh3cProductId 285 }
+
+hh3c-wh2520e-agp                    OBJECT IDENTIFIER ::= { hh3cProductId 286 }
+
+hh3c-ICG2000                        OBJECT IDENTIFIER ::= { hh3cProductId 287 }
+
+hh3c-ICG3000                        OBJECT IDENTIFIER ::= { hh3cProductId 288 }
+
+hh3c-ICG5000                        OBJECT IDENTIFIER ::= { hh3cProductId 289 }
+
+hh3c-S5520TP-SI                     OBJECT IDENTIFIER ::= { hh3cProductId 290 }
+
+hh3c-wa2210-ag                      OBJECT IDENTIFIER ::= { hh3cProductId 291 }
+
+hh3c-wa2220-ag                      OBJECT IDENTIFIER ::= { hh3cProductId 292 }
+
+hh3c-wa2220e-ag                     OBJECT IDENTIFIER ::= { hh3cProductId 293 }
+
+hh3c-wa2210x-g                      OBJECT IDENTIFIER ::= { hh3cProductId 294 }
+
+hh3c-wa2220x-ag                     OBJECT IDENTIFIER ::= { hh3cProductId 295 }
+
+hh3c-wa2220x-agp                    OBJECT IDENTIFIER ::= { hh3cProductId 296 }
+
+hh3c-S3100-52TP-SI                  OBJECT IDENTIFIER ::= { hh3cProductId 297 }
+
+hh3c-secpathASE5000-E               OBJECT IDENTIFIER ::= { hh3cProductId 298 }
+
+hh3c-secpathASE5000-S               OBJECT IDENTIFIER ::= { hh3cProductId 299 }
+
+hh3c-secpathU200-C                  OBJECT IDENTIFIER ::= { hh3cProductId 300 }
+
+hh3c-secpathU200-S                  OBJECT IDENTIFIER ::= { hh3cProductId 301 }
+
+hh3c-secpathU200-A                  OBJECT IDENTIFIER ::= { hh3cProductId 302 }
+
+hh3c-secpathU200-M                  OBJECT IDENTIFIER ::= { hh3cProductId 303 }
+
+hh3c-ec3016-hc                      OBJECT IDENTIFIER ::= { hh3cProductId 304 }
+
+hh3c-dc1001-ff                      OBJECT IDENTIFIER ::= { hh3cProductId 305 }
+
+hh3c-ecr3304-hf                     OBJECT IDENTIFIER ::= { hh3cProductId 306 }
+
+hh3c-ecr3308-hd                     OBJECT IDENTIFIER ::= { hh3cProductId 307 }
+
+hh3c-ecr3316-hc                     OBJECT IDENTIFIER ::= { hh3cProductId 308 }
+
+hh3c-isc3000                        OBJECT IDENTIFIER ::= { hh3cProductId 309 }
+
+hh3c-isc3100                        OBJECT IDENTIFIER ::= { hh3cProductId 310 }
+
+hh3c-vm9000                         OBJECT IDENTIFIER ::= { hh3cProductId 311 }
+
+hh3c-vm5000                         OBJECT IDENTIFIER ::= { hh3cProductId 312 }
+
+hh3c-ms9000-vtdu                    OBJECT IDENTIFIER ::= { hh3cProductId 313 }
+
+hh3c-ms9000-nru                     OBJECT IDENTIFIER ::= { hh3cProductId 314 }
+
+hh3c-ums9005                        OBJECT IDENTIFIER ::= { hh3cProductId 315 }
+
+hh3c-CS2104B                        OBJECT IDENTIFIER ::= { hh3cProductId 316 }
+
+hh3c-CS2106B                        OBJECT IDENTIFIER ::= { hh3cProductId 317 }
+
+hh3c-S5024E                         OBJECT IDENTIFIER ::= { hh3cProductId 318 }
+
+hh3c-S5048E                         OBJECT IDENTIFIER ::= { hh3cProductId 319 }
+
+hh3c-secpathF5000-A                 OBJECT IDENTIFIER ::= { hh3cProductId 320 }
+
+hh3c-neoceanIX3240                  OBJECT IDENTIFIER ::= { hh3cProductId 321 }
+
+hh3c-neoceanIX3620                  OBJECT IDENTIFIER ::= { hh3cProductId 322 }
+
+hh3c-MSA7302                        OBJECT IDENTIFIER ::= { hh3cProductId 323 }
+
+hh3c-MSA7306                        OBJECT IDENTIFIER ::= { hh3cProductId 324 }
+
+hh3c-S7501E                         OBJECT IDENTIFIER ::= { hh3cProductId 325 }
+
+hh3c-S3100-8C-EPON-EI               OBJECT IDENTIFIER ::= { hh3cProductId 326 }
+
+hh3c-S3100-16C-EPON-EI              OBJECT IDENTIFIER ::= { hh3cProductId 327 }
+
+hh3c-S3100-26C-EPON-EI              OBJECT IDENTIFIER ::= { hh3cProductId 328 }
+
+hh3c-secBlade-LSQ1AFCBSC0           OBJECT IDENTIFIER ::= { hh3cProductId 329 }
+
+hh3c-secBlade-LSB1AFC1A0            OBJECT IDENTIFIER ::= { hh3cProductId 330 }
+
+hh3c-secpathF1000-C                 OBJECT IDENTIFIER ::= { hh3cProductId 331 }
+
+hh3c-secpathF100-A-SI               OBJECT IDENTIFIER ::= { hh3cProductId 332 }
+
+hh3c-secpathV100-E                  OBJECT IDENTIFIER ::= { hh3cProductId 333 }
+
+hh3c-S5800-32C                      OBJECT IDENTIFIER ::= { hh3cProductId 334 }
+
+hh3c-S5800-56C                      OBJECT IDENTIFIER ::= { hh3cProductId 335 }
+
+hh3c-S5800-32C-PWR                  OBJECT IDENTIFIER ::= { hh3cProductId 336 }
+
+hh3c-S5800-56C-PWR                  OBJECT IDENTIFIER ::= { hh3cProductId 337 }
+
+hh3c-S5800-60C-PWR                  OBJECT IDENTIFIER ::= { hh3cProductId 338 }
+
+hh3c-S5800-32F                      OBJECT IDENTIFIER ::= { hh3cProductId 339 }
+
+hh3c-S5800X-28C                     OBJECT IDENTIFIER ::= { hh3cProductId 340 }
+
+hh3c-S5800X-28S                     OBJECT IDENTIFIER ::= { hh3cProductId 341 }
+
+hh3c-cc602                          OBJECT IDENTIFIER ::= { hh3cProductId 342 }
+
+hh3c-cr400                          OBJECT IDENTIFIER ::= { hh3cProductId 343 }
+
+hh3c-cc600E                         OBJECT IDENTIFIER ::= { hh3cProductId 344 }
+
+hh3c-secpathT1000-M                 OBJECT IDENTIFIER ::= { hh3cProductId 345 }
+
+hh3c-neoceanVX1540                  OBJECT IDENTIFIER ::= { hh3cProductId 346 }
+
+hh3c-msr50-06                       OBJECT IDENTIFIER ::= { hh3cProductId 347 }
+
+hh3c-secpathACG2000-M               OBJECT IDENTIFIER ::= { hh3cProductId 348 }
+
+hh3c-secBlade-LSQ1ACGASC0           OBJECT IDENTIFIER ::= { hh3cProductId 349 }
+
+hh3c-secBlade-LSB1ACG1A0            OBJECT IDENTIFIER ::= { hh3cProductId 350 }
+
+hh3c-wx3024wcm                      OBJECT IDENTIFIER ::= { hh3cProductId 351 }
+
+hh3c-wx3024lsw                      OBJECT IDENTIFIER ::= { hh3cProductId 352 }
+
+hh3c-wx5004                         OBJECT IDENTIFIER ::= { hh3cProductId 353 }
+
+hh3c-sr6604                         OBJECT IDENTIFIER ::= { hh3cProductId 354 }
+
+hh3c-iag5000-A                      OBJECT IDENTIFIER ::= { hh3cProductId 355 }
+
+hh3c-secBlade-SPE-FWM               OBJECT IDENTIFIER ::= { hh3cProductId 356 }
+
+hh3c-ICG2200                        OBJECT IDENTIFIER ::= { hh3cProductId 357 }
+
+hh3c-S7602                          OBJECT IDENTIFIER ::= { hh3cProductId 358 }
+
+hh3c-S7603                          OBJECT IDENTIFIER ::= { hh3cProductId 359 }
+
+hh3c-S7606                          OBJECT IDENTIFIER ::= { hh3cProductId 360 }
+
+hh3c-S7606-V                        OBJECT IDENTIFIER ::= { hh3cProductId 361 }
+
+hh3c-S7610                          OBJECT IDENTIFIER ::= { hh3cProductId 362 }
+
+hh3c-wa2610e-gn                     OBJECT IDENTIFIER ::= { hh3cProductId 363 }
+
+hh3c-wa2620e-agn                    OBJECT IDENTIFIER ::= { hh3cProductId 364 }
+
+hh3c-wa1208e-g-v5                   OBJECT IDENTIFIER ::= { hh3cProductId 365 }
+
+hh3c-wa1208e-dg-v5                  OBJECT IDENTIFIER ::= { hh3cProductId 366 }
+
+hh3c-wa1208e-ag-v5                  OBJECT IDENTIFIER ::= { hh3cProductId 367 }
+
+hh3c-wa1208e-agp-v5                 OBJECT IDENTIFIER ::= { hh3cProductId 368 }
+
+hh3c-wa1208e-gp-v5                  OBJECT IDENTIFIER ::= { hh3cProductId 369 }
+
+hh3c-S7503E-S                       OBJECT IDENTIFIER ::= { hh3cProductId 370 }
+
+hh3c-secpathIAG2000-A               OBJECT IDENTIFIER ::= { hh3cProductId 371 }
+
+hh3c-secpathT1000-A                 OBJECT IDENTIFIER ::= { hh3cProductId 372 }
+
+hh3c-secpathT1000-S                 OBJECT IDENTIFIER ::= { hh3cProductId 373 }
+
+hh3c-secBlade-EWPX1FWA0             OBJECT IDENTIFIER ::= { hh3cProductId 374 }
+
+hh3c-secBlade-LSQ1NSMSC0            OBJECT IDENTIFIER ::= { hh3cProductId 375 }
+
+hh3c-secBlade-LSQM1AFDBSC0          OBJECT IDENTIFIER ::= { hh3cProductId 376 }
+
+hh3c-secBlade-LSQ1LBSC0             OBJECT IDENTIFIER ::= { hh3cProductId 377 }
+
+hh3c-secBlade-LSB1LB1A0             OBJECT IDENTIFIER ::= { hh3cProductId 378 }
+
+hh3c-neoceanIX1560                  OBJECT IDENTIFIER ::= { hh3cProductId 379 }
+
+hh3c-neoceanEX1500S                 OBJECT IDENTIFIER ::= { hh3cProductId 380 }
+
+hh3c-neoceanEX1520S                 OBJECT IDENTIFIER ::= { hh3cProductId 381 }
+
+hh3c-neoceanEX1540S                 OBJECT IDENTIFIER ::= { hh3cProductId 382 }
+
+hh3c-neoceanEX1560S                 OBJECT IDENTIFIER ::= { hh3cProductId 383 }
+
+hh3c-ET716                          OBJECT IDENTIFIER ::= { hh3cProductId 384 }
+
+hh3c-MSA7301                        OBJECT IDENTIFIER ::= { hh3cProductId 385 }
+
+hh3c-ER3200                         OBJECT IDENTIFIER ::= { hh3cProductId 386 }
+ 
+hh3c-ER3100                         OBJECT IDENTIFIER ::= { hh3cProductId 387 }
+
+hh3c-s9505E                         OBJECT IDENTIFIER ::= { hh3cProductId 388 }
+
+hh3c-s9508E-V                       OBJECT IDENTIFIER ::= { hh3cProductId 389 }
+
+hh3c-s9512E                         OBJECT IDENTIFIER ::= { hh3cProductId 390 }
+
+hh3c-s12508                         OBJECT IDENTIFIER ::= { hh3cProductId 391 }
+
+hh3c-s12518                         OBJECT IDENTIFIER ::= { hh3cProductId 392 }
+
+hh3c-ET708                          OBJECT IDENTIFIER ::= { hh3cProductId 393 }
+
+hh3c-ET724                         OBJECT IDENTIFIER ::= { hh3cProductId 394 }
+
+END

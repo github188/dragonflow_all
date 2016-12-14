@@ -1,0 +1,1046 @@
+tos-MIB DEFINITIONS ::= BEGIN
+
+IMPORTS
+    MODULE-IDENTITY,NOTIFICATION-TYPE, OBJECT-TYPE, enterprises,
+    Integer32, Opaque,IpAddress   FROM SNMPv2-SMI
+    TEXTUAL-CONVENTION, DisplayString, TruthValue
+	FROM SNMPv2-TC;
+
+TOPSEC MODULE-IDENTITY
+    LAST-UPDATED "0504271620Z" -- sep. 27 ,2005
+    ORGANIZATION "TOPSEC"
+    CONTACT-INFO
+            " Topsec beijing
+              China
+              EMail: support@topsec.com.cn "
+    DESCRIPTION
+            "The MIB module for management of Topsec Operating System Security Product, independent of
+            the specific encapsulation scheme in use."
+    REVISION     "0504271620Z" -- sep. 27 ,2005
+    DESCRIPTION
+            "Initial version."
+    ::= { enterprises 9952 }
+
+NetSecurity OBJECT IDENTIFIER ::= { TOPSEC 1 }
+DeviceStatus OBJECT IDENTIFIER ::= { NetSecurity 1 }
+tosMIBObjects OBJECT IDENTIFIER ::= { NetSecurity 5 }
+
+tos  OBJECT IDENTIFIER ::= { tosMIBObjects 1 }
+
+
+tosContact OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (0..255))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "Contact fashion with tos develop group."
+    ::= { tos 1 }
+
+
+TosVersion OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (0..255))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "Version no. of current TOS device."
+    ::= { tos 2 }
+
+
+CurConnect OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "current connected num."
+    ::= { tos 3  }
+
+CurUnconnect OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "current unconnected num."
+    ::= { tos 4 }
+
+
+ADSLStatus OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "status of ADSL."
+    ::= { tos 5 }
+
+ADSLTimeLast OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "ADSL time lasting."
+    ::= { tos 6 }
+
+ADSLPackRev OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "ADSL packets received."
+    ::= { tos 7 }
+
+ADSLPackSnd OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "ADSL packets sent."
+    ::= { tos 8 }
+
+ADSLByteRev OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "ADSL bytes received."
+    ::= { tos 9 }
+
+ADSLByteSnd OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "ADSL bytes sent."
+    ::= { tos 10 }
+
+ADSLPpp0Addr OBJECT-TYPE
+    SYNTAX       IpAddress
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "ADSL ppp0 address."
+    ::= { tos 11 }
+
+LinkBakMasterDev OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (0..255))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "Link back master device name ."
+    ::= { tos 12 }
+
+LinkBakSlaveDev OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (0..255))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "Link back slave device name ."
+    ::= { tos 13 }
+
+LinkBakMasterLinkStatus OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (0..255))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "Link back master device status ."
+    ::= { tos 14 }
+
+LinkBakSlaveLinkStatus OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (0..255))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "Link back slave device status ."
+    ::= { tos 15 }
+
+LinkBakActive OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (0..255))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "Link back enabled or not ."
+    ::= { tos 16 }
+
+
+
+TosIfTable OBJECT-TYPE
+    SYNTAX     SEQUENCE OF TosIfEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "The (conceptual) table containing information about Network Interface card status."
+    ::= { tos 21 }
+
+TosIfEntry OBJECT-TYPE
+    SYNTAX     TosIfEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "An entry (conceptual row) containing the information about  a
+            device NIC status."
+    INDEX      {  
+	TosifIndex
+	    }
+    ::= { TosIfTable 1 }
+
+TosIfEntry ::= SEQUENCE {
+    TosIfIndex		         INTEGER,
+    TosIfName		         DisplayString,
+    TosNegotiateOrNot	         DisplayString,
+    TosIfAddress	               	         DisplayString,
+    TosIfPackRec                  	         Counter32,
+    TosIfPackXmit                            Counter32,
+    TosIfSumErrRec                        Counter32,
+    TosIfL2bCastErrRec                 Counter32,
+    TosIfIpPackRec                         Counter32,
+    TosIfArpPackRec                     Counter32,
+    TosIfUdpPackRec                    Counter32,
+    TosIfTcpPackRec                     Counter32,
+    TosIfIcmpPackRec                   Counter32,
+    TosIfL3mCastRec                    Counter32,
+    TosIfFragPackRec                   Counter32,
+    TosIfDiscPack                          Counter32,
+    TosIfColliPack                          Counter32,
+    TosIfStatus                                DisplayString
+    }
+
+
+ TosIfIndex OBJECT-TYPE
+    SYNTAX     INTEGER
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "Table index."
+    ::= { TosIfEntry 1 }
+
+
+TosIfName OBJECT-TYPE
+    SYNTAX     DisplayString
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "Name of the NIC."
+    ::= { TosIfEntry 2 }
+
+ TosNegotiateOrNot OBJECT-TYPE
+    SYNTAX    DisplayString
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "Negotiate or not."
+    ::= { TosIfEntry 3 }
+
+ TosIfAddress OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "IP address of the NIC."
+    ::= { TosIfEntry 4 }
+
+    TosIfPackRec OBJECT-TYPE
+    SYNTAX       Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The number of the packets received."
+    ::= { TosIfEntry 5}
+
+TosIfPackXmit OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+             "The number of the packets sent out."
+    ::= { TosIfEntry 6 }
+
+TosIfSumErrRec OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+             "The number of the error packets received."
+    ::= { TosIfEntry 7 }
+
+TosIfL2bCastErrRec OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+             "The number of the other error packets including second level broadcast packets received."
+    ::= { TosIfEntry 8 }
+
+TosIfIpPackRec OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+             "The total number of the ip packets and bytes received."
+    ::= { TosIfEntry 9 }
+
+TosIfArpPackRec OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+             "The total number of the arp packets and tytes received."
+    ::= { TosIfEntry 10 }
+
+TosIfUdpPackRe OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+             "The total number of the udp packets and tytes received."
+    ::= { TosIfEntry 11 }
+
+TosIfTcpPackRec OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+             "The total number of the tcp packets and tytes received."
+    ::= { TosIfEntry 12 }
+
+TosIfIcmpPackRec OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+             "The total number of the icmp packets and tytes received."
+    ::= { TosIfEntry 13 }
+
+TosIfL3mCastRec OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+             "The total number of the third level broadcast and multicast packets received."
+    ::= { TosIfEntry 14 }
+
+TosIfFragPackRec OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+             "The total number of the ip frag and ip option packets received."
+    ::= { TosIfEntry 15 }
+
+TosIfDiscPack OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+             "The total number of the packets denied and discarded."
+    ::= { TosIfEntry 16 }
+
+TosIfColliPack OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+             "The number of the packets collisioned."
+    ::= { TosIfEntry 17 }
+
+TosIfStatus OBJECT-TYPE
+    SYNTAX     DisplayString
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+             "The NIC is up or down,"
+    ::= { TosIfEntry 18 }
+
+
+TosMACTable OBJECT-TYPE
+    SYNTAX     SEQUENCE OF TosMACEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "The (conceptual) table containing information on MAC table."
+    ::= { tos 22 }
+
+TosMACEntry OBJECT-TYPE
+    SYNTAX     TosMACEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "An entry (conceptual row) containing the information of a MAC information."
+    INDEX      {     
+		TosMACIndex   
+                }
+    ::= { TosMACTable 1 }
+
+TosMACEntry ::= SEQUENCE {
+   TosMACIndex               INTEGER,
+   TosMACAddress         DisplayString,
+   TosMACVlanID            Counter32,
+   TosMACDevName            DisplayString,
+                 }
+
+TosMACIndex    OBJECT-TYPE
+    SYNTAX	INTEGER
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"Index of the Tos MAC table ."
+    ::= { TosMACEntry 1  } 
+
+TosMACAddress      OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"The MAC address."
+    ::= { TosMACEntry 2  } 
+
+   TosMACVlanID    OBJECT-TYPE
+    SYNTAX	 Counter32
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"The VLAN id of the MAC."
+    ::= { TosMACEntry 3  } 
+
+   TosMACDevName    OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"The dev name of the MAC."
+    ::= { TosMACEntry 4  } 
+
+
+
+TosVLANTable OBJECT-TYPE
+    SYNTAX     SEQUENCE OF TosVLANEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "The (conceptual) table containing information on VLAN table."
+    ::= { tos 23 }
+
+TosVLANEntry OBJECT-TYPE
+    SYNTAX     TosVLANEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "An entry (conceptual row) containing the information of a VLAN information."
+    INDEX      {     
+		TosVLANIndex   
+                }
+    ::= { TosVLANTable 1 }
+
+TosVLANEntry ::= SEQUENCE {
+   TosVLANIndex               INTEGER,
+   TosVLANId	           DisplayString,
+   TosVLANStatus            DisplayString,
+   TosVLANMTU               INTEGER
+                 }
+
+TosVLANIndex    OBJECT-TYPE
+    SYNTAX	INTEGER
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"Index of the Tos VLAN table ."
+    ::= { TosVLANEntry 1  } 
+
+TosVLANId    OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"The VLAN id."
+    ::= { TosVLANEntry 2  } 
+
+
+TosVLANStatus     OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"The VLAN status."
+    ::= { TosVLANEntry 3  } 
+
+   TosVLANMTU     OBJECT-TYPE
+    SYNTAX	 INTEGER
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"The VLAN MTU."
+    ::= { TosVLANEntry 4  } 
+   
+
+TosRouteTable OBJECT-TYPE
+    SYNTAX     SEQUENCE OF TosRouteEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "The (conceptual) table containing Route information ."
+    ::= {  tos 24 }
+
+TosRouteEntry OBJECT-TYPE
+    SYNTAX     TosRouteEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "An entry (conceptual row) containing the Route table ."
+    INDEX      {        
+                TosRouteIndex 
+                }
+    ::= { TosRouteTable 1 }
+
+
+TosRouteEntry ::= SEQUENCE {
+    TosRouteIndex               INTEGER,
+    TosRouteId                     Counter32,
+    TosRouteNetSrc            DisplayString,
+    TosRouteNetDst            DisplayString,
+    TosRouteGateway         DisplayString,
+    TosRouteFlags              DisplayString,
+    TosRoutemetric             Counter32,
+    TosRouteIface               DisplayString
+                 }
+
+TosRouteIndex OBJECT-TYPE
+    SYNTAX      INTEGER (0..10000)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "Index of Route Table ."
+    ::= { TosRouteEntry 1 }
+
+
+TosRouteId OBJECT-TYPE
+    SYNTAX     Counter
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "Id of the route ."
+    ::= { TosRouteEntry 2 }
+
+TosRouteNetSrc OBJECT-TYPE
+    SYNTAX     DisplayString
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "the source of route ."
+    ::= { TosRouteEntry 3 }
+
+TosRouteNetDst OBJECT-TYPE
+    SYNTAX     DisplayString
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "the destination of route ."
+    ::= { TosRouteEntry 4 }
+
+
+TosRouteGateway OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"the gateway of route ."
+    ::= { TosRouteEntry 5  } 
+
+TosRouteFlags OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"the flags of route ."
+    ::= { TosRouteEntry 6  } 
+
+TosRoutemetric OBJECT-TYPE
+    SYNTAX      Counter32
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	" the metric of route."
+    ::= { TosRouteEntry 7 } 
+
+TosRouteIface OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	" the interface name."
+    ::= { TosRouteEntry 8 } 
+
+
+
+TosARPTable OBJECT-TYPE
+    SYNTAX     SEQUENCE OF TosARPEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "The (conceptual) table containing ARP information."
+    ::= { tos 25  }
+
+TosARPEntry OBJECT-TYPE
+    SYNTAX     TosARPEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "An entry (conceptual row) containing the information on ARP."
+    INDEX      {  tosARPIndex }
+    ::= {  TosARPTable 1 }
+
+TosARPEntry ::= SEQUENCE {
+    TosARPIndex                   INTEGER,
+    TosARPDevName            DisplayString,
+    TosARPIpAdrress            DisplayString,
+    TosARPMacAddress        DisplayString,
+    TosARPStatus                   DisplayString
+         }
+
+TosARPIndex OBJECT-TYPE
+    SYNTAX      INTEGER (0..1000)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "The Index of the ARP table ."
+    ::= { TosARPEntry 1 }
+
+
+TosARPDevName  OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (0..255))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "The device name of the ARP."
+    ::= { TosARPEntry 2 }
+
+TosARPIpAdrress OBJECT-TYPE
+    SYNTAX      DisplayString   
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "The IP address."
+    ::= { TosARPEntry 3 }
+
+TosARPMacAddress  OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (0..255))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "The MAC address of the ARP."
+    ::= { TosARPEntry 4}
+
+TosARPStatus  OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (0..255))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "Status."
+    ::= { TosARPEntry 5 }
+
+TosConfigTable OBJECT-TYPE
+    SYNTAX     SEQUENCE OF TosConfigEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "The (conceptual) table containing Config information."
+    ::= { tos 26  }
+
+TosConfigEntry OBJECT-TYPE
+    SYNTAX     TosConfigEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "An entry (conceptual row) containing the information of configure information."
+    INDEX      {  TosConfigIndex }
+    ::= {  TosConfigTable 1 }
+
+TosConfigEntry ::= SEQUENCE {
+    TosConfigIndex              INTEGER,
+    TosConfigContent            DisplayString
+         }
+
+TosConfigIndex OBJECT-TYPE
+    SYNTAX      INTEGER
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "The Index of the Config table ."
+    ::= { TosConfigEntry 1 }
+
+
+TosConfigContent  OBJECT-TYPE
+    SYNTAX      DisplayString
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "The detail information of configure."
+    ::= { TosConfigEntry 2 }
+
+
+TosUserTable OBJECT-TYPE
+    SYNTAX     SEQUENCE OF TosUserEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "The (conceptual) table containing information on the current device user."
+    ::= {  tos 27 }
+
+TosUserEntry OBJECT-TYPE
+    SYNTAX     TosUserEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "An entry (conceptual row) containing the information on current vpn users."
+    INDEX      {        
+                TosUserIndex 
+                }
+    ::= { TosUserTable 1 }
+
+TosUserEntry ::= SEQUENCE {
+    TosUserIndex               INTEGER,
+   TosUserName                DisplayString,
+   TosUserLoginIp             IpAddress,
+    TosUserLoginTime           DisplayString
+                 }
+
+TosUserIndex OBJECT-TYPE
+    SYNTAX      INTEGER (0..10000)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "Index of User Table ."
+    ::= { TosUserEntry 1 }
+
+TosUserName OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"Name of  User Table ."
+    ::= { TosUserEntry 2  } 
+
+TosUserLoginIp OBJECT-TYPE
+    SYNTAX     IpAddress
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The IP where User login."
+    ::= { TosUserEntry 3 }
+
+TosUserLoginTime OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"The Time when User login ."
+    ::= { TosUserEntry 4 } 
+
+
+TosAdmTable OBJECT-TYPE
+    SYNTAX     SEQUENCE OF TosAdmEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "The (conceptual) table containing information on the current device administrators."
+    ::= {  tos 28 }
+
+TosAdmEntry OBJECT-TYPE
+    SYNTAX     TosAdmEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "An entry (conceptual row) containing the information on current tos administrators."
+    INDEX      {        
+                TosAdmIndex 
+                }
+    ::= { TosAdmTable 1 }
+
+TosAdmEntry ::= SEQUENCE {
+    TosAdmIndex               INTEGER,
+   TosAdmName                DisplayString,
+   TosAdmLoginIp             DisplayString,
+    TosAdmLoginTime           DisplayString
+                 }
+
+TosAdmIndex OBJECT-TYPE
+    SYNTAX      INTEGER (0..10000)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "Index of the administrator Table ."
+    ::= { TosAdmEntry 1 }
+
+TosAdmName OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"Name of  the administrator ."
+    ::= { TosAdmEntry 2  } 
+
+TosAdmLoginIp OBJECT-TYPE
+    SYNTAX     DisplayString
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The IP where the administrator login."
+    ::= { TosAdmEntry 3 }
+
+TosAdmLoginTime OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"The Time when administrator login ."
+    ::= { TosAdmEntry 4 } 
+
+TosARPProxyTable OBJECT-TYPE
+    SYNTAX     SEQUENCE OF TosARPProxyEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "The (conceptual) table containing ARPProxy information."
+    ::= { tos 29  }
+
+TosARPProxyEntry OBJECT-TYPE
+    SYNTAX     TosARPProxyEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "An entry (conceptual row) containing the information on ARPProxy."
+    INDEX      {  TosARPProxyIndex }
+    ::= {  TosARPProxyTable 1 }
+
+TosARPProxyEntry ::= SEQUENCE {
+    TosARPProxyIndex                   INTEGER,
+    TosARPProxyDevName            DisplayString,
+    TosARPProxyMaxIpAddress        IpAddress,
+    TosARPProxyMinIpAddress            IpAddress,
+    TosARPProxyStat        		DisplayString
+         }
+
+TosARPProxyIndex OBJECT-TYPE
+    SYNTAX      INTEGER (0..1000)
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "The Index of the ARPProxy table ."
+    ::= { TosARPProxyEntry 1 }
+
+TosARPProxyDevName  OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (0..255))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "The device name of the ARPProxy."
+    ::= { TosARPProxyEntry 2 }
+
+TosARPProxyMaxIpAdrress OBJECT-TYPE
+    SYNTAX      IpAddress   
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "The Max IP address."
+    ::= { TosARPProxyEntry 3 }
+
+TosARPProxyMinIpAddress  OBJECT-TYPE
+    SYNTAX      IpAddress   
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "The Min IP address."
+    ::= { TosARPProxyEntry 4}
+
+TosARPProxyStat  OBJECT-TYPE
+    SYNTAX      DisplayString (SIZE (0..255))
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+            "The device arp proxy status."
+    ::= { TosARPProxyEntry 5 }
+
+
+TosIpsecTable OBJECT-TYPE
+    SYNTAX     SEQUENCE OF TosIpsecEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "The (conceptual) table containing information on tunnel's ipsec state."
+    ::= { tos 34 }
+
+TosIpsecEntry OBJECT-TYPE
+    SYNTAX     TosIpsecEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "An entry (conceptual row) containing the information on a
+            particular running tunnel."
+    INDEX      {  TosIpsecLocnetAddress,
+                         TosIpsecRemnetAddress,
+                         TosIpsecLocmask,
+                         TosIpsecRemmask     }
+    ::= { TosIpsecTable 1 }
+
+TosIpsecEntry ::= SEQUENCE {
+    TosIpsecLocnetAddress         IpAddress,
+    TosIpsecRemnetAddress         IpAddress,
+    TosIpsecLocmask               INTEGER,
+    TosIpsecRemmask               INTEGER,
+    TosInsecPkts                  Counter32,
+    TosInsecBtye                  Counter32,
+    TosIpsecOutsecPkts                 Counter32,
+    TosIpsecOuterrPkts                 Counter32,
+    TosIpsecOutsecBtye                 Counter32
+    }
+
+TosIpsecLocnetAddress OBJECT-TYPE
+    SYNTAX     IpAddress
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The net of the local endpoint of the tunnel (i.e., the
+            source address used in the outer IP header), or 0.0.0.0 if
+            unknown."
+    ::= { TosIpsecEntry 1 }
+
+TosIpsecRemnetAddress OBJECT-TYPE
+    SYNTAX     IpAddress
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The net of the remote endpoint of the tunnel (i.e., the
+            destination address used in the outer IP header), or 0.0.0.0
+            if unknown."
+    ::= { TosIpsecEntry 2 }
+
+TosIpsecLocmask OBJECT-TYPE
+    SYNTAX     INTEGER(0..32) 
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The local net's mask."
+    ::= { TosIpsecEntry 3 }
+
+TosIpsecRemmask OBJECT-TYPE
+    SYNTAX     INTEGER(0..32) 
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The remote net's mask."
+    ::= { TosIpsecEntry 4 }
+
+TosIpsecInsecPkts OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The total numbers of In packets through the tunnel."
+    ::= { TosIpsecEntry 5 }
+
+TosIpsecInsecBtye OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The numbers of btye In packets through the tunnel."
+    ::= { TosIpsecEntry 6 }
+
+TosIpsecOutsecPkts OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The total numbers of Out packets through the tunnel."
+    ::= { TosIpsecEntry 7 }
+
+TosIpsecOuterrPkts OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The numbers of Out error packets through the tunnel."
+    ::= { TosIpsecEntry 8 }
+
+TosIpsecOutsecBtye OBJECT-TYPE
+    SYNTAX     Counter32
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The total numbers of byte Out packets through the tunnel."
+    ::= { TosIpsecEntry 9 }
+
+
+
+TosTunnelTable OBJECT-TYPE
+    SYNTAX     SEQUENCE OF TosTunnelEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "The (conceptual) table containing information on the configured Tunnel."
+    ::= { tos 35 }
+
+TosTunnelEntry OBJECT-TYPE
+    SYNTAX     TosTunnelEntry
+    MAX-ACCESS not-accessible
+    STATUS     current
+    DESCRIPTION
+            "An entry (conceptual row) containing the information on a
+            particular configured Tunnel."
+    INDEX      {     TosTunnelLocnetAddress,
+                     TosTunnelRemnetAddress,
+                     TosTunnelLocmask,
+                     TosTunnelRemmask   
+                }
+    ::= { TosTunnelTable 1 }
+
+TosTunnelEntry ::= SEQUENCE {
+   TosTunnelName               DisplayString,
+   TosTunnelLocnetAddress      IpAddress,
+   TosTunnelRemnetAddress      IpAddress,
+   TosTunnelLocmask            IpAddress,
+   TosTunnelRemmask            IpAddress
+                 }
+
+TosTunnelName OBJECT-TYPE
+    SYNTAX	DisplayString
+    MAX-ACCESS	read-only
+    STATUS	current
+    DESCRIPTION  
+	"Name of the Tos tunnel ."
+    ::= { TosTunnelEntry 1  } 
+
+TosTunnelLocnetAddress OBJECT-TYPE
+    SYNTAX     IpAddress
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The net of the local endpoint of the tunnel (i.e., the
+            source address used in the outer IP header), or 0.0.0.0 if
+            unknown."
+    ::= { TosTunnelEntry 2 }
+
+TosTunnelRemnetAddress OBJECT-TYPE
+    SYNTAX     IpAddress
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The net of the remote endpoint of the tunnel (i.e., the
+            destination address used in the outer IP header), or 0.0.0.0
+            if unknown."
+    ::= { TosTunnelEntry 3 }
+
+TosTunnelLocmask OBJECT-TYPE
+    SYNTAX     IpAddress 
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The local net's mask."
+    ::= { TosTunnelEntry 4 }
+
+TosTunnelRemmask OBJECT-TYPE
+    SYNTAX     IpAddress 
+    MAX-ACCESS read-only
+    STATUS     current
+    DESCRIPTION
+            "The remote net's mask."
+    ::= { TosTunnelEntry 5 }
+
+
+END

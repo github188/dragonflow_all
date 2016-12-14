@@ -1,0 +1,241 @@
+-- ==========================================================================
+-- Copyright (C) 2004 by H3C Technologies. All rights reserved.
+--
+-- Description: The purpose of this MIB file is to provide the definition of
+--              the message statistic information MIB of H323.
+-- Reference:
+-- ==========================================================================
+HH3C-VOH323CALLSTAT-MIB DEFINITIONS ::= BEGIN
+    IMPORTS
+        OBJECT-TYPE, MODULE-IDENTITY, Counter32, Integer32
+            FROM SNMPv2-SMI
+        hh3cVoice
+            FROM HH3C-OID-MIB;   
+    
+    
+        hh3cVoiceH323CallStat MODULE-IDENTITY 
+            LAST-UPDATED "200503150000Z"
+            ORGANIZATION
+                "Hangzhou H3C Tech. Co., Ltd."
+            CONTACT-INFO
+                "Platform Team Hangzhou H3C Tech. Co., Ltd.
+                Hai-Dian District Beijing P.R. China
+                http://www.h3c.com
+                Zip:100085
+                "
+            DESCRIPTION 
+                "This MIB is to provide the definition of the message 
+                statistic information MIB of H323."
+            REVISION "200503150000Z"
+            DESCRIPTION 
+                "The initial version of this MIB file."
+            ::= { hh3cVoice 11 }
+        
+
+
+--===========================================================================
+--                hh3cVOIPH225StatTable
+
+--===========================================================================
+        hh3cVOIPH225StatTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVOIPH225StatEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "A list of voip H225 message statistics entries."
+            ::= { hh3cVoiceH323CallStat 1 }
+    
+    
+        hh3cVOIPH225StatEntry OBJECT-TYPE
+            SYNTAX HH3CVOIPH225StatEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "A collection of statistics kept for a H225 message."
+            INDEX { hh3cH225MsgIndex }
+            ::= { hh3cVOIPH225StatTable 1 }
+    
+        HH3CVOIPH225StatEntry ::=
+            SEQUENCE {
+                hh3cH225MsgIndex
+                    Integer32,
+                hh3cH225MsgName
+                    OCTET STRING,    
+                hh3cH225MsgSend
+                    Counter32,
+                hh3cH225MsgReceive
+                    Counter32
+                }
+    
+        hh3cH225MsgIndex OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The index of a H225 message."
+            ::= { hh3cVOIPH225StatEntry 1 }
+            
+        hh3cH225MsgName OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The name of a H225 message."
+            ::= { hh3cVOIPH225StatEntry 2 }
+    
+        hh3cH225MsgSend OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The number of messages which a gateway has sent."
+            ::= { hh3cVOIPH225StatEntry 3 }
+    
+    
+        hh3cH225MsgReceive OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The number of messages which a gateway has received."
+            ::= { hh3cVOIPH225StatEntry 4 }
+    
+            
+--===========================================================================
+--                hh3cVOIPH245StatTable
+
+--===========================================================================
+        hh3cVOIPH245StatTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVOIPH245StatEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "A list of voip H245 message statistics entries."
+            ::= { hh3cVoiceH323CallStat 2 }
+    
+    
+        hh3cVOIPH245StatEntry OBJECT-TYPE
+            SYNTAX HH3CVOIPH245StatEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "A collection of statistics kept for a H245
+                message. "
+            INDEX { hh3cH245MsgIndex }
+            ::= { hh3cVOIPH245StatTable 1 }
+    
+        HH3CVOIPH245StatEntry ::=
+            SEQUENCE {
+                hh3cH245MsgIndex
+                    Integer32,
+                hh3cH245MsgName
+                    OCTET STRING,    
+                hh3cH245MsgSend
+                    Counter32,
+                hh3cH245MsgReceive
+                    Counter32
+                }
+    
+        hh3cH245MsgIndex OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The index of a H245 message."
+            ::= { hh3cVOIPH245StatEntry 1 }
+            
+        hh3cH245MsgName OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The name of a H245 message."
+            ::= { hh3cVOIPH245StatEntry 2 }
+    
+        hh3cH245MsgSend OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The number of messages which a gateway has sent."
+            ::= { hh3cVOIPH245StatEntry 3 }
+    
+    
+        hh3cH245MsgReceive OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The number of messages which a gateway has received."
+            ::= { hh3cVOIPH245StatEntry 4 }
+
+--===========================================================================
+--                hh3cVOIPRasStatTable
+
+--===========================================================================
+        hh3cVOIPRasStatTable OBJECT-TYPE
+            SYNTAX SEQUENCE OF HH3CVOIPRasStatEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "A list of voip ras message statistics entries."
+            ::= { hh3cVoiceH323CallStat 3 }
+    
+    
+        hh3cVOIPRasStatEntry OBJECT-TYPE
+            SYNTAX HH3CVOIPRasStatEntry
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "A collection of statistics kept for a ras
+                message. "
+            INDEX { hh3cRasMsgIndex }
+            ::= { hh3cVOIPRasStatTable 1 }
+    
+        HH3CVOIPRasStatEntry ::=
+            SEQUENCE {
+                hh3cRasMsgIndex
+                    Integer32,
+                hh3cRasMsgName
+                    OCTET STRING,    
+                hh3cRasMsgSend
+                    Counter32,
+                hh3cRasMsgReceive
+                    Counter32
+                }
+    
+        hh3cRasMsgIndex OBJECT-TYPE
+            SYNTAX Integer32
+            MAX-ACCESS not-accessible
+            STATUS current
+            DESCRIPTION
+                "The index of a ras message."
+            ::= { hh3cVOIPRasStatEntry 1 }
+            
+        hh3cRasMsgName OBJECT-TYPE
+            SYNTAX OCTET STRING
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The name of a ras message."
+            ::= { hh3cVOIPRasStatEntry 2 }
+    
+        hh3cRasMsgSend OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The number of messages which a gateway has sent."
+            ::= { hh3cVOIPRasStatEntry 3 }
+    
+    
+        hh3cRasMsgReceive OBJECT-TYPE
+            SYNTAX Counter32
+            MAX-ACCESS read-only
+            STATUS current
+            DESCRIPTION
+                "The number of messages which a gateway has received."
+            ::= { hh3cVOIPRasStatEntry 4 }
+        
+    
+    END

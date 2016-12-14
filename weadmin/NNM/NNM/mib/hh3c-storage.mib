@@ -1,0 +1,506 @@
+-- ===========================================================
+-- Copyright (C) 2007 by H3C TECHNOLOGIES. All rights reserved.
+-- Description: The MIB is designed to manage the storage system.
+-- Reference:
+-- =================================================================
+HH3C-STORAGE-MIB DEFINITIONS ::= BEGIN
+IMPORTS
+        Counter32, Integer32,
+        OBJECT-TYPE, MODULE-IDENTITY, NOTIFICATION-TYPE
+    FROM SNMPv2-SMI
+        TEXTUAL-CONVENTION
+    FROM SNMPv2-TC
+        InetAddressType, InetAddress
+    FROM INET-ADDRESS-MIB
+        entPhysicalIndex
+    FROM ENTITY-MIB
+        Hh3cStorageCapableState, Hh3cStorageEnableState, Hh3cStorageActionType,
+        Hh3cStorageLedStateType, Hh3cWwpnListType, hh3cStorageRef
+    FROM HH3C-STORAGE-REF-MIB;
+
+hh3cStorageMIB MODULE-IDENTITY
+    LAST-UPDATED "200709041452Z"
+    ORGANIZATION
+        "H3C Technologies Co., Ltd."
+    CONTACT-INFO
+        "Platform Team H3C Technologies Co., Ltd.
+         Hai-Dian District Beijing P.R. China
+         Http://www.h3c.com
+         Zip:100085"
+    DESCRIPTION
+        "This MIB describes the general information of storage device,
+        such as the property, configuration and management."
+    ::= { hh3cStorageRef 1 }
+
+hh3cStorageMibObjects OBJECT IDENTIFIER ::= { hh3cStorageMIB 1 }
+
+hh3cStorageServerInfo    OBJECT IDENTIFIER ::= { hh3cStorageMibObjects 1 }
+
+hh3cStoragePhysicalInfo  OBJECT IDENTIFIER ::= { hh3cStorageMibObjects 2 }
+
+-- The storage server's information are described here.
+hh3cStorageServerCapability  OBJECT IDENTIFIER ::= { hh3cStorageServerInfo 1 }
+
+
+hh3cRaidCapability OBJECT-TYPE
+    SYNTAX      Hh3cStorageCapableState
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the agent support raid management."
+    ::={ hh3cStorageServerCapability 1 }
+
+hh3cFcCapability OBJECT-TYPE
+    SYNTAX      Hh3cStorageCapableState
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the agent support FC(fiber channel) management."
+    ::={ hh3cStorageServerCapability 2 }
+
+hh3cNasCapability OBJECT-TYPE
+    SYNTAX      Hh3cStorageCapableState
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the agent support NAS(Network Attached Storage)."
+    ::={ hh3cStorageServerCapability 3 }
+
+hh3cAdaptiveRepCapability OBJECT-TYPE
+    SYNTAX      Hh3cStorageCapableState
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the agent support adaptive replication.
+        With adaptive replication option, data from the primary resource is continuously 
+        replicated to a replication resource unless the system determines it is not practical 
+        or possible, such as when there is insufficient bandwidth. 
+        For continuous replication to occur, a continuous replication resource is used to 
+        stage the data being replicated from the primary resource. 
+        Similar to a cache, as soon as data comes into the continuous replication resource,
+        it is written to the replication resource."
+    ::={ hh3cStorageServerCapability 4 }
+
+hh3cRemoteRepCapability OBJECT-TYPE
+    SYNTAX      Hh3cStorageCapableState
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the agent support remote replication."
+    ::={ hh3cStorageServerCapability 5 }
+
+hh3cSafeCacheCapability OBJECT-TYPE
+    SYNTAX      Hh3cStorageCapableState
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the agent support safe cache."
+    ::={ hh3cStorageServerCapability 6 }
+
+hh3cSyncMirrorCapability OBJECT-TYPE
+    SYNTAX      Hh3cStorageCapableState
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the agent support synchronized mirror."
+    ::={ hh3cStorageServerCapability 7 }
+
+hh3cAsyncMirrorCapability OBJECT-TYPE
+    SYNTAX      Hh3cStorageCapableState
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the agent support asynchronous mirror."
+    ::={ hh3cStorageServerCapability 8 }
+
+hh3cTimeMarkCapability OBJECT-TYPE
+    SYNTAX      Hh3cStorageCapableState
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the agent support time mark."
+    ::={ hh3cStorageServerCapability 9 }
+
+hh3cSseCapability OBJECT-TYPE
+    SYNTAX      Hh3cStorageCapableState
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the agent support SSE(Storage Service Enable)."
+    ::={ hh3cStorageServerCapability 10 }
+
+
+-- The storage server's target config information are described here.
+hh3cStorageTargetConfig  OBJECT IDENTIFIER ::= { hh3cStorageServerInfo 2 }
+
+hh3ciSCSITargetEnable OBJECT-TYPE
+    SYNTAX      Hh3cStorageEnableState
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the agent support iSCSI target."
+    DEFVAL { disable }
+    ::={ hh3cStorageTargetConfig 1 }
+
+hh3cFcTargetEnable OBJECT-TYPE
+    SYNTAX      Hh3cStorageEnableState
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the agent support FC target."
+    ::={ hh3cStorageTargetConfig 2 }
+
+
+-- The server's physical information are described.
+hh3cStorageServerPhysInfo  OBJECT IDENTIFIER ::= { hh3cStorageServerInfo 3 }
+
+hh3cServerLocationLedState OBJECT-TYPE
+    SYNTAX      Hh3cStorageLedStateType
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This object identifies the state of storage device's location led."
+    ::={ hh3cStorageServerPhysInfo 1 }
+
+hh3cServerResetButtonState OBJECT-TYPE
+    SYNTAX      Hh3cStorageEnableState
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the reset button is enable."
+    DEFVAL { enable }
+    ::={ hh3cStorageServerPhysInfo 2 }
+
+hh3cServerPowerButtonState OBJECT-TYPE
+    SYNTAX      Hh3cStorageEnableState
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the power button is enable."
+    DEFVAL { enable }
+    ::={ hh3cStorageServerPhysInfo 3 }
+
+hh3cServerPowerState OBJECT-TYPE
+    SYNTAX      INTEGER
+        {
+            online(1),
+            onlinebypass(2),
+            onbattery(3),
+            unknown(4)
+        }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object identifies the state of power supply in the server,
+        and is valid when UPS has been configured successful.
+        The value 'online' means power supply is well-balanced.
+        The value 'onlinebypass' means supply power without ups.
+        The value 'onbattery' means supply power with battery.
+        The value 'unknown' means the power supply state is unknown."
+    ::={ hh3cStorageServerPhysInfo 4 }
+
+
+-- DEU Entity Extend Table
+-- This table described some information about the DEU.
+hh3cDeuTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF Hh3cDeuEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table contains some information of a particular DEU(Disk Enclosure
+        Unit)."
+    ::= { hh3cStoragePhysicalInfo 1 }
+
+hh3cDeuEntry OBJECT-TYPE
+    SYNTAX      Hh3cDeuEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "An entry containing management information applicable
+        to a particular DEU."
+    INDEX
+        {
+            hh3cDeuIndex
+        }
+
+    ::= { hh3cDeuTable 1 }
+
+Hh3cDeuEntry ::= SEQUENCE
+    {
+        hh3cDeuIndex         Integer32,
+        hh3cDeuIDLed         Hh3cStorageLedStateType,
+        hh3cDeuDiskScan      Hh3cStorageActionType
+    }
+
+hh3cDeuIndex OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This object identifies the index of hh3cDeuTable. The DEU identified
+        by a particular value of this index is the same object as identified
+        by the same value of entPhysicalIndex."
+    ::= { hh3cDeuEntry 1 }
+
+hh3cDeuIDLed OBJECT-TYPE
+    SYNTAX      Hh3cStorageLedStateType
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This object identifies the state of storage DEU's led."
+    DEFVAL { off }
+    ::= { hh3cDeuEntry 2 }
+
+hh3cDeuDiskScan OBJECT-TYPE
+    SYNTAX      Hh3cStorageActionType
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "The operation of scanning the table. When the value of this object
+        is set to 'action', the operation of disk scanning is touched off."
+    ::= { hh3cDeuEntry 3 }
+
+
+-- Storage Server Network Interface Table
+-- This table described the interface information of the network.
+hh3cStorageInterfaceTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF Hh3cStorageInterfaceEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table describes the interface information of the network."
+    ::= { hh3cStoragePhysicalInfo 2 }
+
+hh3cStorageInterfaceEntry OBJECT-TYPE
+    SYNTAX      Hh3cStorageInterfaceEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "An entry containing management information applicable
+        to a particular interface."
+    INDEX
+        {
+            hh3cStorageInterfaceIndex
+        }
+
+    ::= { hh3cStorageInterfaceTable 1 }
+
+Hh3cStorageInterfaceEntry ::= SEQUENCE
+    {
+        hh3cStorageInterfaceIndex          Integer32,
+        hh3cStorageInterfaceGateway        InetAddress,
+        hh3cStorageInterfaceGatewayType    InetAddressType,
+        hh3cStorageInterfaceMTU            INTEGER
+    }
+
+hh3cStorageInterfaceIndex OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This object identifies the index of Hh3cStorageInterfaceEntry. The
+        interface identified by this index is the same interface as identified
+        by the same value of ifIndex."
+    ::= { hh3cStorageInterfaceEntry 1 }
+
+
+hh3cStorageInterfaceGateway OBJECT-TYPE
+    SYNTAX      InetAddress
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This object identifies the gateway address of interface."
+    ::= { hh3cStorageInterfaceEntry 2 }
+
+hh3cStorageInterfaceGatewayType OBJECT-TYPE
+    SYNTAX      InetAddressType
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This object identifies the gateway address type of interface."
+    ::= { hh3cStorageInterfaceEntry 3 }
+
+hh3cStorageInterfaceMTU OBJECT-TYPE
+    SYNTAX      INTEGER
+        {
+            mtu1(1500),
+            mtu2(9000)
+        }
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This object identifies the MTU of interface."
+    ::= { hh3cStorageInterfaceEntry 4 }
+
+
+-- Storage Server Bonding Interface Table
+-- This table described the information of the bonding interface.
+hh3cBondingTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF Hh3cBondingEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table describes the information of the Bonding interface."
+    ::= { hh3cStoragePhysicalInfo 3 }
+
+hh3cBondingEntry OBJECT-TYPE
+    SYNTAX      Hh3cBondingEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "An entry containing management information applicable to a particular
+        Bonding interface."
+    INDEX
+        {
+            hh3cBondingIndex
+        }
+
+    ::= { hh3cBondingTable 1 }
+
+Hh3cBondingEntry ::= SEQUENCE
+    {
+        hh3cBondingIndex       Integer32,
+        hh3cBondingPortList    OCTET STRING
+    }
+
+hh3cBondingIndex OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This object identifies the index of hh3cBondingEntry. The interface
+        identified by this index is the same interface as identified by the
+        same value of ifIndex."
+    ::= { hh3cBondingEntry 1 }
+
+hh3cBondingPortList OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "An entry contains management information applicable to a particular bonding interface.
+         Every two bytes describe the ifIndex of an interface, and an interface belongs
+         to one bonding group only. An interface should be deleted from the portlist 
+         of the bonding group it belongs to before it is added to another bonding group."
+    ::= { hh3cBondingEntry 2 }
+
+-- SCSI Adapter Table
+-- This table described some information of the SCSI adapter.
+hh3cScsiAdapterTable OBJECT-TYPE
+    SYNTAX      SEQUENCE OF Hh3cScsiAdapterEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This table containing some information of the SCSI(Small Computer
+        System interface) adapter."
+    ::= { hh3cStoragePhysicalInfo 4 }
+
+hh3cScsiAdapterEntry OBJECT-TYPE
+    SYNTAX      Hh3cScsiAdapterEntry
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "An entry containing management information applicable
+        to a particular SCSI adapter."
+    INDEX
+        {
+            entPhysicalIndex,
+            hh3cAdapterNumber
+        }
+    ::= { hh3cScsiAdapterTable 1 }
+
+Hh3cScsiAdapterEntry ::= SEQUENCE
+    {
+        hh3cAdapterNumber              Integer32,
+        hh3cAdapterDesc                OCTET STRING,
+        hh3cAdapterType                INTEGER,
+        hh3cFcAdapterMode              INTEGER,
+        hh3cFcAdapterInitiatorWwpnName Hh3cWwpnListType,
+        hh3cFcAdapterTargetWwpnName    Hh3cWwpnListType,
+        hh3cFcAdapterPortState         INTEGER,
+        hh3cFcAdapterModeSwitch        Hh3cStorageEnableState
+    }
+
+hh3cAdapterNumber OBJECT-TYPE
+    SYNTAX      Integer32
+    MAX-ACCESS  not-accessible
+    STATUS      current
+    DESCRIPTION
+        "This object identifies the index of the adapter ."
+    ::= { hh3cScsiAdapterEntry 1 }
+
+hh3cAdapterDesc OBJECT-TYPE
+    SYNTAX      OCTET STRING
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object describes some information of the adapter."
+    ::= { hh3cScsiAdapterEntry 2 }
+
+hh3cAdapterType OBJECT-TYPE
+    SYNTAX      INTEGER
+        {
+            scsi(1),
+            fc(2)
+        }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object identifies the type of adapter. If the value of this
+        object is not equal to 'fc', the associated object(such as hh3cFcAdapterMode,
+        hh3cFcAdapterIWWPNs,hh3cFcAdapterTWWPNs,hh3cFcAdapterPortState,hh3cFcAdapterModeSwitch)
+        will be invalid."
+    ::= { hh3cScsiAdapterEntry 3 }
+
+hh3cFcAdapterMode OBJECT-TYPE
+    SYNTAX      INTEGER
+        {
+            initiator(1),
+            target(2),
+            dual(3)
+        }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object identifies the mode type of adapter."
+    ::= { hh3cScsiAdapterEntry 4 }
+
+hh3cFcAdapterInitiatorWwpnName OBJECT-TYPE
+    SYNTAX      Hh3cWwpnListType
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object describes the FC's adapter WWPN(World Wide Port
+        Name) numbers."
+    ::= { hh3cScsiAdapterEntry 5 }
+
+hh3cFcAdapterTargetWwpnName OBJECT-TYPE
+    SYNTAX      Hh3cWwpnListType
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object describes the FC's target WWPN numbers."
+    ::= { hh3cScsiAdapterEntry 6 }
+
+hh3cFcAdapterPortState OBJECT-TYPE
+    SYNTAX      INTEGER
+        {
+            linkup(1),
+            linkdown(2)
+        }
+    MAX-ACCESS  read-only
+    STATUS      current
+    DESCRIPTION
+        "This object identifies the state of adapter's interface."
+    ::= { hh3cScsiAdapterEntry 7 }
+
+hh3cFcAdapterModeSwitch OBJECT-TYPE
+    SYNTAX      Hh3cStorageEnableState
+    MAX-ACCESS  read-write
+    STATUS      current
+    DESCRIPTION
+        "This object identifies if the adapter work on a target mode."
+    DEFVAL { disable }
+    ::= { hh3cScsiAdapterEntry 8 }
+
+END
