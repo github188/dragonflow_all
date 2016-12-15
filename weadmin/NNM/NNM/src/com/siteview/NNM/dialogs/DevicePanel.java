@@ -129,30 +129,7 @@ public class DevicePanel extends Dialog {
 				String portindex = ((JsonValue) event.data).asString();
 				portindex = portindex.substring(1);
 				System.out.println(portindex);
-				Connection conn = ConfigDB.getConn();
-				String sql = "select pindex from ports where (porttype='6' or porttype='117') and id='"
-						+ nodeid + "'";
-				String pindex = "";
-				try {
-					ResultSet rs = ConfigDB.query(sql, conn);
-					int i = 1;
-					while (rs.next()) {
-						if (portindex.equals(i + "")) {
-							pindex = rs.getString("pindex");
-							if (pindex == null)
-								pindex = "";
-							System.out.println(pindex);
-							break;
-						}
-						i = i + 1;
-					}
-				} catch (NumberFormatException e) {
-					e.printStackTrace();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				} catch (Exception ex) {
-				}
-				ConfigDB.close(conn);
+				String pindex = DevicePanelUtils.getPindexFromPorts(nodeid, portindex);
 				if (eventag.equals("openport")) {
 					PrivateCommDialog cdialog = new PrivateCommDialog(parent
 							.getShell(), entityobj, pindex, true);
@@ -275,116 +252,11 @@ public class DevicePanel extends Dialog {
 				});
 				width = 890;
 			} else {
-
-				Connection conn = ConfigDB.getvConn();
-				String sql = "select svgtype,transform,itemid,svid,linewidth,fillcolor,linecolor,fontname,fontsize,textanchor,cssclass,ecx,ecy,erx,ery,vvalue from visiopanelauto where factory is null order by id ";
+				Map<String, Map<String, String>> baseshapes = DevicePanelUtils.getBaseShapesWithoutSysoidAndVdx();
+				Connection conn = ConfigDB.getConn();
+				String sql = "select pindex,porttype from ports where (porttype='6' or porttype='117')  and id='"
+						+ this.nodeid + "'";
 				ResultSet rs = ConfigDB.query(sql, conn);
-				Map<String, Map<String, String>> baseshapes = new HashMap<String, Map<String, String>>();
-				try {
-					int j = 1;
-					Map<String, String> base1 = null;
-					while (rs.next()) {
-						base1 = new HashMap<String, String>();
-						int svgtype = rs.getInt("svgtype");
-						base1.put("svgtype", svgtype + "");
-						String transform = rs.getString("transform");
-						if (transform == null)
-							transform = "";
-						base1.put("transform", transform);
-						String itemid = rs.getString("itemid");
-						if (itemid == null)
-							itemid = "";
-						base1.put("itemid", itemid);
-						String svid = rs.getString("svid");
-						if (svid == null)
-							svid = "";
-						base1.put("svid", svid);
-						int linewidth = rs.getInt("linewidth");
-						base1.put("linewidth", linewidth + "");
-						String fillcolor = rs.getString("fillcolor");
-						base1.put("fillcolor", fillcolor);
-						String linecolor = rs.getString("linecolor");
-						base1.put("linecolor", linecolor);
-						String fontname = rs.getString("fontname");
-						if (fontname == null)
-							fontname = "";
-						base1.put("fontname", fontname);
-						String fontsize = rs.getString("fontsize");
-						if (fontsize == null)
-							fontsize = "";
-						base1.put("fontsize", fontsize);
-						if (!fontsize.isEmpty()) {
-							try {
-								String tempv = fontsize.substring(0, 3);
-								float emsize = Float.parseFloat(tempv);
-								if (emsize < 0.3) {
-									continue;
-								}
-							} catch (Exception ex) {
-
-							}
-						}
-						String textanchor = rs.getString("textanchor");
-						if (textanchor == null)
-							textanchor = "";
-						base1.put("textanchor", textanchor);
-						String cssclass = rs.getString("cssclass");
-						if (cssclass == null)
-							cssclass = "";
-						base1.put("cssclass", cssclass);
-						String ecx = rs.getString("ecx");
-						if (ecx == null)
-							ecx = "";
-						base1.put("ecx", ecx);
-						String ecy = rs.getString("ecy");
-						if (ecy == null)
-							ecy = "";
-						base1.put("ecy", ecy);
-						String erx = rs.getString("erx");
-						if (erx == null)
-							erx = "";
-						base1.put("erx", erx);
-						String ery = rs.getString("ery");
-						if (ery == null)
-							ery = "";
-						base1.put("ery", ery);
-						String vvalue = rs.getString("vvalue");
-						if (vvalue == null)
-							vvalue = "";
-						base1.put("vvalue", vvalue);
-						baseshapes.put(j + "", base1);
-						j = j + 1;
-					}
-				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (Exception ex) {
-
-				}
-				ConfigDB.close(conn);
-				 conn = ConfigDB.getConn();
-				sql = "select count(*) as coun from ports where (porttype='6' or porttype='117')  and id='"
-						+ this.nodeid + "'";
-				rs = ConfigDB.query(sql, conn);
-				int coun = 12;
-				try {
-					while (rs.next()) {
-						coun = rs.getInt("coun");
-					}
-				} catch (Exception ex) {
-
-				}
-				int groupsize = 6;// 组大小 两列
-				if (coun % 6 != 0 && coun % 8 == 0) {
-					groupsize = 8;
-				}
-
-				sql = "select pindex,porttype from ports where (porttype='6' or porttype='117')  and id='"
-						+ this.nodeid + "'";
-				rs = ConfigDB.query(sql, conn);
 				List<Integer> rowsss = new ArrayList<Integer>();
 				int row1 = 1;
 				try {
@@ -392,242 +264,45 @@ public class DevicePanel extends Dialog {
 					int portindex = 1;
 					while (rs.next()) {
 						if (row1 == 1) {
-							if (!rowsss.contains(1)) {
-								rowsss.add(1);
-								ShapeItem tempitem = null;
-								tempitem = new ShapeItem(visioChart);
-								tempitem.setFillcolor("#efefef");
-								tempitem.setLinecolor("#0a0a0a");
-								tempitem.setLinewidth(1);
-								tempitem.setSvgtype(4);
-								tempitem.setEcx("30");
-								tempitem.setEcy("30");
-								tempitem.setErx("430");
-								tempitem.setEry("32");
-							}
+							addOneShapeItemSimple(rowsss,row1,visioChart,"30","30","430","32");
 						} else {
-							if (!rowsss.contains(row1)) {
-								rowsss.add(row1);
-								ShapeItem tempitem = null;
-								tempitem = new ShapeItem(visioChart);
-								tempitem.setFillcolor("#efefef");
-								tempitem.setLinecolor("#0a0a0a");
-								tempitem.setLinewidth(1);
-								tempitem.setSvgtype(4);
-								tempitem.setEcx("30");
-								tempitem.setEcy(35 * row1 + "");
-								tempitem.setErx(430 + "");
-								tempitem.setEry("30");
-							}
+							addOneShapeItemSimple(rowsss,row1,visioChart,"30",(35 * row1 + ""),"430","30");
 						}
-						String pindex = rs.getString("pindex");
-						for (String key : baseshapes.keySet()) {
-							Map<String, String> mapbase = baseshapes.get(key);
-							ShapeItem tempitem = null;
-							tempitem = new ShapeItem(visioChart);
-							tempitem.setFillcolor(mapbase.get("fillcolor"));
-							tempitem.setLinecolor(mapbase.get("linecolor"));
-							tempitem.setLinewidth(Integer.parseInt(mapbase
-									.get("linewidth")));
-							if (!mapbase.get("itemid").isEmpty())
-								tempitem.setItemid(mapbase.get("itemid"));
-							tempitem.setSvgtype(Integer.parseInt(mapbase
-									.get("svgtype")));
-							String transform = "";
-							int movex = 35 * column1;
-							int movey = 35 * row1;
-							if (row1 == 1)
-								movey = 30;
-							tempitem.setTransform("translate(" + movex + ","
-									+ movey + ")");
-							// if (!mapbase.get("transform").isEmpty())
-							// tempitem.setTransform(mapbase.get("transform"));
-							if (!mapbase.get("svid").isEmpty()) {
-								String svid = mapbase.get("svid");
-								if (svid.startsWith("c")) {
-									svid = "c" + portindex;
-								} else if (svid.startsWith("p")) {
-									svid = "p" + portindex;
-								}
-								tempitem.setSvid(svid);
-							}
-							if (!mapbase.get("fontname").isEmpty())
-								tempitem.setFontname(mapbase.get("fontname"));
-							if (!mapbase.get("fontsize").isEmpty())
-								tempitem.setFontsize(mapbase.get("fontsize"));
-							if (!mapbase.get("textanchor").isEmpty())
-								tempitem.setTextanchor(mapbase
-										.get("textanchor"));
-							if (!mapbase.get("cssclass").isEmpty())
-								tempitem.setCssclass(mapbase.get("cssclass"));
-							if (!mapbase.get("ecx").isEmpty()) {
-								tempitem.setEcx(movex + "");
-							}
-							if (!mapbase.get("ecy").isEmpty()) {
-								tempitem.setEcy(movey + "");
-							}
-							if (!mapbase.get("erx").isEmpty())
-								tempitem.setErx(mapbase.get("erx"));
-							if (!mapbase.get("ery").isEmpty())
-								tempitem.setEry(mapbase.get("ery"));
-							if (!mapbase.get("vvalue").isEmpty())
-								tempitem.setValue(mapbase.get("vvalue"));
-
-						}
+						// String pindex = rs.getString("pindex");
+						addShapeItemWithBaseShapes(baseshapes,visioChart,portindex,column1,row1);
 						portindex = portindex + 1;
 						column1 = column1 + 1;
 						if (column1 > 12) {
 							column1 = 1;
 							row1 = row1 + 1;
 						}
-
 					}
 				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (Exception ex) {
-
-				}
-				//
-				String fact = "huawei1";
-				if (this.sysoid.startsWith("1.3.6.1.4.1.9.")) {
-					fact = "cisco";
-				} else if (this.sysoid.startsWith("1.3.6.1.4.1.2011.")) {
-					fact = "huawei";
-				} else if (this.sysoid.startsWith("1.3.6.1.4.1.25506.")) {
-					fact = "h3c";
-				} else if (this.sysoid.startsWith("1.3.6.1.4.1.3902.")) {
-					fact = "zte";
-				} else if (this.sysoid.startsWith("1.3.6.1.4.1.4881.")) {
-					fact = "ruijie";
-				}
-				sql = "select svgtype,transform,itemid,svid,linewidth,fillcolor,linecolor,fontname,fontsize,textanchor,cssclass,ecx,ecy,erx,ery,vvalue from visiopanelauto where factory ='"
-						+ fact + "' ";
-
-				try {
-
-					ResultSet rs1 = ConfigDB.query(sql, conn);
-					while (rs1.next()) {
-
-						int svgtype = rs1.getInt("svgtype");
-
-						String transform = rs1.getString("transform");
-						if (transform == null)
-							transform = "";
-						String itemid = rs1.getString("itemid");
-						if (itemid == null)
-							itemid = "";
-						String svid = rs1.getString("svid");
-						if (svid == null)
-							svid = "";
-						int linewidth = rs1.getInt("linewidth");
-						String fillcolor = rs1.getString("fillcolor");
-						String linecolor = rs1.getString("linecolor");
-						String fontname = rs1.getString("fontname");
-						if (fontname == null)
-							fontname = "";
-						String fontsize = rs1.getString("fontsize");
-						if (fontsize == null)
-							fontsize = "";
-						if (!fontsize.isEmpty()) {
-							try {
-								String tempv = fontsize.substring(0, 3);
-								float emsize = Float.parseFloat(tempv);
-								if (emsize < 0.3) {
-									continue;
-								}
-							} catch (Exception ex) {
-
-							}
-						}
-						String textanchor = rs1.getString("textanchor");
-						if (textanchor == null)
-							textanchor = "";
-						String cssclass = rs1.getString("cssclass");
-						if (cssclass == null)
-							cssclass = "";
-						String ecx = rs1.getString("ecx");
-						if (ecx == null)
-							ecx = "";
-						String ecy = rs1.getString("ecy");
-						if (ecy == null)
-							ecy = "";
-						String erx = rs1.getString("erx");
-						if (erx == null)
-							erx = "";
-						String ery = rs1.getString("ery");
-						if (ery == null)
-							ery = "";
-						String vvalue = rs1.getString("vvalue");
-						if (vvalue == null)
-							vvalue = "";
-						ShapeItem tempitem = null;
-						tempitem = new ShapeItem(visioChart);
-						tempitem.setFillcolor(fillcolor);
-						tempitem.setLinecolor(linecolor);
-						tempitem.setLinewidth(linewidth);
-						if (!itemid.isEmpty())
-							tempitem.setItemid(itemid);
-						tempitem.setSvgtype(svgtype);
-
-						float movex = 480;
-						float movey = 5;
-						if (!transform.isEmpty()) {
-							String tempx = transform.substring(
-									transform.indexOf("(") + 1,
-									transform.indexOf(","));
-							float x = Float.parseFloat(tempx);
-							String tempy = transform.substring(
-									transform.indexOf(",") + 1,
-									transform.indexOf(")"));
-							float y = Float.parseFloat(tempy);
-							movex = x + movex;
-							movey = y + movey;
-						}
-
-						tempitem.setTransform("translate(" + movex + ","
-								+ movey + ")");
-
-						if (!fontname.isEmpty())
-							tempitem.setFontname(fontname);
-						if (!fontsize.isEmpty())
-							tempitem.setFontsize(fontsize);
-						if (!textanchor.isEmpty())
-							tempitem.setTextanchor(textanchor);
-						if (!cssclass.isEmpty())
-							tempitem.setCssclass(cssclass);
-						if (!ecx.isEmpty()) {
-							float xteimp = Float.parseFloat(ecx) + movex;
-							tempitem.setEcx(xteimp + "");
-						}
-						if (!ecy.isEmpty()) {
-							float yteimp = Float.parseFloat(ecy) + movey;
-							tempitem.setEcy(yteimp + "");
-						}
-						if (!erx.isEmpty())
-							tempitem.setErx(erx);
-						if (!ery.isEmpty())
-							tempitem.setEry(ery);
-						if (!vvalue.isEmpty())
-							tempitem.setValue(vvalue);
-					}
-				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (Exception ex) {
-
 				}
 				ConfigDB.close(conn);
+
+				String fact = DevicePanelUtils.getFactoryNameBySysoid(this.sysoid);
+				List<Map<String,String>> dataList = DevicePanelUtils.getShapeItemDataList(fact);
+				for(Map<String,String> map:dataList){
+					if (!map.get("fontsize").isEmpty()) {
+						try {
+							String tempv = map.get("fontsize").substring(0, 3);
+							float emsize = Float.parseFloat(tempv);
+							if (emsize < 0.3) {
+								continue;
+							}
+						} catch (Exception ex) {
+						}
+					}
+					addShapeItemWithShapeData(map,visioChart);
+				}
 				visioChart.setLayoutData(new GridData((670 + 10), (1217 + 15)));
 				width = 700;
 				height = 100 + row1 * 35;
-
 				parent.getDisplay().timerExec(1000, new Runnable() {
 					public void run() {
 						getstatus();
@@ -635,19 +310,30 @@ public class DevicePanel extends Dialog {
 							visioChart.setStatuss(statuss);
 							visioChart.setTooltipdata(tooltips);
 						}
-						// visioChart.setTooltipdata(dd);
 						parent.getDisplay().timerExec(10000, this);
 					}
 				});
-
 			}
 
 		}
-		// height=vi.svgheight+30;
-		// container.setSize(vi.svgwidth+30, vi.svgheight+30);
 		return visioChart;
 	}
 
+	private void addOneShapeItemSimple(List<Integer> rowsss,int row1,VisioMap visioChart,String ecx,String ecy,String erx,String ery){
+		if (!rowsss.contains(row1)) {
+			rowsss.add(row1);
+			ShapeItem tempitem = null;
+			tempitem = new ShapeItem(visioChart);
+			tempitem.setFillcolor("#efefef");
+			tempitem.setLinecolor("#0a0a0a");
+			tempitem.setLinewidth(1);
+			tempitem.setSvgtype(4);
+			tempitem.setEcx(ecx);
+			tempitem.setEcy(ecy);
+			tempitem.setErx(erx);
+			tempitem.setEry(ery);
+		}
+	}
 	private void addOneShapeItem(Map<String,String> obj, VisioMap visioChart){
 		ShapeItem tempitem = null;
 		tempitem = new ShapeItem(visioChart);
@@ -679,6 +365,100 @@ public class DevicePanel extends Dialog {
 		tempitem.setEry(obj.get("ery"));
 		if (!obj.get("vvalue").isEmpty())
 		tempitem.setValue(obj.get("vvalue"));
+	}
+	private void addShapeItemWithBaseShapes(Map<String, Map<String, String>> baseshapes,VisioMap visioChart,int portindex,int column1,int row1){
+		for (String key : baseshapes.keySet()) {
+			Map<String, String> mapbase = baseshapes.get(key);
+			ShapeItem tempitem = null;
+			tempitem = new ShapeItem(visioChart);
+			tempitem.setFillcolor(mapbase.get("fillcolor"));
+			tempitem.setLinecolor(mapbase.get("linecolor"));
+			tempitem.setLinewidth(Integer.parseInt(mapbase
+					.get("linewidth")));
+			if (!mapbase.get("itemid").isEmpty())
+				tempitem.setItemid(mapbase.get("itemid"));
+			tempitem.setSvgtype(Integer.parseInt(mapbase
+					.get("svgtype")));
+			String transform = "";
+			int movex = 35 * column1;
+			int movey = 35 * row1;
+			if (row1 == 1)
+				movey = 30;
+			tempitem.setTransform("translate(" + movex + ","
+					+ movey + ")");
+			// if (!mapbase.get("transform").isEmpty())
+			// tempitem.setTransform(mapbase.get("transform"));
+			if (!mapbase.get("svid").isEmpty()) {
+				String svid = mapbase.get("svid");
+				if (svid.startsWith("c")) {
+					svid = "c" + portindex;
+				} else if (svid.startsWith("p")) {
+					svid = "p" + portindex;
+				}
+				tempitem.setSvid(svid);
+			}
+			if (!mapbase.get("fontname").isEmpty())
+				tempitem.setFontname(mapbase.get("fontname"));
+			if (!mapbase.get("fontsize").isEmpty())
+				tempitem.setFontsize(mapbase.get("fontsize"));
+			if (!mapbase.get("textanchor").isEmpty())
+				tempitem.setTextanchor(mapbase
+						.get("textanchor"));
+			if (!mapbase.get("cssclass").isEmpty())
+				tempitem.setCssclass(mapbase.get("cssclass"));
+			if (!mapbase.get("ecx").isEmpty()) {
+				tempitem.setEcx(movex + "");
+			}
+			if (!mapbase.get("ecy").isEmpty()) {
+				tempitem.setEcy(movey + "");
+			}
+			if (!mapbase.get("erx").isEmpty())
+				tempitem.setErx(mapbase.get("erx"));
+			if (!mapbase.get("ery").isEmpty())
+				tempitem.setEry(mapbase.get("ery"));
+			if (!mapbase.get("vvalue").isEmpty())
+				tempitem.setValue(mapbase.get("vvalue"));
+		}
+	}
+
+	private void addShapeItemWithShapeData(Map<String,String> map, VisioMap visioChart){
+		ShapeItem tempitem = null;
+		tempitem = new ShapeItem(visioChart);
+		tempitem.setFillcolor(map.get("fillcolor"));
+		tempitem.setLinecolor(map.get("linecolor"));
+		tempitem.setLinewidth(Integer.parseInt(map.get("linewidth")));
+		if (!map.get("itemid").isEmpty()) tempitem.setItemid(map.get("itemid"));
+		tempitem.setSvgtype(Integer.parseInt(map.get("svgtype")));
+		float movex = 480;
+		float movey = 5;
+		if (!map.get("transform").isEmpty()) {
+			String tempx = map.get("transform").substring(
+					map.get("transform").indexOf("(") + 1,
+					map.get("transform").indexOf(","));
+			float x = Float.parseFloat(tempx);
+			String tempy = map.get("transform").substring(
+					map.get("transform").indexOf(",") + 1,
+					map.get("transform").indexOf(")"));
+			float y = Float.parseFloat(tempy);
+			movex = x + movex;
+			movey = y + movey;
+		}
+		tempitem.setTransform("translate(" + movex + "," + movey + ")");
+		if (!map.get("fontname").isEmpty()) tempitem.setFontname(map.get("fontname"));
+		if (!map.get("fontsize").isEmpty()) tempitem.setFontsize(map.get("fontsize"));
+		if (!map.get("textanchor").isEmpty()) tempitem.setTextanchor(map.get("textanchor"));
+		if (!map.get("cssclass").isEmpty()) tempitem.setCssclass(map.get("cssclass"));
+		if (!map.get("ecx").isEmpty()) {
+			float xteimp = Float.parseFloat(map.get("ecx")) + movex;
+			tempitem.setEcx(xteimp + "");
+		}
+		if (!map.get("ecy").isEmpty()) {
+			float yteimp = Float.parseFloat(map.get("ecy")) + movey;
+			tempitem.setEcy(yteimp + "");
+		}
+		if (!map.get("erx").isEmpty()) tempitem.setErx(map.get("erx"));
+		if (!map.get("ery").isEmpty()) tempitem.setEry(map.get("ery"));
+		if (!map.get("vvalue").isEmpty()) tempitem.setValue(map.get("vvalue"));
 	}
 
 	private void getstatus() {
