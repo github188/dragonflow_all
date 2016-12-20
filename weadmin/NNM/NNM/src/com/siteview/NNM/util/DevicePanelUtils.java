@@ -78,7 +78,7 @@ public class DevicePanelUtils {
 		 return pindex;
 	 }
 	/**
-	 * 根据xh获取svid
+	 * 根据xh获取svid in vData.db数据库
 	 */
 	public static String getSvidByXh(int xh){
 		String svid = "";
@@ -96,7 +96,9 @@ public class DevicePanelUtils {
 		ConfigDB.close(conn);
 		return svid;
 	}
-
+	/*
+	 * 获取svg图形的数据(每个小图形的位置和颜色等)。在vData.db对应的visiopanel+xh的表里。
+	*/
 	public static List<Map<String,String>> getVisiopanelDataByXh(int xh){
 		List<Map<String,String>> ltips=new ArrayList<Map<String,String>>();
 		Map<String, String> tipss =null;
@@ -184,7 +186,10 @@ public class DevicePanelUtils {
 		ConfigDB.close(conn);
 		return ltips;
 	}
-
+	/**
+	 * 直接从vData.db数据库的visiopanelauto表里读数据。
+	 * @return 两层深度的一个json结构。
+	 */
 	public static Map<String, Map<String, String>> getBaseShapesWithoutSysoidAndVdx(){
 		Connection conn = ConfigDB.getvConn();
 		String sql = "select svgtype,transform,itemid,svid,linewidth,fillcolor,linecolor,fontname,fontsize,textanchor,cssclass,ecx,ecy,erx,ery,vvalue from visiopanelauto where factory is null order by id ";

@@ -163,25 +163,23 @@ public class DevicePanel extends Dialog {
 						pdialog.open();
 					}
 				}else if(eventag.toLowerCase().equals("portport")){
-					if(rr==-1){
-					rr=11;
 					PortDialog pdialog=new PortDialog(parent.getShell(),pindex,portkey,entityobj.getLocalip(),commm);
 					rr= pdialog.open();
-					if (rr==IDialogConstants.OK_ID){
-						rr=-1;
-					}
+					if(rr==-1){
+						rr=11;
+						if (rr==IDialogConstants.OK_ID){
+							rr=-1;
+						}
 					}
 				}
 			}
 		});
-
+		// 总体的处理流程。
 		rowCount = DevicePanelUtils.getRowCountBySvid(this.entityobj.getSvid());
-		if (VisioDB.visiodb.containsKey(this.sysoid)) {
+		// 	首先查找这个sysoid在vData.db数据库有没有配置对应的svg图像数据。
+		if (VisioDB.visiodb.containsKey(this.sysoid)) { //首先是从visiomain表里查有没有定义
 			Map<String, Integer> vmain = VisioDB.visiodb.get(this.sysoid);
 			int xh = vmain.get("xh");
-			// VisioImporter vi = new VisioImporter();// 1.3.6.1.4.1.9.1.516.vdx
-			// 1.3.6.1.4.1.2011.10.1.80.vdx
-			// 1.3.6.1.4.1.9.1.324.vdx
 			String svid = DevicePanelUtils.getSvidByXh(xh);
 			if(svid!=null && !svid.isEmpty()){
 				this.models = Integer.parseInt(svid.substring(6));
@@ -234,7 +232,7 @@ public class DevicePanel extends Dialog {
 			String filename = DBManage.getPlatformPath() + "visiopanel/"
 					+ this.sysoid + ".vdx";
 			File file = new File(filename);
-			if (file.exists()) {
+			if (file.exists()) { //如果vData.db数据库里没有配置，则直接从visio文件里解析图形。
 				VisioImporter vi = new VisioImporter();
 				vi.ImportPage(filename, visioChart, 0, 10, 10);
 				visioChart.setLayoutData(new GridData((vi.svgwidth + 15),
@@ -246,12 +244,11 @@ public class DevicePanel extends Dialog {
 							visioChart.setStatuss(statuss);
 							visioChart.setTooltipdata(tooltips);
 						}
-						// visioChart.setTooltipdata(dd);
 						parent.getDisplay().timerExec(10000, this);
 					}
 				});
 				width = 890;
-			} else {
+			} else {  // 如果也没有对应的visio文件，则默认get shape data from "visiopanelauto" table directly.
 				Map<String, Map<String, String>> baseshapes = DevicePanelUtils.getBaseShapesWithoutSysoidAndVdx();
 				Connection conn = ConfigDB.getConn();
 				String sql = "select pindex,porttype from ports where (porttype='6' or porttype='117')  and id='"
@@ -314,7 +311,6 @@ public class DevicePanel extends Dialog {
 					}
 				});
 			}
-
 		}
 		return visioChart;
 	}
@@ -514,12 +510,9 @@ public class DevicePanel extends Dialog {
 					if (fdata.getPortSpeed() >= 1000000000) {
 						inflow = DevicePanelUtils.getSpeed(fdata.getHcInSpeed()*1000);
 						outflow = DevicePanelUtils.getSpeed(fdata.getHcOutSpeed()*1000);
-
 					} else {
 						inflow = DevicePanelUtils.getSpeed(fdata.getInFlow()) ;
 						outflow = DevicePanelUtils.getSpeed(fdata.getOutFlow());
-
-
 					}
 					tooltips[i] = PortManage.portTypenum2TypeDesc.get(porttype)
 							+ ":"
@@ -547,10 +540,8 @@ public class DevicePanel extends Dialog {
 
 			}
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Exception ex) {
 		}
